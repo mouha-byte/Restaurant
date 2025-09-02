@@ -203,124 +203,160 @@
     </div>
   </section>
 
-  <!-- Order Modal -->
-  <div class="modal fade" id="orderDetailModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="orderDetailModalLabel">Commander</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="orderForm">
-            <div class="form-group">
-              <label>Produit:</label>
-              <input type="text" id="productName" class="form-control" readonly>
-            </div>
-            <div class="form-group">
-              <label>Prix unitaire:</label>
-              <input type="text" id="productPrice" class="form-control" readonly>
-            </div>
-            <div class="form-group">
-              <label for="quantity">Quantité:</label>
-              <input type="number" id="quantity" class="form-control" min="1" value="1" required>
-            </div>
-            <div class="form-group">
-              <label for="customerName">Nom du client:</label>
-              <input type="text" id="customerName" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label for="customerLocation">Localisation:</label>
-              <input type="text" id="customerLocation" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Total:</label>
-              <input type="text" id="totalPrice" class="form-control" readonly>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" onclick="submitOrder()">Commander</button>
+    <!-- Order Modal -->
+    <div class="modal fade" id="orderDetailModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="orderDetailModalLabel">Commander</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="orderForm">
+              <div class="form-group">
+                <label>Produit:</label>
+                <input type="text" id="productName" class="form-control" readonly>
+              </div>
+              <div class="form-group">
+                <label>Prix unitaire:</label>
+                <input type="text" id="productPrice" class="form-control" readonly>
+              </div>
+              <div class="form-group">
+                <label for="quantity">Quantité:</label>
+                <input type="number" id="quantity" class="form-control" min="1" value="1" required>
+              </div>
+              <div class="form-group">
+                <label for="customerName">Nom du client:</label>
+                <input type="text" id="customerName" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="customerEmail">Email:</label>
+                <input type="email" id="customerEmail" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="customerLocation">Localisation:</label>
+                <input type="text" id="customerLocation" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Total:</label>
+                <input type="text" id="totalPrice" class="form-control" readonly>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" onclick="submitOrder()">Commander</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <script>
-  // Configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-    authDomain: "restaurant-896d0.firebaseapp.com",
-    projectId: "restaurant-896d0",
-    storageBucket: "restaurant-896d0.firebasestorage.app",
-    messagingSenderId: "1037108801190",
-    appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-    measurementId: "G-ESNJW4VC0Y"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  let currentProduct = {};
-
-  function openOrderModal(productName, price) {
-    currentProduct = {
-      name: productName,
-      price: price
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
+      authDomain: "restaurant-896d0.firebaseapp.com",
+      projectId: "restaurant-896d0",
+      storageBucket: "restaurant-896d0.firebasestorage.app",
+      messagingSenderId: "1037108801190",
+      appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
+      measurementId: "G-ESNJW4VC0Y"
     };
-    
-    document.getElementById('productName').value = productName;
-    document.getElementById('productPrice').value = '$' + price;
-    document.getElementById('quantity').value = 1;
-    document.getElementById('totalPrice').value = '$' + price;
-    
-    $('#orderDetailModal').modal('show');
-  }
 
-  // Calculer le prix total quand la quantité change
-  document.getElementById('quantity').addEventListener('input', function() {
-    const quantity = parseInt(this.value) || 1;
-    const total = currentProduct.price * quantity;
-    document.getElementById('totalPrice').value = '$' + total;
-  });
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-  function submitOrder() {
-    const quantity = parseInt(document.getElementById('quantity').value);
-    const customerName = document.getElementById('customerName').value;
-    const customerLocation = document.getElementById('customerLocation').value;
-    
-    if (!customerName || !customerLocation) {
-      alert('Veuillez remplir tous les champs');
-      return;
+    let currentProduct = {};
+
+    function openOrderModal(productName, price) {
+      currentProduct = {
+        name: productName,
+        price: price
+      };
+      
+      document.getElementById('productName').value = productName;
+      document.getElementById('productPrice').value = '$' + price;
+      document.getElementById('quantity').value = 1;
+      document.getElementById('totalPrice').value = '$' + price;
+      
+      $('#orderDetailModal').modal('show');
     }
-    
-    const orderData = {
-      productName: currentProduct.name,
-      unitPrice: currentProduct.price,
-      quantity: quantity,
-      totalPrice: currentProduct.price * quantity,
-      customerName: customerName,
-      customerLocation: customerLocation,
-      orderDate: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    
-    db.collection('orders').add(orderData)
-      .then((docRef) => {
-        alert('Commande envoyée avec succès!');
-        $('#orderDetailModal').modal('hide');
-        document.getElementById('orderForm').reset();
-      })
-      .catch((error) => {
-        console.error('Erreur lors de l\'envoi:', error);
-        alert('Erreur lors de l\'envoi de la commande');
-      });
-  }
-  </script>
+
+    // Calculer le prix total quand la quantité change
+    document.getElementById('quantity').addEventListener('input', function() {
+      const quantity = parseInt(this.value) || 1;
+      const total = currentProduct.price * quantity;
+      document.getElementById('totalPrice').value = '$' + total;
+    });
+
+    function submitOrder() {
+      const quantity = parseInt(document.getElementById('quantity').value);
+      const customerName = document.getElementById('customerName').value;
+      const customerEmail = document.getElementById('customerEmail').value;
+      const customerLocation = document.getElementById('customerLocation').value;
+      
+      if (!customerName || !customerEmail || !customerLocation) {
+        alert('Veuillez remplir tous les champs');
+        return;
+      }
+      
+      const orderData = {
+        productName: currentProduct.name,
+        unitPrice: currentProduct.price,
+        quantity: quantity,
+        totalPrice: currentProduct.price * quantity,
+        customerName: customerName,
+        customerEmail: customerEmail,
+        customerLocation: customerLocation,
+        orderDate: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      
+      db.collection('orders').add(orderData)
+        .then((docRef) => {
+          // Show success popup with better styling
+          const successModal = document.createElement('div');
+          successModal.innerHTML = `
+            <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">
+                      <i class="fa fa-check-circle"></i> Succès
+                    </h5>
+                  </div>
+                  <div class="modal-body text-center">
+                    <i class="fa fa-check-circle text-success" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Commande envoyée avec succès!</h4>
+                    <p>Votre commande a été enregistrée. Nous vous contacterons bientôt.</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Parfait!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(successModal);
+          $('#successModal').modal('show');
+
+          // Auto-hide after 3 seconds
+          setTimeout(() => {
+            $('#successModal').modal('hide');
+            document.body.removeChild(successModal);
+          }, 3000);
+          $('#orderDetailModal').modal('hide');
+          document.getElementById('orderForm').reset();
+        })
+        .catch((error) => {
+          console.error('Erreur lors de l\'envoi:', error);
+          alert('Erreur lors de l\'envoi de la commande');
+        });
+    }
+    </script>
 
   <!-- end food section -->
 
