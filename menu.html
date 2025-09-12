@@ -524,7 +524,7 @@
         </nav>
       </div>
     </header>
-    <!-- end header section -->
+    <!-- end header section -->   
   </div>
 
   <!-- Floating Cart -->
@@ -561,13 +561,25 @@
         <h2>Our Menu</h2>
       </div>
 
-      <ul class="filters_menu">
+      <!-- <ul class="filters_menu">
         <li class="active" data-filter="*">All</li>
         <li data-filter=".burger">Burger</li>
         <li data-filter=".pizza">Pizza</li>
         <li data-filter=".pasta">Pasta</li>
         <li data-filter=".fries">Fries</li>
-      </ul>
+      </ul> -->
+      <ul class="filters_menu">
+  <li class="active" data-filter="*">All</li>
+  <li data-filter=".pizza">Pizza</li>
+  <li data-filter=".burger">Burger</li>
+  <li data-filter=".pasta">Pâtes</li>
+  <li data-filter=".tacos">Tacos</li>
+  <li data-filter=".tex-mex">Tex-Mex</li>
+  <li data-filter=".salade">Salades</li>
+  <li data-filter=".fries">Frites</li>
+  <li data-filter=".dessert">Desserts</li>
+  <li data-filter=".boissons">Boissons</li>
+</ul>
 
       <div class="filters-content">
         <div class="row product-grid" id="product-grid">
@@ -676,16 +688,110 @@
 
     // Static product data to avoid CORS issues
     const products = [
-      { name: "Delicious Burger", price: 15, description: "Fresh burger with lettuce, tomato, and cheese", category: "burger", image: "images/f1.png" },
-      { name: "Classic Pizza", price: 20, description: "Traditional pizza with tomato sauce and mozzarella", category: "pizza", image: "images/f2.png" },
-      { name: "Creamy Pasta", price: 18, description: "Pasta with creamy alfredo sauce", category: "pasta", image: "images/f3.png" },
-      { name: "Crispy Fries", price: 8, description: "Golden crispy french fries", category: "fries", image: "images/f4.png" },
-      { name: "Cheese Burger", price: 17, description: "Double cheese burger with special sauce", category: "burger", image: "images/f5.png" },
-      { name: "Margherita Pizza", price: 22, description: "Classic margherita with fresh basil", category: "pizza", image: "images/f6.png" },
-      { name: "Penne Pasta", price: 16, description: "Penne with marinara sauce", category: "pasta", image: "images/f7.png" },
-      { name: "Loaded Fries", price: 12, description: "Fries loaded with cheese and bacon", category: "fries", image: "images/f8.png" },
-      { name: "BBQ Burger", price: 19, description: "BBQ burger with onion rings", category: "burger", image: "images/f9.png" }
-    ];
+    // --- PIZZAS ---
+    // Base Tomate
+    { name: "Margherita Pizza (Junior)", price: 8, description: "Base Tomate, Mozzarella", category: "pizza", image: "images/f8.png" },
+    { name: "Margherita Pizza (Senior)", price: 12.5, description: "Base Tomate, Mozzarella", category: "pizza", image: "images/f8.png" },
+    { name: "Bambino Pizza (Junior)", price: 8.5, description: "Base Tomate, Mozzarella, Jambon, Œuf", category: "pizza", image: "images/f8.png" },
+    { name: "Bambino Pizza (Senior)", price: 14.5, description: "Base Tomate, Mozzarella, Jambon, Œuf", category: "pizza", image: "images/f8.png" },
+    { name: "Calzone Pizza (Junior)", price: 8.5, description: "Base Tomate, Mozzarella, Viande Hachée ou Jambon, Œuf", category: "pizza", image: "images/f8.png" },
+    { name: "Calzone Pizza (Senior)", price: 14.5, description: "Base Tomate, Mozzarella, Viande Hachée ou Jambon, Œuf", category: "pizza", image: "images/f8.png" },
+    { name: "Napolitaine Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Anchois, Câpres, Olives", category: "pizza", image: "images/f8.png" },
+    { name: "Napolitaine Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Anchois, Câpres, Olives", category: "pizza", image: "images/f8.png" },
+    { name: "Regina Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Jambon, Champignons", category: "pizza", image: "images/f8.png" },
+    { name: "Regina Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Jambon, Champignons", category: "pizza", image: "images/f8.png" },
+    { name: "4 Fromages Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Gorgonzola, Chèvre, Brie", category: "pizza", image: "images/f8.png" },
+    { name: "4 Fromages Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Gorgonzola, Chèvre, Brie", category: "pizza", image: "images/f8.png" },
+    { name: "Campion Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Viande Hachée, Champignons", category: "pizza", image: "images/f8.png" },
+    { name: "Campion Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Viande Hachée, Champignons", category: "pizza", image: "images/f8.png" },
+    { name: "4 Saisons Pizza (Junior)", price: 9.5, description: "Base Tomate, Mozzarella, Jambon, Champignons, Poivrons, Olives", category: "pizza", image: "images/f8.png" },
+    { name: "4 Saisons Pizza (Senior)", price: 15.5, description: "Base Tomate, Mozzarella, Jambon, Champignons, Poivrons, Olives", category: "pizza", image: "images/f8.png" },
+    { name: "Vegetarienne Pizza (Junior)", price: 9.5, description: "Base Tomate, Mozzarella, Champignons, Poivrons, Olives", category: "pizza", image: "images/f8.png" },
+    { name: "Vegetarienne Pizza (Senior)", price: 15.5, description: "Base Tomate, Mozzarella, Champignons, Poivrons, Olives", category: "pizza", image: "images/f8.png" },
+    { name: "Orientale Pizza (Junior)", price: 9.5, description: "Base Tomate, Mozzarella, Merguez, Poivrons, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Orientale Pizza (Senior)", price: 15.5, description: "Base Tomate, Mozzarella, Merguez, Poivrons, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Speranza Pizza (Junior)", price: 10, description: "Base Tomate, Mozzarella, Viande Hachée, Merguez, Poulet, Buffalo", category: "pizza", image: "images/f8.png" },
+    { name: "Speranza Pizza (Senior)", price: 16, description: "Base Tomate, Mozzarella, Viande Hachée, Merguez, Poulet, Buffalo", category: "pizza", image: "images/f8.png" },
+
+    // Base Crème
+    { name: "Tartiflette Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Lardons, Reblochon, Pommes de terre, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Tartiflette Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Lardons, Reblochon, Pommes de terre, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Chèvre Miel Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Chèvre, Miel", category: "pizza", image: "images/f8.png" },
+    { name: "Chèvre Miel Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Chèvre, Miel", category: "pizza", image: "images/f8.png" },
+    { name: "Raclette Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Poulet, Raclette, Pommes de terre, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Raclette Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Poulet, Raclette, Pommes de terre, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Campagnarde Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Poulet, Gorgonzola, Pommes de terre, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Campagnarde Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Poulet, Gorgonzola, Pommes de terre, Oignons", category: "pizza", image: "images/f8.png" },
+
+    // Base Spéciale
+    { name: "Poulet Al Tartufo Pizza (Junior)", price: 10, description: "Base Spéciale, Mozzarella, Crème Truffe, Poulet, Buffalo, P.Terre, Champignons, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "Poulet Al Tartufo Pizza (Senior)", price: 16, description: "Base Spéciale, Mozzarella, Crème Truffe, Poulet, Buffalo, P.Terre, Champignons, Oignons", category: "pizza", image: "images/f8.png" },
+    { name: "La Corzza Pizza (Junior)", price: 10, description: "Base Spéciale, Mozzarella, Cordon Bleu, Tenders, Sauce Fromagère, Frites", category: "pizza", image: "images/f8.png" },
+    { name: "La Corzza Pizza (Senior)", price: 16, description: "Base Spéciale, Mozzarella, Cordon Bleu, Tenders, Sauce Fromagère, Frites", category: "pizza", image: "images/f8.png" },
+    { name: "Barbecue Pizza (Junior)", price: 10, description: "Base Spéciale, Mozzarella, Merguez, Poulet, Buffalo, Sauce Barbecue", category: "pizza", image: "images/f8.png" },
+    { name: "Barbecue Pizza (Senior)", price: 16, description: "Base Spéciale, Mozzarella, Merguez, Poulet, Buffalo, Sauce Barbecue", category: "pizza", image: "images/f8.png" },
+
+    // --- BURGERS ---
+    // Classiques
+    { name: "Cheese Burger", price: 6.5, description: "Steak 90g, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Cheese Burger (Menu)", price: 8, description: "Steak 90g, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Fish Burger", price: 6.5, description: "Poisson, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Fish Burger (Menu)", price: 8, description: "Poisson, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Chicken Burger", price: 6.5, description: "Chicken, Galette, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Chicken Burger (Menu)", price: 8, description: "Chicken, Galette, Cheddar", category: "burger", image: "images/f8.png" },
+
+    // XXL
+    { name: "Bio Bacon Burger", price: 9, description: "Steak 180g, Double Cheddar, Bacon", category: "burger", image: "images/f8.png" },
+    { name: "Bio Bacon Burger (Menu)", price: 10.5, description: "Steak 180g, Double Cheddar, Bacon", category: "burger", image: "images/f8.png" },
+    { name: "Le King Burger", price: 9, description: "Steak 180g, Cheddar, Œuf", category: "burger", image: "images/f8.png" },
+    { name: "Le King Burger (Menu)", price: 10.5, description: "Steak 180g, Cheddar, Œuf", category: "burger", image: "images/f8.png" },
+    { name: "Ostri Burger", price: 10, description: "2 Steak 180g, Bacon, 2 Cheddar, Œuf", category: "burger", image: "images/f8.png" },
+    { name: "Ostri Burger (Menu)", price: 11.5, description: "2 Steak 180g, Bacon, 2 Cheddar, Œuf", category: "burger", image: "images/f8.png" },
+
+    // Speciaux
+    { name: "Bacon Burger", price: 7.5, description: "Steak 90g, Bacon, Cheddar, Œuf", category: "burger", image: "images/f8.png" },
+    { name: "Bacon Burger (Menu)", price: 9, description: "Steak 90g, Bacon, Cheddar, Œuf", category: "burger", image: "images/f8.png" },
+    { name: "Speranza Burger", price: 7.5, description: "Steak 90g, Chicken, Galette P.Terre, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Speranza Burger (Menu)", price: 9, description: "Steak 90g, Chicken, Galette P.Terre, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Burger Raclette", price: 7.5, description: "Steak 90g, Raclette, Galette P.Terre, Cheddar", category: "burger", image: "images/f8.png" },
+    { name: "Burger Raclette (Menu)", price: 9, description: "Steak 90g, Raclette, Galette P.Terre, Cheddar", category: "burger", image: "images/f8.png" },
+
+    // --- PATES (PASTA) ---
+    { name: "Pâtes Carbonara", price: 9, description: "Crème Fraîche, Lardons, Œuf, Parmesan", category: "pasta", image: "images/f8.png" },
+    { name: "Pâtes Saumon", price: 9, description: "Crème Fraîche, Saumon, Parmesan", category: "pasta", image: "images/f8.png" },
+    { name: "Pâtes Bolognaise", price: 9, description: "Sauce Tomate, Viande Hachée, Parmesan", category: "pasta", image: "images/f8.png" },
+    { name: "Pâtes Fruits de Mer", price: 9, description: "Sauce Tomate, Fruits de mer, Parmesan", category: "pasta", image: "images/f8.png" },
+    { name: "Pâtes Al Tartuffo", price: 9, description: "Crème Fraîche, Crème de Truffe, Poulet, Champignon, Parmesan", category: "pasta", image: "images/f8.png" },
+
+    // --- TEX MEX & FRIES ---
+    { name: "6 Nuggets", price: 6, description: "6 pièces de poulet pané", category: "tex-mex", image: "images/f8.png" },
+    { name: "Menu 6 Nuggets", price: 8, description: "6 pièces de poulet pané, servi avec frites et boisson", category: "tex-mex", image: "images/f8.png" },
+    { name: "6 Onion Rings", price: 6, description: "6 rondelles d'oignon frites", category: "tex-mex", image: "images/f8.png" },
+    { name: "Menu 6 Onion Rings", price: 8, description: "6 rondelles d'oignon frites, servi avec frites et boisson", category: "tex-mex", image: "images/f8.png" },
+    { name: "6 Mozzarella Sticks", price: 6, description: "6 bâtonnets de mozzarella panés", category: "tex-mex", image: "images/f8.png" },
+    { name: "Menu 6 Mozzarella Sticks", price: 8, description: "6 bâtonnets de mozzarella panés, servi avec frites et boisson", category: "tex-mex", image: "images/f8.png" },
+    { name: "6 Tenders", price: 8, description: "6 tenders de poulet", category: "tex-mex", image: "images/f8.png" },
+    { name: "Menu 6 Tenders", price: 10, description: "6 tenders de poulet, servi avec frites et boisson", category: "tex-mex", image: "images/f8.png" },
+    { name: "Frites (Petite)", price: 2.5, description: "Portion de frites petite", category: "fries", image: "images/f8.png" },
+    { name: "Frites (Moyenne)", price: 3.5, description: "Portion de frites moyenne", category: "fries", image: "images/f8.png" },
+    { name: "Frites (Grande)", price: 4.5, description: "Portion de frites grande", category: "fries", image: "images/f8.png" },
+
+    // --- TACOS ---
+    { name: "Tacos (1 Viande)", price: 8, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/f8.png" },
+    { name: "Tacos (2 Viandes)", price: 9, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/f8.png" },
+    { name: "Tacos (3 Viandes)", price: 10, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/f8.png" },
+
+    // --- SALADES ---
+    { name: "Salade César", price: 7, description: "Salade, Poulet, Tomate, Olives, Buffalo", category: "salade", image: "images/f8.png" },
+    { name: "Salade Chèvre Chaud", price: 7, description: "Salade, Lardons Grillés, Chèvre Chaud Sur Toast, Miel, Tomate", category: "salade", image: "images/f8.png" },
+    { name: "Salade Fraîcheur", price: 6, description: "Salade, Saumon, Thon, Tomate, Buffalo, Olives", category: "salade", image: "images/f8.png" },
+
+    // --- DESSERTS & BOISSONS ---
+    { name: "Tiramisu", price: 3, description: "Dessert classique italien", category: "dessert", image: "images/f8.png" },
+    { name: "Tarte au Daims", price: 3, description: "Tarte au chocolat et caramel Daims", category: "dessert", image: "images/f8.png" },
+    { name: "Canette 33cl", price: 1.5, description: "Boisson en canette de 33cl", category: "boissons", image: "images/f8.png" },
+    { name: "Bouteille 1.5L", price: 3.5, description: "Boisson en bouteille de 1.5L", category: "boissons", image: "images/f8.png" }
+];
 
     function loadProducts() {
       const grid = document.getElementById('product-grid');
@@ -862,53 +968,79 @@
       };
       
       db.collection('orders').add(orderData)
-      .then((docRef) => {
-        sendNotification("📦 New Order", `Order from ${customerName}: ${cart.length} items - $${totalPrice}`);
-        
-        // Show success message
-        alert('Order placed successfully! We will contact you soon.');
-        
-        // Clear cart and close modals
-        cart = [];
-        updateCartDisplay();
-        $('#checkoutModal').modal('hide');
-        $('#floating-cart').removeClass('open');
-        
-        // Reset form
-        document.getElementById('checkoutForm').reset();
+     .then((docRef) => {
+  // Notification interne
+ 
+
+  // === Préparation du message Telegram ===
+  const chatId = "6758786390"; // ID du groupe ou de l’admin
+  const message =
+    `🍽️ *New Order Received*\n\n` +
+    `👤 *Customer:* ${customerName}\n` +
+    `📧 *Email:* ${customerEmail}\n` +
+    `📱 *Phone:* ${customerPhone}\n` +
+    `📍 *Address:* ${customerLocation}\n\n` +
+    `🛒 *Items:*\n` +
+    cart
+      .map(
+        (item) => `• ${item.name} x${item.quantity} - $${item.price * item.quantity}`
+      )
+      .join("\n") +
+    `\n\n💰 *Total: $${totalPrice}*\n` +
+    `📅 *Order ID:* ${docRef.id}`;
+
+  // === Envoi Telegram ===
+  sendTelegramMessage(chatId, message);
+
+  // Fonction d’envoi vers Telegram
+  function sendTelegramMessage(chatId, message) {
+    const botToken = "7829056029:AAG0owYmm4vzF9tLg71YHxoZ6O4Rr76aF6k";
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+        parse_mode: "Markdown", // ou "MarkdownV2" si caractères spéciaux
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.ok) {
+          console.log("📱 Telegram message sent successfully");
+        } else {
+          console.error("❌ Failed to send Telegram message:", data);
+        }
       })
       .catch((error) => {
+        console.error("⚠️ Error sending Telegram message:", error);
+      });
+  }
+
+  // === Success user feedback ===
+  alert("✅ Order placed successfully! We will contact you soon.");
+
+  // Vider le panier et fermer la modal
+  cart = [];
+  updateCartDisplay();
+  $("#checkoutModal").modal("hide");
+  $("#floating-cart").removeClass("open");
+
+  // Reset form
+  document.getElementById("checkoutForm").reset();
+})
+
+ .catch((error) => {
         console.error('Error submitting order:', error);
         alert('Error placing order. Please try again.');
       });
     }
 
-    async function sendNotification(title, body) {
-      try {
-        const serverKey = "cjM9MYBcTDqUqSFyJswVkE:APA91bEr_15moic8XFofkDU0RJQugoRI76Nxdo4RJzV4wOwovEEDTFVzZJK98SnrhrZHj815tSd_GKhKno2UV8sqz5xDJZ3q6nGPLUfEMVeYiAHd9SzK9e4";
-        const response = await fetch("https://fcm.googleapis.com/fcm/send", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "key=" + serverKey,
-          },
-          body: JSON.stringify({
-            to: "/topics/orders",
-            notification: { title, body },
-          }),
-        });
-        
-        if (response.ok) {
-          console.log("📨 Notification sent!");
-        } else {
-          console.error("Failed to send notification");
-        }
-      } catch (error) {
-        console.error("Error sending notification:", error);
-      }
-    }
-
-    // Appel initial pour charger les produits
+     // Appel initial pour charger les produits
     loadProducts();
   </script>
 
