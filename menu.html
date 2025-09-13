@@ -992,7 +992,7 @@
   // === Envoi Telegram ===
   // === Envoi Telegram ===
   sendTelegramMessage(message);
-  sendEmail(orderData, docRef);
+  // sendEmail(orderData, docRef);
 
   // Fonction d'envoi vers Telegram
   function sendTelegramMessage(message) {
@@ -1007,21 +1007,21 @@
   }
 
   // Fonction d'envoi d'email
-  function sendEmail(orderData, docRef) {
-    fetch("/api/email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: "mouhanedmliki6@gmail.com",
-        subject: "🍽️ Nouvelle commande - Speranza Pizza",
-        text: `Nouvelle commande reçue!\n\nClient: ${orderData.customerName}\nEmail: ${orderData.customerEmail}\nTéléphone: ${orderData.customerPhone}\nAdresse: ${orderData.customerLocation}\n\nCommande ID: ${docRef.id}\nTotal: $${orderData.totalPrice}`
-      })
-    })
-    .then(res => res.json())
-    .then(data => console.log("Email envoyé:", data))
-    .catch(err => console.error("Erreur email:", err));
-  }
-  // === Success user feedback ===
+  // function sendEmail(orderData, docRef) {
+  //   fetch("/api/email", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       to: "mouhanedmliki6@gmail.com",
+  //       subject: "🍽️ Nouvelle commande - Speranza Pizza",
+  //       text: `Nouvelle commande reçue!\n\nClient: ${orderData.customerName}\nEmail: ${orderData.customerEmail}\nTéléphone: ${orderData.customerPhone}\nAdresse: ${orderData.customerLocation}\n\nCommande ID: ${docRef.id}\nTotal: $${orderData.totalPrice}`
+  //     })
+  //   })
+  //   .then(res => res.json())
+  //   .then(data => console.log("Email envoyé:", data))
+  //   .catch(err => console.error("Erreur email:", err));
+  // }
+  // // === Success user feedback ===
   alert("✅ Order placed successfully! We will contact you soon.");
   function sendEmailMessage(orderData, docRef) {
     // Using fetch to send email via a backend service or email API
