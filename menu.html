@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Feane</title>
+  <title>Speranza Pizza</title>
   <link rel="shortcut icon" href="images/favicon.png">
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
@@ -459,7 +459,7 @@
         <nav class="navbar navbar-expand-lg custom_nav-container ">
           <a class="navbar-brand" href="index.html">
             <span>
-              Feane
+              Speranza Pizza
             </span>
           </a>
 
@@ -990,39 +990,81 @@
     `📅 *Order ID:* ${docRef.id}`;
 
   // === Envoi Telegram ===
-  sendTelegramMessage(chatId, message);
+  // === Envoi Telegram ===
+  sendTelegramMessage(message);
 
-  // Fonction d’envoi vers Telegram
-  function sendTelegramMessage(chatId, message) {
-    const botToken = "7829056029:AAG0owYmm4vzF9tLg71YHxoZ6O4Rr76aF6k";
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-    fetch(url, {
+  // Fonction d'envoi vers Telegram
+  function sendTelegramMessage(message) {
+    fetch("/api/send", {  // 👉 auto-resolu par Vercel
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: "Markdown", // ou "MarkdownV2" si caractères spéciaux
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message })
     })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.ok) {
-          console.log("📱 Telegram message sent successfully");
-        } else {
-          console.error("❌ Failed to send Telegram message:", data);
-        }
-      })
-      .catch((error) => {
-        console.error("⚠️ Error sending Telegram message:", error);
-      });
+    .then(res => res.json())
+    .then(data => console.log("Message envoyé:", data))
+    .catch(err => console.error("Erreur:", err));
   }
-
   // === Success user feedback ===
   alert("✅ Order placed successfully! We will contact you soon.");
+  function sendEmailMessage(orderData, docRef) {
+    // Using fetch to send email via a backend service or email API
+    const emailData = {
+      to: 'mouhanedmliki6@gmail.com', // Boss email
+      subject: '🍽️ New Order Received - Speranza Pizza',
+      html: `
+        <h2>🍽️ New Order Received</h2>
+        <h3>Customer Information:</h3>
+        <p><strong>👤 Name:</strong> ${orderData.customerName}</p>
+        <p><strong>📧 Email:</strong> ${orderData.customerEmail}</p>
+        <p><strong>📱 Phone:</strong> ${orderData.customerPhone}</p>
+        <p><strong>📍 Address:</strong> ${orderData.customerLocation}</p>
+        
+        <h3>🛒 Order Details:</h3>
+        <ul>
+          ${cart.map(item => `<li>${item.name} x${item.quantity} - $${item.price * item.quantity}</li>`).join('')}
+        </ul>
+        
+        <h3>💰 Total: $${orderData.totalPrice}</h3>
+        <p><strong>📅 Order ID:</strong> ${docRef.id}</p>
+        <p><strong>🕐 Order Time:</strong> ${new Date().toLocaleString()}</p>
+      `,
+      // Gmail SMTP credentials (Note: In production, these should be server-side)
+      smtp: {
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: 'mouhanedmliki6@gmail.com',
+          pass: 'fecz pmsp kyqs klac'
+        }
+      }
+    };
+
+    // Send email via your backend API endpoint
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(emailData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('✅ Email sent successfully to boss!');
+      } else {
+        console.log('❌ Failed to send email:', data.error);
+      }
+    })
+    .catch(error => {
+      console.log('❌ Email sending error:', error);
+      // Fallback: log the order details for manual processing
+      console.log('📧 Order notification data:', emailData);
+    });
+  }
+
+  // Call the email function
+  sendEmailMessage(orderData, docRef);
 
   // Vider le panier et fermer la modal
   cart = [];
@@ -1069,7 +1111,7 @@
         </div>
         <div class="col-md-4 footer-col">
           <div class="footer_detail">
-            <a href="" class="footer-logo">Feane</a>
+            <a href="" class="footer-logo">Speranza Pizza</a>
             <p>Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with</p>
             <div class="footer_social">
               <a href=""><i class="fa fa-facebook" aria-hidden="true"></i></a>
