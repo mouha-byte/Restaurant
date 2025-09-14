@@ -1024,35 +1024,29 @@
 
 
   // Fonction d’envoi vers Telegram
-  function sendTelegramMessage(chatId, message) {
-    const botToken = "7829056029:AAG0owYmm4vzF9tLg71YHxoZ6O4Rr76aF6k";
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: "Markdown", // ou "MarkdownV2" si caractères spéciaux
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.ok) {
-          console.log("📱 Telegram message sent successfully");
-        } else {
-          console.error("❌ Failed to send Telegram message:", data);
-        }
-      })
-      .catch((error) => {
-        console.error("⚠️ Error sending Telegram message:", error);
+  async function sendTelegramMessage(chatId, message) {
+    // chatId argument is ignored because the server-side API uses the CHAT_ID env var.
+    try {
+      const res = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
       });
-  }
 
-  function sendEmailMessage(orderData, docRef) {
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log('📱 Telegram message requested via backend:', data);
+      } else {
+        console.error('❌ Backend failed to send Telegram message:', data);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('⚠️ Error calling backend Telegram endpoint:', error);
+      return null;
+    }
+  }function sendEmailMessage(orderData, docRef) {
     // Build a plain-text fallback message (nodemailer handler expects `text`)
     const itemsText = cart
       .map(item => `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`)
