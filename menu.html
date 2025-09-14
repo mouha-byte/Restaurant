@@ -1052,56 +1052,56 @@
       });
   }
 
-   function sendEmailMessage(orderData, docRef) {
-    // Using fetch to send email via a backend service or email API
-    const emailData = {
-      to: 'mouhanedmliki6@gmail.com', // Boss email
-      subject: '🍽️ New Order Received - Speranza Pizza',
-      html: `
-        <h2>🍽️ New Order Received</h2>
-        <h3>Customer Information:</h3>
-        <p><strong>👤 Name:</strong> ${orderData.customerName}</p>
-        <p><strong>📧 Email:</strong> ${orderData.customerEmail}</p>
-        <p><strong>📱 Phone:</strong> ${orderData.customerPhone}</p>
-        <p><strong>📍 Address:</strong> ${orderData.customerLocation}</p>
-        
-        <h3>🛒 Order Details:</h3>
-        <ul>
-          ${cart.map(item => `<li>${item.name} x${item.quantity} - $${item.price * item.quantity}</li>`).join('')}
-        </ul>
-        
-        <h3>💰 Total: $${orderData.totalPrice}</h3>
-        <p><strong>📅 Order ID:</strong> ${docRef.id}</p>
-        <p><strong>🕐 Order Time:</strong> ${new Date().toLocaleString()}</p>
-      `,
-      // Gmail SMTP credentials (Note: In production, these should be server-side)
-      
+  function sendEmailMessage(orderData, docRef) {
+    // Build a plain-text fallback message (nodemailer handler expects `text`)
+    const itemsText = cart
+      .map(item => `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`)
+      .join("\n");
+
+    const emailText = [
+      '🍽️ New Order Received',
+      '',
+      `Customer: ${orderData.customerName}`,
+      `Email: ${orderData.customerEmail}`,
+      `Phone: ${orderData.customerPhone}`,
+      `Address: ${orderData.customerLocation}`,
+      '',
+      'Items:',
+      itemsText,
+      '',
+      `Total: $${orderData.totalPrice}`,
+      `Order ID: ${docRef.id}`,
+      `Order Time: ${new Date().toLocaleString()}`
+    ].join('\n');
+
+    const payload = {
+      to: 'mouhanedmliki6@gmail.com',
+      subject: `🍽️ New Order #${docRef.id} - Speranza Pizza`,
+      text: emailText
     };
 
-    // Send email via your backend API endpoint
-    fetch('/api/send-email.js', {
+    // Send email via your backend API endpoint (Next.js API route)
+    fetch('/api/send-email', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(emailData)
+      body: JSON.stringify(payload)
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        console.log('✅ Email sent successfully to boss!');
-      } else {
-        console.log('❌ Failed to send email:', data.error);
-      }
-    })
-    .catch(error => {
-      console.log('❌ Email sending error:', error);
-      // Fallback: log the order details for manual processing
-      console.log('📧 Order notification data:', emailData);
-    });
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          console.log('✅ Email sent successfully to boss!');
+        } else {
+          console.warn('❌ Failed to send email:', data.error || data);
+        }
+      })
+      .catch(err => {
+        console.error('❌ Email sending error:', err);
+        // Fallback: log the order details for manual processing
+        console.log('📧 Order notification data:', payload);
+      });
   }
-
-  // Call the email function
   sendEmailMessage(orderData, docRef);  
 
   // === Success user feedback ===
