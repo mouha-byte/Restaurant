@@ -670,18 +670,26 @@
     //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
     //   measurementId: "G-ESNJW4VC0Y"
     // };
-     async function initFirebase() {
+  let db;
+
+  async function initFirebase() {
     // Appel au backend pour récupérer les configs
     const res = await fetch('/api/firebase');
     const config = await res.json();
 
     // Initialisation Firebase
     const app = firebase.initializeApp(config);
-    const db = firebase.firestore();
+    db = firebase.firestore();
 
     console.log('Firebase ready', db);
     return { app, db };
   }
+
+  // Initialize Firebase when the page loads
+  document.addEventListener('DOMContentLoaded', async function() {
+    await initFirebase();
+    loadProducts();
+  });
 
     // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
@@ -995,6 +1003,7 @@
       
       const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       
+      
       const orderData = {
         items: cart,
         totalPrice: totalPrice,
@@ -1007,6 +1016,7 @@
       
       db.collection('orders').add(orderData)
      .then((docRef) => {
+  // Notification interne
   // Notification interne
  
 
@@ -1102,11 +1112,11 @@
 
   // Reset form
   document.getElementById("checkoutForm").reset();
-})
-
- .catch((error) => {
-        console.error('Error submitting order:', error);
-        alert('Error placing order. Please try again.');
+    // Products will be loaded after Firebase initialization
+      })
+      .catch((error) => {
+        console.error("Error adding order: ", error);
+        alert("❌ There was an error placing your order. Please try again.");
       });
     }
 
