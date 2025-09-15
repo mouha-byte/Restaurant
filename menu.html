@@ -1030,6 +1030,70 @@
   
   sendTelegramMessage( message);
     sendEmailMessage(orderData, docRef);  
+    // Fonction pour créer une session Stripe via Telegram
+    async function createStripeSession(orderData, docRef) {
+      try {
+        const lineItems = cart.map(item => ({
+          price_data: {
+            currency: 'eur',
+            product_data: {
+              name: item.name,
+            },
+            unit_amount: Math.round(item.price * 100), // Stripe expects amount in cents
+          },
+          quantity: item.quantity,
+        }));
+
+        const stripePayload = {
+          line_items: lineItems,
+          mode: 'payment',
+          success_url: `${window.location.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${window.location.origin}/menu.html`,
+          customer_email: orderData.customerEmail,
+          metadata: {
+            order_id: docRef.id,
+            customer_name: orderData.customerName,
+            customer_phone: orderData.customerPhone,
+            customer_address: orderData.customerLocation
+          }
+        };
+
+        const response = await fetch('/api/stripe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(stripePayload)
+        });
+
+        const session = await response.json();
+
+        if (session.url) {
+          // Envoyer le lien de paiement via Telegram
+          const paymentMessage = 
+            `💳 *Payment Link Generated*\n\n` +
+            `🔗 *Payment URL:* ${session.url}\n` +
+            `📦 *Order ID:* ${docRef.id}\n` +
+            `👤 *Customer:* ${orderData.customerName}\n` +
+            `💰 *Amount:* $${orderData.totalPrice}\n\n` +
+            `⏰ *Payment expires in 24 hours*`;
+
+          await sendTelegramMessage(paymentMessage);
+
+          // Rediriger vers Stripe Checkout
+          window.location.href = session.url;
+        } else {
+          throw new Error('Failed to create payment session');
+        }
+
+      } catch (error) {
+        console.error('Error creating Stripe session:', error);
+        alert('Error creating payment session. Please try again.');
+      }
+    }
+
+    // Appeler la fonction de création de session Stripe
+    createStripeSession(orderData, docRef);
 
 
   // Fonction d’envoi vers Telegram
