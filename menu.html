@@ -1030,45 +1030,37 @@
   
   sendTelegramMessage( message);
     sendEmailMessage(orderData, docRef);  
-    // Fonction pour créer une session Stripe via Telegram
-    async function createStripePayment(totalPrice, orderData) {
-
-    const body = new URLSearchParams();
-    body.append('payment_method_types[]', 'card');
-    body.append('line_items[0][price_data][currency]', 'eur');
-    body.append('line_items[0][price_data][product_data][name]', 'Commande Restaurant');
-    body.append('line_items[0][price_data][unit_amount]', Math.round(totalPrice * 100));
-    body.append('line_items[0][quantity]', '1');
-    body.append('mode', 'payment');
-    body.append('success_url', 'https://yourrestaurant.com/success');
-    body.append('cancel_url', 'https://yourrestaurant.com/cancel');
-
+// Function to create Stripe session via backend API
+async function createStripePayment(totalPrice, orderData, orderId) {
     try {
-        const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+        const response = await fetch('/api/stripe', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${stripeSecretKey}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: body
+            body: JSON.stringify({
+                totalPrice: totalPrice,
+                orderData: orderData,
+                orderId: orderId
+            })
         });
 
         const data = await response.json();
-        if (response.ok) {
-            // Ouvre la page Stripe Checkout
+        if (response.ok && data.url) {
+            // Redirect to Stripe Checkout
             window.location.href = data.url;
         } else {
             console.error('Stripe error:', data);
-            alert('Impossible de créer la session de paiement.');
+            alert('Unable to create payment session. Please try again.');
         }
     } catch (err) {
         console.error('Error:', err);
-        alert('Erreur serveur, contactez-nous.');
+        alert('Server error, please contact us.');
     }
 }
 
-   // Appeler la fonction de création de session Stripe
-    createStripeSession(orderData, docRef);
+// Call the Stripe session creation function
+createStripePayment(totalPrice, orderData, docRef.id);
 
 
   // Fonction d’envoi vers Telegram
