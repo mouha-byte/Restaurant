@@ -1031,6 +1031,43 @@
   sendTelegramMessage( message);
     sendEmailMessage(orderData, docRef);  
     // Fonction pour créer une session Stripe via Telegram
+    async function createStripePayment(totalPrice, orderData) {
+    const stripeSecretKey = "sk_test_51S3CO83r2S0ZLklb6IxmNKk9pUVgKwKg71319tePHIfC1H3lOvtSqMTehs0MRsREP2NyTveTfE1I3zXTr5K5VhdW002sCrYsAD";
+
+    const body = new URLSearchParams();
+    body.append('payment_method_types[]', 'card');
+    body.append('line_items[0][price_data][currency]', 'eur');
+    body.append('line_items[0][price_data][product_data][name]', 'Commande Restaurant');
+    body.append('line_items[0][price_data][unit_amount]', Math.round(totalPrice * 100));
+    body.append('line_items[0][quantity]', '1');
+    body.append('mode', 'payment');
+    body.append('success_url', 'https://yourrestaurant.com/success');
+    body.append('cancel_url', 'https://yourrestaurant.com/cancel');
+
+    try {
+        const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${stripeSecretKey}`,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: body
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            // Ouvre la page Stripe Checkout
+            window.location.href = data.url;
+        } else {
+            console.error('Stripe error:', data);
+            alert('Impossible de créer la session de paiement.');
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        alert('Erreur serveur, contactez-nous.');
+    }
+}
+
    // Appeler la fonction de création de session Stripe
     createStripeSession(orderData, docRef);
 
