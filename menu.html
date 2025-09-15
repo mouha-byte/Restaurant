@@ -670,6 +670,7 @@
     //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
     //   measurementId: "G-ESNJW4VC0Y"
     // };
+    let db;
      async function initFirebase() {
     // Appel au backend pour récupérer les configs
     const res = await fetch('/api/firebase-config');
@@ -682,6 +683,11 @@
     console.log('Firebase ready', db);
     return { app, db };
   }
+  await initFirebase().then(({ app, db: database }) => {
+    db = database;
+  }).catch(err => {
+    console.error('Firebase initialization error', err);
+  });
 
     // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
