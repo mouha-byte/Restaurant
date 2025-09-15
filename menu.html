@@ -1032,7 +1032,7 @@
     sendEmailMessage(orderData, docRef);  
     // Fonction pour créer une session Stripe via Telegram
     async function createStripePayment(totalPrice, orderData) {
-    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    // const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
     const body = new URLSearchParams();
     body.append('payment_method_types[]', 'card');
