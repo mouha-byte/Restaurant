@@ -672,15 +672,29 @@
     // };
     // firebase.initializeApp(firebaseConfig);
     // const db = firebase.firestore();
-  // Call backend to get Firebase config
-  const res = await fetch('/api/firebase');
-  const config = await res.json();
+  // Call backend to get Firebase config and initialize Firebase
+  async function initializeFirebase() {
+    try {
+      const res = await fetch('/api/firebase');
+      const config = await res.json();
+      
+      // Initialize Firebase
+      const app = firebase.initializeApp(config);
+      const db = firebase.firestore();
+      
+      console.log('Firebase ready', db);
+      return db;
+    } catch (error) {
+      console.error('Error initializing Firebase:', error);
+      return null;
+    }
+  }
 
-  // Initialize Firebase
-  const app = firebase.initializeApp(config);
-  const db = firebase.firestore();
-
-  console.log('Firebase ready', db);
+  // Initialize Firebase when page loads
+  let db;
+  initializeFirebase().then(database => {
+    db = database;
+  });
 
   //   // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
