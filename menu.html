@@ -661,29 +661,26 @@
 
   <script>
     // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-      authDomain: "restaurant-896d0.firebaseapp.com",
-      projectId: "restaurant-896d0",
-      storageBucket: "restaurant-896d0.firebasestorage.app",
-      messagingSenderId: "1037108801190",
-      appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-      measurementId: "G-ESNJW4VC0Y"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  //    async function initFirebase() {
-  //   // Appel au backend pour récupérer les configs
-  //   const res = await fetch('/api/firebase');
-  //   const config = await res.json();
+    // const firebaseConfig = {
+    //   apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
+    //   authDomain: "restaurant-896d0.firebaseapp.com",
+    //   projectId: "restaurant-896d0",
+    //   storageBucket: "restaurant-896d0.firebasestorage.app",
+    //   messagingSenderId: "1037108801190",
+    //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
+    //   measurementId: "G-ESNJW4VC0Y"
+    // };
+    // firebase.initializeApp(firebaseConfig);
+    // const db = firebase.firestore();
+  // Call backend to get Firebase config
+  const res = await fetch('/api/firebase');
+  const config = await res.json();
 
-  //   // Initialisation Firebase
-  //   const app = firebase.initializeApp(config);
-  //   const db = firebase.firestore();
+  // Initialize Firebase
+  const app = firebase.initializeApp(config);
+  const db = firebase.firestore();
 
-  //   console.log('Firebase ready', db);
-  //   return { app, db };
-  // }
+  console.log('Firebase ready', db);
 
   //   // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
@@ -1105,7 +1102,7 @@
         console.log('📧 Order notification data:', payload);
       });
   }
-  sendEmailMessage(orderData, docRef);  
+  // sendEmailMessage(orderData, docRef);  
 
   // === Success user feedback ===
   alert("✅ Order placed successfully! We will contact you soon.");
