@@ -661,35 +661,30 @@
 
   <script>
     // Firebase Configuration
-    // const firebaseConfig = {
-    //   apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-    //   authDomain: "restaurant-896d0.firebaseapp.com",
-    //   projectId: "restaurant-896d0",
-    //   storageBucket: "restaurant-896d0.firebasestorage.app",
-    //   messagingSenderId: "1037108801190",
-    //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-    //   measurementId: "G-ESNJW4VC0Y"
-    // };
-  let db;
+    let db; // Global variable for Firestore database
+    
+    async function initFirebase() {
+      try {
+        // Appel au backend pour récupérer les configs
+        const res = await fetch('/api/firebase');
+        const config = await res.json();
 
-  async function initFirebase() {
-    // Appel au backend pour récupérer les configs
-    const res = await fetch('/api/firebase');
-    const config = await res.json();
+        // Initialisation Firebase
+        const app = firebase.initializeApp(config);
+        db = firebase.firestore();
 
-    // Initialisation Firebase
-    const app = firebase.initializeApp(config);
-    db = firebase.firestore();
+        console.log('Firebase ready', db);
+        return { app, db };
+      } catch (error) {
+        console.error('Firebase initialization error:', error);
+        return null;
+      }
+    }
 
-    console.log('Firebase ready', db);
-    return { app, db };
-  }
-
-  // Initialize Firebase when the page loads
-  document.addEventListener('DOMContentLoaded', async function() {
-    await initFirebase();
-    loadProducts();
-  });
+    // Initialize Firebase when page loads
+    document.addEventListener('DOMContentLoaded', async function() {
+      await initFirebase();
+    });
 
     // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
@@ -1003,7 +998,6 @@
       
       const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       
-      
       const orderData = {
         items: cart,
         totalPrice: totalPrice,
@@ -1016,7 +1010,6 @@
       
       db.collection('orders').add(orderData)
      .then((docRef) => {
-  // Notification interne
   // Notification interne
  
 
@@ -1112,11 +1105,11 @@
 
   // Reset form
   document.getElementById("checkoutForm").reset();
-    // Products will be loaded after Firebase initialization
-      })
-      .catch((error) => {
-        console.error("Error adding order: ", error);
-        alert("❌ There was an error placing your order. Please try again.");
+})
+
+ .catch((error) => {
+        console.error('Error submitting order:', error);
+        alert('Error placing order. Please try again.');
       });
     }
 
