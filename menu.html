@@ -661,40 +661,29 @@
 
   <script>
     // Firebase Configuration
-    // const firebaseConfig = {
-    //   apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-    //   authDomain: "restaurant-896d0.firebaseapp.com",
-    //   projectId: "restaurant-896d0",
-    //   storageBucket: "restaurant-896d0.firebasestorage.app",
-    //   messagingSenderId: "1037108801190",
-    //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-    //   measurementId: "G-ESNJW4VC0Y"
-    // };
-    // firebase.initializeApp(firebaseConfig);
-    // const db = firebase.firestore();
-  // Call backend to get Firebase config and initialize Firebase
-  async function initializeFirebase() {
-    try {
-      const res = await fetch('/api/firebase');
-      const config = await res.json();
-      
-      // Initialize Firebase
-      const app = firebase.initializeApp(config);
-      const db = firebase.firestore();
-      
-      console.log('Firebase ready', db);
-      return db;
-    } catch (error) {
-      console.error('Error initializing Firebase:', error);
-      return null;
-    }
-  }
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
+      authDomain: "restaurant-896d0.firebaseapp.com",
+      projectId: "restaurant-896d0",
+      storageBucket: "restaurant-896d0.firebasestorage.app",
+      messagingSenderId: "1037108801190",
+      appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
+      measurementId: "G-ESNJW4VC0Y"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  //    async function initFirebase() {
+  //   // Appel au backend pour récupérer les configs
+  //   const res = await fetch('/api/firebase');
+  //   const config = await res.json();
 
-  // Initialize Firebase when page loads
-  let db;
-  initializeFirebase().then(database => {
-    db = database;
-  });
+  //   // Initialisation Firebase
+  //   const app = firebase.initializeApp(config);
+  //   const db = firebase.firestore();
+
+  //   console.log('Firebase ready', db);
+  //   return { app, db };
+  // }
 
   //   // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
