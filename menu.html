@@ -661,24 +661,24 @@
 
   <script>
     // Firebase Configuration
-    // const firebaseConfig = {
-    //   apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-    //   authDomain: "restaurant-896d0.firebaseapp.com",
-    //   projectId: "restaurant-896d0",
-    //   storageBucket: "restaurant-896d0.firebasestorage.app",
-    //   messagingSenderId: "1037108801190",
-    //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-    //   measurementId: "G-ESNJW4VC0Y"
-    // };
     const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: `${process.env.FIREBASE_PROJECT_ID}.firebaseapp.com`,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
-  messagingSenderId: process.env.FIREBASE_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
-};
+      apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
+      authDomain: "restaurant-896d0.firebaseapp.com",
+      projectId: "restaurant-896d0",
+      storageBucket: "restaurant-896d0.firebasestorage.app",
+      messagingSenderId: "1037108801190",
+      appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
+      measurementId: "G-ESNJW4VC0Y"
+    };
+//     const firebaseConfig = {
+//   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+//   authDomain: `${process.env.FIREBASE_PROJECT_ID}.firebaseapp.com`,
+//   projectId: process.env.FIREBASE_PROJECT_ID,
+//   storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,
+//   messagingSenderId: process.env.FIREBASE_SENDER_ID,
+//   appId: process.env.FIREBASE_APP_ID,
+//   measurementId: process.env.FIREBASE_MEASUREMENT_ID
+// };
 
 
     firebase.initializeApp(firebaseConfig);
