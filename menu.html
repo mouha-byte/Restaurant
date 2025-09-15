@@ -661,30 +661,27 @@
 
   <script>
     // Firebase Configuration
-    let db; // Global variable for Firestore database
-    
-    async function initFirebase() {
-      try {
-        // Appel au backend pour récupérer les configs
-        const res = await fetch('/api/firebase');
-        const config = await res.json();
+    // const firebaseConfig = {
+    //   apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
+    //   authDomain: "restaurant-896d0.firebaseapp.com",
+    //   projectId: "restaurant-896d0",
+    //   storageBucket: "restaurant-896d0.firebasestorage.app",
+    //   messagingSenderId: "1037108801190",
+    //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
+    //   measurementId: "G-ESNJW4VC0Y"
+    // };
+     async function initFirebase() {
+    // Appel au backend pour récupérer les configs
+    const res = await fetch('/api/firebase');
+    const config = await res.json();
 
-        // Initialisation Firebase
-        const app = firebase.initializeApp(config);
-        db = firebase.firestore();
+    // Initialisation Firebase
+    const app = firebase.initializeApp(config);
+    const db = firebase.firestore();
 
-        console.log('Firebase ready', db);
-        return { app, db };
-      } catch (error) {
-        console.error('Firebase initialization error:', error);
-        return null;
-      }
-    }
-
-    // Initialize Firebase when page loads
-    document.addEventListener('DOMContentLoaded', async function() {
-      await initFirebase();
-    });
+    console.log('Firebase ready', db);
+    return { app, db };
+  }
 
     // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
