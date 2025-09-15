@@ -9,10 +9,21 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // API Route : /api/create-payment
 export default async function handler(req, res) {
+    console.log('=== DÉBUT DEBUG STRIPE ===');
+    console.log('Méthode:', req.method);
+    console.log('Body reçu:', req.body);
+    console.log('Variables env:', {
+        STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ? 'Définie' : 'Manquante',
+        FRONTEND_URL: process.env.FRONTEND_URL || 'Manquante'
+    });
+
     if (req.method === 'POST') {
         const { amount, email } = req.body;
+        
+        console.log('Données extraites:', { amount, email });
 
         try {
+            console.log('Création session Stripe...');
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
                 line_items: [{
@@ -29,12 +40,19 @@ export default async function handler(req, res) {
                 customer_email: email
             });
 
+            console.log('Session créée avec succès:', session.id);
+            console.log('URL de checkout:', session.url);
             res.json({ url: session.url });
         } catch (error) {
+            console.error('Erreur Stripe:', error.message);
+            console.error('Stack trace:', error.stack);
             res.status(500).json({ error: error.message });
         }
     } else {
+        console.log('Méthode non autorisée:', req.method);
         res.setHeader('Allow', 'POST');
         res.status(405).end('Method Not Allowed');
     }
+    
+    console.log('=== FIN DEBUG STRIPE ===');
 }
