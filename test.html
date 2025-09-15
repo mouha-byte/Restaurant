@@ -30,6 +30,8 @@
         });
 
         const data = await response.json();
+        alert('error $' + data.error + '.');
+
 
         if(data.url) {
           // Redirige automatiquement le client vers Stripe Checkout
