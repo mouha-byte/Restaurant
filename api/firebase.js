@@ -1,4 +1,4 @@
-// api/firebase-config.js (backend)
+// api/firebase-config.js (backend)f
 import express from 'express';
 const router = express.Router();
 
