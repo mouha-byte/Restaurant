@@ -661,35 +661,31 @@
 
   <script>
     // Firebase Configuration
-    // const firebaseConfig = {
-    //   apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-    //   authDomain: "restaurant-896d0.firebaseapp.com",
-    //   projectId: "restaurant-896d0",
-    //   storageBucket: "restaurant-896d0.firebasestorage.app",
-    //   messagingSenderId: "1037108801190",
-    //   appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-    //   measurementId: "G-ESNJW4VC0Y"
-    // };
-    let db;
-     async function initFirebase() {
-    // Appel au backend pour récupérer les configs
-    const res = await fetch('/api/firebase-config');
-    const config = await res.json();
-
-    // Initialisation Firebase
-    const app = firebase.initializeApp(config);
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
+      authDomain: "restaurant-896d0.firebaseapp.com",
+      projectId: "restaurant-896d0",
+      storageBucket: "restaurant-896d0.firebasestorage.app",
+      messagingSenderId: "1037108801190",
+      appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
+      measurementId: "G-ESNJW4VC0Y"
+    };
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+  //    async function initFirebase() {
+  //   // Appel au backend pour récupérer les configs
+  //   const res = await fetch('/api/firebase');
+  //   const config = await res.json();
 
-    console.log('Firebase ready', db);
-    return { app, db };
-  }
-  await initFirebase().then(({ app, db: database }) => {
-    db = database;
-  }).catch(err => {
-    console.error('Firebase initialization error', err);
-  });
+  //   // Initialisation Firebase
+  //   const app = firebase.initializeApp(config);
+  //   const db = firebase.firestore();
 
-    // Filter functionality
+  //   console.log('Firebase ready', db);
+  //   return { app, db };
+  // }
+
+  //   // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
       const filterButtons = document.querySelectorAll('.filters_menu li');
       const productCards = document.querySelectorAll('.product-grid > div');
@@ -1017,13 +1013,27 @@
  
 
   // === Préparation du message Telegram ===
+  const message =
+    `🍽️ *New Order Received*\n\n` +
+    `👤 *Customer:* ${customerName}\n` +
+    `📧 *Email:* ${customerEmail}\n` +
+    `📱 *Phone:* ${customerPhone}\n` +
+    `📍 *Address:* ${customerLocation}\n\n` +
+    `🛒 *Items:*\n` +
+    cart
+      .map(
+        (item) => `• ${item.name} x${item.quantity} - $${item.price * item.quantity}`
+      )
+      .join("\n") +
+    `\n\n💰 *Total: $${totalPrice}*\n` +
+    `📅 *Order ID:* ${docRef.id}`;
   
-  sendTelegramMessage(chatId, message);
+  sendTelegramMessage( message);
     sendEmailMessage(orderData, docRef);  
 
 
   // Fonction d’envoi vers Telegram
-  async function sendTelegramMessage(chatId, message) {
+  async function sendTelegramMessage(message) {
     // chatId argument is ignored because the server-side API uses the CHAT_ID env var.
     try {
       const res = await fetch('/api/send', {
