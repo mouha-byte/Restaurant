@@ -1030,144 +1030,125 @@
   
   sendTelegramMessage( message);
     sendEmailMessage(orderData, docRef);  
-    createStripePayment(totalPrice, orderData, docRef.id);
-},
-
 // Function to create Stripe session via backend API
 async function createStripePayment(totalPrice, orderData, orderId) {
-  try {
-    const response = await fetch("/server", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        totalPrice,
-        orderData,
-        orderId
-      })
+    try {
+        const response = await fetch('/api/stripe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                totalPrice: totalPrice,
+                orderData: orderData,
+                orderId: orderId
+            })
         });
-
-        console.log('🔍 Debug: Stripe payment request sent');
-        console.log('📊 Debug: Total Price:', totalPrice);
-        console.log('📋 Debug: Order Data:', orderData);
-        console.log('🆔 Debug: Order ID:', orderId);
-
-        if (!response.ok) {
-      console.error('❌ Debug: Response not OK:', response.status, response.statusText);
-      throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
         const data = await response.json();
-        console.log('✅ Debug: Response data:', data);
-        
         if (response.ok && data.url) {
-      console.log('🔗 Debug: Redirecting to Stripe URL:', data.url);
-      window.location.href = data.url; // redirect to Stripe
-      return;
+            // Redirect to Stripe Checkout
+            window.location.href = data.url;
+        } else {
+            console.error('Stripe error:', data);
+            alert('Unable to create payment session. Please try again.');
         }
-
-        console.error('❌ Debug: Stripe session error:', data);
-        alert('Unable to create payment session. Please try again.');
-      } catch (err) {
-        console.error('🚨 Debug: Stripe session network error:', err);
-        console.error('🔍 Debug: Error details:', {
-      message: err.message,
-      stack: err.stack,
-      name: err.name
-        });
-        alert('Server error while creating payment. Please contact us.');
-      }
-}
-      
-
-   
-
-// Fonction d'envoi vers Telegram
-async function sendTelegramMessage(message) {
-  // chatId argument is ignored because the server-side API uses the CHAT_ID env var.
-  try {
-    const res = await fetch('/api/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      console.log('📱 Telegram message requested via backend:', data);
-    } else {
-      console.error('❌ Backend failed to send Telegram message:', data);
+    } catch (err) {
+        console.error('Error:', err);
+        alert('Server error, please contact us.');
     }
-
-    return data;
-  } catch (error) {
-    console.error('⚠️ Error calling backend Telegram endpoint:', error);
-    return null;
-  }
 }
 
-function sendEmailMessage(orderData, docRef) {
-  // Build a plain-text fallback message (nodemailer handler expects `text`)
-  const itemsText = cart
-    .map(item => `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`)
-    .join("\n");
+// Call the Stripe session creation function
+createStripePayment(totalPrice, orderData, docRef.id);
 
-  const emailText = [
-    '🍽️ New Order Received',
-    '',
-    `Customer: ${orderData.customerName}`,
-    `Email: ${orderData.customerEmail}`,
-    `Phone: ${orderData.customerPhone}`,
-    `Address: ${orderData.customerLocation}`,
-    '',
-    'Items:',
-    itemsText,
-    '',
-    `Total: $${orderData.totalPrice}`,
-    `Order ID: ${docRef.id}`,
-    `Order Time: ${new Date().toLocaleString()}`
-  ].join('\n');
 
-  const payload = {
-    to: 'mouhanedmliki6@gmail.com',
-    subject: `🍽️ New Order #${docRef.id} - Speranza Pizza`,
-    text: emailText
-  };
+  // Fonction d’envoi vers Telegram
+  async function sendTelegramMessage(message) {
+    // chatId argument is ignored because the server-side API uses the CHAT_ID env var.
+    try {
+      const res = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
 
-  // Send email via your backend API endpoint (Next.js API route)
-  fetch('/api/send-email', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        console.log('✅ Email sent successfully to boss!');
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log('📱 Telegram message requested via backend:', data);
       } else {
-        console.warn('❌ Failed to send email:', data.error || data);
+        console.error('❌ Backend failed to send Telegram message:', data);
       }
+
+      return data;
+    } catch (error) {
+      console.error('⚠️ Error calling backend Telegram endpoint:', error);
+      return null;
+    }
+  }function sendEmailMessage(orderData, docRef) {
+    // Build a plain-text fallback message (nodemailer handler expects `text`)
+    const itemsText = cart
+      .map(item => `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`)
+      .join("\n");
+
+    const emailText = [
+      '🍽️ New Order Received',
+      '',
+      `Customer: ${orderData.customerName}`,
+      `Email: ${orderData.customerEmail}`,
+      `Phone: ${orderData.customerPhone}`,
+      `Address: ${orderData.customerLocation}`,
+      '',
+      'Items:',
+      itemsText,
+      '',
+      `Total: $${orderData.totalPrice}`,
+      `Order ID: ${docRef.id}`,
+      `Order Time: ${new Date().toLocaleString()}`
+    ].join('\n');
+
+    const payload = {
+      to: 'mouhanedmliki6@gmail.com',
+      subject: `🍽️ New Order #${docRef.id} - Speranza Pizza`,
+      text: emailText
+    };
+
+    // Send email via your backend API endpoint (Next.js API route)
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     })
-    .catch(err => {
-      console.error('❌ Email sending error:', err);
-      // Fallback: log the order details for manual processing
-      console.log('📧 Order notification data:', payload);
-    });
-}
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          console.log('✅ Email sent successfully to boss!');
+        } else {
+          console.warn('❌ Failed to send email:', data.error || data);
+        }
+      })
+      .catch(err => {
+        console.error('❌ Email sending error:', err);
+        // Fallback: log the order details for manual processing
+        console.log('📧 Order notification data:', payload);
+      });
+  }
+  // sendEmailMessage(orderData, docRef);  
 
-// === Success user feedback ===
-alert("✅ Order placed successfully! We will contact you soon.");
+  // === Success user feedback ===
+  alert("✅ Order placed successfully! We will contact you soon.");
 
-// Vider le panier et fermer la modal
-cart = [];
-updateCartDisplay();
-$("#checkoutModal").modal("hide");
-$("#floating-cart").removeClass("open");
+  // Vider le panier et fermer la modal
+  cart = [];
+  updateCartDisplay();
+  $("#checkoutModal").modal("hide");
+  $("#floating-cart").removeClass("open");
 
-// Reset form
-document.getElementById("checkoutForm").reset();
+  // Reset form
+  document.getElementById("checkoutForm").reset();
 })
 
  .catch((error) => {
