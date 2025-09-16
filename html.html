@@ -104,12 +104,23 @@
     async function createCheckoutSession(data) {
       const errorBox = document.getElementById('errorBox');
       errorBox.style.display = 'none';
+
+      // Determine API path (supports local server.js or Vercel serverless)
+      const apiPath = '/api/create-checkout-session';
+
       try {
-        const response = await fetch('/create-checkout-session', {
+        console.log('[Checkout] Creating session with payload:', {
+          orderId: data.orderId,
+          items: data.items,
+          total: data.total
+        });
+
+        const response = await fetch(apiPath, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             orderId: data.orderId,
+              // totalPrice not trusted for charge, but passed for reference
             totalPrice: Number(data.total),
             items: data.items,
             customerName: data.customerName,
@@ -119,25 +130,20 @@
           })
         });
 
-        // Handle redirect case
-        if (response.redirected && response.url) {
-          window.location.href = response.url;
-          return;
-        }
-
-        let payloadText = await response.text();
-        let payload;
-        try { payload = JSON.parse(payloadText); } catch (_) { payload = {}; }
+        let raw = await response.text();
+        let payload = {};
+        try { payload = JSON.parse(raw); } catch (_) {}
 
         if (response.ok && payload.url) {
           window.location.href = payload.url;
           return;
         }
 
-        throw new Error(payload.error || payload.message || 'Failed to create checkout session');
+        throw new Error(payload.error || `HTTP ${response.status} – ${raw.slice(0,200)}`);
       } catch (err) {
         console.error('Stripe session error:', err);
-        errorBox.textContent = 'Unable to create payment session: ' + err.message;
+        errorBox.textContent = 'Unable to create payment session: ' + err.message +
+          ' (Check that /api/create-checkout-session exists and STRIPE_SECRET_KEY is set).';
         errorBox.style.display = 'block';
         document.getElementById('retryBtn').style.display = 'inline-block';
         document.getElementById('payNowBtn').style.display = 'inline-block';

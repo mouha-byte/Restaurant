@@ -1036,14 +1036,13 @@ function createStripePayment(orderId, orderData) {
     const checkoutData = {
       orderId,
       total: orderData.totalPrice,
-      items: orderData.items || orderData.items === undefined ? orderData.items : cart,
+      items: orderData.items,
       customerName: orderData.customerName,
       customerEmail: orderData.customerEmail,
       customerPhone: orderData.customerPhone,
       customerLocation: orderData.customerLocation
     };
     sessionStorage.setItem('checkoutData', JSON.stringify(checkoutData));
-    // Minimal URL (data retrieved in html.html from sessionStorage)
     window.location.href = 'html.html?orderId=' + encodeURIComponent(orderId);
   } catch (e) {
     console.error('Failed to init payment redirect', e);
