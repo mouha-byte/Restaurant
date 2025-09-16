@@ -1004,7 +1004,8 @@
         customerEmail: customerEmail,
         customerPhone: customerPhone,
         customerLocation: customerLocation,
-        orderDate: firebase.firestore.FieldValue.serverTimestamp()
+        orderDate: firebase.firestore.FieldValue.serverTimestamp(),
+        paymentStatus: 'pending' // <-- added
       };
       
       db.collection('orders').add(orderData)
@@ -1148,8 +1149,35 @@ function createStripePayment(orderId, orderData) {
       });
     }
 
-     // Appel initial pour charger les produits
-    loadProducts();
+    // --- Post Stripe return payment handler ---
+  function handlePostPayment() {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('payment');
+    const orderId = params.get('orderId');
+    if (!orderId || !status) return;
+
+    const flagKey = 'paymentConfirmed-' + orderId;
+    if (status === 'success') {
+      if (sessionStorage.getItem(flagKey)) return; // already processed
+      db.collection('orders').doc(orderId).update({
+        paymentStatus: 'paid',
+        paymentConfirmedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        sessionStorage.setItem(flagKey, '1');
+        alert('✅ Payment confirmed. Thank you!');
+      }).catch(err => {
+        console.error('Failed to set paymentStatus=paid', err);
+      });
+    } else if (status === 'cancelled') {
+      db.collection('orders').doc(orderId).update({
+        paymentStatus: 'cancelled'
+      }).catch(() => {});
+    }
+  }
+
+  // Call after initial UI setup
+  loadProducts();
+  handlePostPayment();
   </script>
 
   <!-- footer section -->
