@@ -42,6 +42,7 @@ async function createStripePaymentSession(totalPrice, orderData) {
         });
 
         console.log('Session created successfully:', session.id);
+        console.log('Payment session URL:', session.url);
         return {
             success: true,
             url: session.url,

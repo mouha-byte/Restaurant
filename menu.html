@@ -1033,35 +1033,36 @@
 // Function to create Stripe session via backend API
 async function createStripePayment(totalPrice, orderData, orderId) {
     try {
-        const response = await fetch('/api/stripe', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                totalPrice: totalPrice,
-                orderData: orderData,
-                orderId: orderId
-            })
-        });
+      const response = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          totalPrice,
+          orderData,
+          orderId
+        })
+      });
 
-        const data = await response.json();
-        if (response.ok && data.url) {
-            // Redirect to Stripe Checkout
-            window.location.href = data.url;
-        } else {
-            console.error('Stripe error:', data);
-            alert('Unable to create payment session. Please try again.');
-        }
+      // If server.js responds with a redirect (e.g., res.redirect(303, session.url))
+      if (response.redirected && response.url) {
+        window.location.href = response.url;
+        return;
+      }
+
+      // Otherwise expect JSON with a checkout URL
+      const data = await response.json().catch(() => ({}));
+      if (response.ok && data && data.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      console.error('Stripe session error:', data);
+      alert('Unable to create payment session. Please try again.');
     } catch (err) {
-        console.error('Error:', err);
-        alert('Server error, please contact us.');
+      console.error('Stripe session network error:', err);
+      alert('Server error while creating payment. Please contact us.');
     }
-}
-
-// Call the Stripe session creation function
-createStripePayment(totalPrice, orderData, docRef.id);
-
+  }
 
   // Fonction d’envoi vers Telegram
   async function sendTelegramMessage(message) {
