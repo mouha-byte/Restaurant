@@ -8,12 +8,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-
-// Skip JSON parsing for Stripe webhook so we can access the raw body
-app.use((req, res, next) => {
-    if (req.originalUrl === "/webhook") return next();
-    return bodyParser.json()(req, res, next);
-});
+app.use(express.json());
 
 // Load Stripe secret
 const { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PORT } = process.env;
@@ -43,21 +38,39 @@ app.get("/", (req, res) => {
 // 1️⃣ Create a checkout session
 app.post("/create-checkout-session", async (req, res) => {
     try {
+        const {
+            orderId,
+            items = [],
+            totalPrice,
+            customerName,
+            customerEmail
+        } = req.body;
+
+        if (!items.length || !totalPrice) {
+            return res.status(400).json({ error: 'Missing items or totalPrice' });
+        }
+
+        const line_items = items.map(it => ({
+            price_data: {
+                currency: 'eur',
+                product_data: { name: it.name },
+                unit_amount: Math.round(Number(it.price) * 100) // convert to cents
+            },
+            quantity: it.quantity || 1
+        }));
+
+        const origin = req.headers.origin || `http://localhost:3000`;
         const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
-            mode: "payment",
-            line_items: [
-                {
-                    price_data: {
-                        currency: "usd",
-                        product_data: { name: "Pizza Order" },
-                        unit_amount: 1500,
-                    },
-                    quantity: 1,
-                },
-            ],
-            success_url: `${req.protocol}://${req.get('host')}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${req.protocol}://${req.get('host')}/cancel`,
+            mode: 'payment',
+            payment_method_types: ['card'],
+            line_items,
+            customer_email: customerEmail || undefined,
+            metadata: {
+                orderId: orderId || '',
+                customerName: customerName || ''
+            },
+            success_url: `${origin}/menu.html?payment=success&orderId=${orderId}`,
+            cancel_url: `${origin}/html.html?payment=cancelled&orderId=${orderId}`
         });
 
         // Temporary storage
@@ -69,7 +82,9 @@ app.post("/create-checkout-session", async (req, res) => {
             createdAt: new Date().toISOString(),
         };
 
-        res.json({ url: session.url });
+        // Option 1: JSON response
+        return res.json({ url: session.url });
+        // Option 2 (alternative): res.redirect(303, session.url);
     } catch (error) {
         console.error("Error creating checkout session:", error);
         res.status(500).json({ error: error.message });

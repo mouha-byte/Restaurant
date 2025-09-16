@@ -1031,28 +1031,28 @@
   sendTelegramMessage( message);
     sendEmailMessage(orderData, docRef);  
 // Function to create Stripe session via backend API
-async function createStripePayment(totalPrice, orderData, orderId) {
+function createStripePayment(orderId, orderData) {
   try {
-    // Redirect to payment page with order data
-    const orderParams = new URLSearchParams({
-      orderId: orderId,
-      total: totalPrice,
+    const checkoutData = {
+      orderId,
+      total: orderData.totalPrice,
+      items: orderData.items || orderData.items === undefined ? orderData.items : cart,
       customerName: orderData.customerName,
       customerEmail: orderData.customerEmail,
       customerPhone: orderData.customerPhone,
-      customerLocation: orderData.customerLocation,
-      items: JSON.stringify(orderData.items)
-    });
-    
-    window.location.href = `html.html?${orderParams.toString()}`;
-  } catch (err) {
-    console.error('Error:', err);
-    alert('Error redirecting to payment page. Please try again.');
+      customerLocation: orderData.customerLocation
+    };
+    sessionStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+    // Minimal URL (data retrieved in html.html from sessionStorage)
+    window.location.href = 'html.html?orderId=' + encodeURIComponent(orderId);
+  } catch (e) {
+    console.error('Failed to init payment redirect', e);
+    alert('Error preparing payment. Please try again.');
   }
 }
 
-// Call the payment page redirection function
-createStripePayment(totalPrice, orderData, docRef.id);
+      // Call the payment page redirection function
+      createStripePayment(docRef.id, orderData);
 
 
   // Fonction d’envoi vers Telegram

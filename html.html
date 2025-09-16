@@ -105,7 +105,7 @@
       const errorBox = document.getElementById('errorBox');
       errorBox.style.display = 'none';
       try {
-        const response = await fetch('server', {
+        const response = await fetch('/create-checkout-session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -119,23 +119,25 @@
           })
         });
 
-        // If backend issued a redirect (e.g. res.redirect(303, session.url))
+        // Handle redirect case
         if (response.redirected && response.url) {
           window.location.href = response.url;
           return;
         }
 
-        // Otherwise, expect JSON { url }
-        const payload = await response.json().catch(() => ({}));
-        if (response.ok && payload && payload.url) {
+        let payloadText = await response.text();
+        let payload;
+        try { payload = JSON.parse(payloadText); } catch (_) { payload = {}; }
+
+        if (response.ok && payload.url) {
           window.location.href = payload.url;
           return;
         }
 
-        throw new Error((payload && (payload.error || payload.message)) || 'Failed to create checkout session.');
+        throw new Error(payload.error || payload.message || 'Failed to create checkout session');
       } catch (err) {
         console.error('Stripe session error:', err);
-        errorBox.textContent = 'Unable to create payment session. Please try again or contact us.';
+        errorBox.textContent = 'Unable to create payment session: ' + err.message;
         errorBox.style.display = 'block';
         document.getElementById('retryBtn').style.display = 'inline-block';
         document.getElementById('payNowBtn').style.display = 'inline-block';
