@@ -1034,7 +1034,7 @@
 // Function to create Stripe session via backend API
 async function createStripePayment(totalPrice, orderData, orderId) {
     try {
-      const response = await fetch('/create-checkout-session', {
+      const response = await fetch('/server', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
