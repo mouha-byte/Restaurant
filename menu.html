@@ -1034,7 +1034,7 @@
 // Function to create Stripe session via backend API
 async function createStripePayment(totalPrice, orderData, orderId) {
   try {
-    const response = await fetch("/server/create-checkout-session", {
+    const response = await fetch("/api/create-payment-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1042,22 +1042,41 @@ async function createStripePayment(totalPrice, orderData, orderId) {
         orderData,
         orderId
       })
-    });
+        });
 
-    const data = await response.json();
-    
-    if (response.ok && data.url) {
+        console.log('🔍 Debug: Stripe payment request sent');
+        console.log('📊 Debug: Total Price:', totalPrice);
+        console.log('📋 Debug: Order Data:', orderData);
+        console.log('🆔 Debug: Order ID:', orderId);
+
+        if (!response.ok) {
+      console.error('❌ Debug: Response not OK:', response.status, response.statusText);
+      throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ Debug: Response data:', data);
+        
+        if (response.ok && data.url) {
+      console.log('🔗 Debug: Redirecting to Stripe URL:', data.url);
       window.location.href = data.url; // redirect to Stripe
       return;
-    }
+        }
 
-    console.error('Stripe session error:', data);
-    alert('Unable to create payment session. Please try again.');
-  } catch (err) {
-    console.error('Stripe session network error:', err);
-    alert('Server error while creating payment. Please contact us.');
-  }
-}
+        console.error('❌ Debug: Stripe session error:', data);
+        alert('Unable to create payment session. Please try again.');
+      } catch (err) {
+        console.error('🚨 Debug: Stripe session network error:', err);
+        console.error('🔍 Debug: Error details:', {
+      message: err.message,
+      stack: err.stack,
+      name: err.name
+        });
+        alert('Server error while creating payment. Please contact us.');
+      }
+      
+
+   
 
 // Fonction d'envoi vers Telegram
 async function sendTelegramMessage(message) {
