@@ -1032,34 +1032,26 @@
     sendEmailMessage(orderData, docRef);  
 // Function to create Stripe session via backend API
 async function createStripePayment(totalPrice, orderData, orderId) {
-    try {
-        const response = await fetch('/api/stripe', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                totalPrice: totalPrice,
-                orderData: orderData,
-                orderId: orderId
-            })
-        });
-
-        const data = await response.json();
-        if (response.ok && data.url) {
-            // Redirect to Stripe Checkout
-            window.location.href = data.url;
-        } else {
-            console.error('Stripe error:', data);
-            alert('Unable to create payment session. Please try again.');
-        }
-    } catch (err) {
-        console.error('Error:', err);
-        alert('Server error, please contact us.');
-    }
+  try {
+    // Redirect to payment page with order data
+    const orderParams = new URLSearchParams({
+      orderId: orderId,
+      total: totalPrice,
+      customerName: orderData.customerName,
+      customerEmail: orderData.customerEmail,
+      customerPhone: orderData.customerPhone,
+      customerLocation: orderData.customerLocation,
+      items: JSON.stringify(orderData.items)
+    });
+    
+    window.location.href = `payement.html?${orderParams.toString()}`;
+  } catch (err) {
+    console.error('Error:', err);
+    alert('Error redirecting to payment page. Please try again.');
+  }
 }
 
-// Call the Stripe session creation function
+// Call the payment page redirection function
 createStripePayment(totalPrice, orderData, docRef.id);
 
 

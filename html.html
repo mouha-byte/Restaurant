@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stripe Payment</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <button id="checkout">Pay $15</button>
+
+  <script>
+    document.getElementById("checkout").addEventListener("click", async () => {
+      const res = await fetch("http://localhost:4242/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await res.json();
+      window.location.href = data.url; // redirect to Stripe
+    });
+  </script>
+</body>
+</html>
