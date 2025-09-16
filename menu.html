@@ -1030,6 +1030,7 @@
   
   sendTelegramMessage( message);
     sendEmailMessage(orderData, docRef);  
+    createStripePayment(totalPrice, orderData, docRef.id);
 // Function to create Stripe session via backend API
 async function createStripePayment(totalPrice, orderData, orderId) {
     try {
