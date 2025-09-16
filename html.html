@@ -1,21 +1,158 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Stripe Payment</title>
-  <script src="https://js.stripe.com/v3/"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Processing Payment • Speranza Pizza</title>
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <style>
+    body { background:#0f0f0f; color:#fff; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .card { background:#1e1e1e; border:1px solid #333; }
+    .text-muted { color:#b0b0b0 !important; }
+    .accent { color:#ff6b35; }
+    .spinner {
+      width: 36px; height: 36px; border: 4px solid rgba(255,255,255,.15);
+      border-top-color: #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    a.btn-link { color:#ff6b35; }
+    pre { white-space: pre-wrap; word-break: break-word; }
+  </style>
 </head>
 <body>
-  <button id="checkout">Pay $15</button>
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card p-4">
+          <h4 class="mb-1">Redirecting to secure payment…</h4>
+          <p class="text-muted mb-4">Please wait while we prepare your Stripe Checkout session.</p>
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <div class="spinner mr-3"></div>
+            <div>
+              <div class="small text-muted">Order</div>
+              <div id="orderId" class="font-weight-bold">—</div>
+            </div>
+            <div class="ml-auto text-right">
+              <div class="small text-muted">Total</div>
+              <div id="orderTotal" class="font-weight-bold accent">—</div>
+            </div>
+          </div>
+
+          <div id="summary" class="mb-3" style="max-height:220px; overflow:auto;">
+            <!-- Items summary -->
+          </div>
+
+          <div class="d-flex">
+            <button id="retryBtn" class="btn btn-primary mr-2" style="display:none;">Try Again</button>
+            <a href="menu.html" class="btn btn-outline-secondary">Back to Menu</a>
+            <button id="payNowBtn" class="btn btn-success ml-auto" style="display:none;">Pay Now</button>
+          </div>
+
+          <div id="errorBox" class="alert alert-danger mt-3" role="alert" style="display:none;"></div>
+        </div>
+        <p class="text-center text-muted mt-3 small">Secured by Stripe</p>
+      </div>
+    </div>
+  </div>
 
   <script>
-    document.getElementById("checkout").addEventListener("click", async () => {
-      const res = await fetch("http://localhost:4242/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" }
-      });
-      const data = await res.json();
-      window.location.href = data.url; // redirect to Stripe
-    });
+    function readCheckoutData() {
+      // Prefer sessionStorage (set by menu.html)
+      try {
+        const raw = sessionStorage.getItem('checkoutData');
+        if (raw) return JSON.parse(raw);
+      } catch (_) {}
+
+      // Fallback to URL params (limited info)
+      const params = new URLSearchParams(location.search);
+      const orderId = params.get('orderId') || '';
+      const total = Number(params.get('total') || '0');
+      let items = [];
+      try {
+        const itemsRaw = params.get('items');
+        if (itemsRaw) items = JSON.parse(itemsRaw);
+      } catch (_) {}
+      return { orderId, total, items };
+    }
+
+    function renderSummary(data) {
+      document.getElementById('orderId').textContent = data.orderId || '—';
+      document.getElementById('orderTotal').textContent = data.total ? `$${Number(data.total).toFixed(2)}` : '—';
+
+      const summary = document.getElementById('summary');
+      summary.innerHTML = '';
+
+      if (Array.isArray(data.items) && data.items.length) {
+        data.items.forEach(it => {
+          const row = document.createElement('div');
+          row.className = 'd-flex justify-content-between small py-1 border-bottom border-dark';
+          row.innerHTML = `
+            <span>${it.name} x${it.quantity || 1}</span>
+            <span>$${Number((it.price || 0) * (it.quantity || 1)).toFixed(2)}</span>
+          `;
+          summary.appendChild(row);
+        });
+      } else {
+        const empty = document.createElement('div');
+        empty.className = 'text-muted small';
+        empty.textContent = 'No item details available.';
+        summary.appendChild(empty);
+      }
+    }
+
+    async function createCheckoutSession(data) {
+      const errorBox = document.getElementById('errorBox');
+      errorBox.style.display = 'none';
+      try {
+        const response = await fetch('/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId: data.orderId,
+            totalPrice: Number(data.total),
+            items: data.items,
+            customerName: data.customerName,
+            customerEmail: data.customerEmail,
+            customerPhone: data.customerPhone,
+            customerLocation: data.customerLocation
+          })
+        });
+
+        // If backend issued a redirect (e.g. res.redirect(303, session.url))
+        if (response.redirected && response.url) {
+          window.location.href = response.url;
+          return;
+        }
+
+        // Otherwise, expect JSON { url }
+        const payload = await response.json().catch(() => ({}));
+        if (response.ok && payload && payload.url) {
+          window.location.href = payload.url;
+          return;
+        }
+
+        throw new Error((payload && (payload.error || payload.message)) || 'Failed to create checkout session.');
+      } catch (err) {
+        console.error('Stripe session error:', err);
+        errorBox.textContent = 'Unable to create payment session. Please try again or contact us.';
+        errorBox.style.display = 'block';
+        document.getElementById('retryBtn').style.display = 'inline-block';
+        document.getElementById('payNowBtn').style.display = 'inline-block';
+      }
+    }
+
+    (function init() {
+      const data = readCheckoutData();
+      renderSummary(data);
+
+      const retry = () => createCheckoutSession(data);
+      document.getElementById('retryBtn').addEventListener('click', retry);
+      document.getElementById('payNowBtn').addEventListener('click', retry);
+
+      // Auto-start
+      createCheckoutSession(data);
+    })();
   </script>
 </body>
 </html>
