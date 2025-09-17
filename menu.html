@@ -1153,7 +1153,6 @@ function createStripePayment(orderId, orderData) {
     // Wait for Firebase to be initialized and db to be available
     if (typeof db === 'undefined' || !db) {
       await initFirebase();
-      // Wait for db to be set after initFirebase
       let tries = 0;
       while ((typeof db === 'undefined' || !db) && tries < 10) {
         await new Promise(res => setTimeout(res, 200));
@@ -1168,16 +1167,50 @@ function createStripePayment(orderId, orderData) {
     const flagKey = 'paymentConfirmed-' + orderId;
     if (status === 'success') {
       if (sessionStorage.getItem(flagKey)) return; // already processed
-      db.collection('orders').doc(orderId).update({
-        paymentStatus: 'paid',
-        paymentConfirmedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        sessionStorage.setItem(flagKey, '1');
-        alert('✅ Payment confirmed. Thank you!');
-      }).catch(err => {
-        console.error('Failed to set paymentStatus=paid', err);
-        alert('⚠️ Payment confirmed, but failed to update order status. Please contact support.');
-      });
+
+      // Show waiting message
+      let waitingMsg = document.createElement('div');
+      waitingMsg.id = 'payment-waiting-msg';
+      waitingMsg.style = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:16px 32px;border-radius:8px;z-index:9999;font-size:18px;';
+      waitingMsg.textContent = '⏳ Confirmation du paiement en cours...';
+      document.body.appendChild(waitingMsg);
+
+      let attempts = 0;
+      let maxAttempts = 5;
+      let delay = 800;
+
+      async function tryUpdate() {
+        attempts++;
+        try {
+          await db.collection('orders').doc(orderId).update({
+            paymentStatus: 'paid',
+            paymentConfirmedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          sessionStorage.setItem(flagKey, '1');
+          waitingMsg.textContent = '✅ Paiement confirmé. Merci !';
+          setTimeout(() => waitingMsg.remove(), 2000);
+        } catch (err) {
+          if (attempts < maxAttempts) {
+            waitingMsg.textContent = `⏳ Tentative ${attempts}/${maxAttempts}...`;
+            setTimeout(tryUpdate, delay);
+            delay *= 1.5; // increase delay
+          } else {
+            waitingMsg.textContent = '⚠️ Paiement confirmé, mais la mise à jour a échoué. Contactez le support.';
+            setTimeout(() => waitingMsg.remove(), 4000);
+            console.error('Failed to set paymentStatus=paid after retries', err);
+          }
+        }
+      }
+
+      // Timeout global pour éviter de bloquer l'utilisateur
+      setTimeout(() => {
+        if (!sessionStorage.getItem(flagKey)) {
+          waitingMsg.textContent = '⚠️ Confirmation trop lente. Veuillez vérifier votre commande ou contacter le support.';
+          setTimeout(() => waitingMsg.remove(), 5000);
+        }
+      }, 12000);
+
+      tryUpdate();
     } else if (status === 'cancelled') {
       db.collection('orders').doc(orderId).update({
         paymentStatus: 'cancelled'
