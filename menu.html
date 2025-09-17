@@ -658,32 +658,21 @@
   <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
 
   <script>
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-      authDomain: "restaurant-896d0.firebaseapp.com",
-      projectId: "restaurant-896d0",
-      storageBucket: "restaurant-896d0.firebasestorage.app",
-      messagingSenderId: "1037108801190",
-      appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-      measurementId: "G-ESNJW4VC0Y"
-    };
+  // Firebase Configuration
+  let db; // Declare db in global scope
+  async function initFirebase() {
+    const res = await fetch("/api/config");
+    const firebaseConfig = await res.json();
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  //    async function initFirebase() {
-  //   // Appel au backend pour récupérer les configs
-  //   const res = await fetch('/api/firebase');
-  //   const config = await res.json();
+    db = firebase.firestore(); // Assign to global db
+    ////console.log("Firebase init ✅", db);
+  }
 
-  //   // Initialisation Firebase
-  //   const app = firebase.initializeApp(config);
-  //   const db = firebase.firestore();
-
-  //   console.log('Firebase ready', db);
-  //   return { app, db };
-  // }
+  initFirebase();
+  
 
   //   // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
@@ -1046,7 +1035,7 @@ function createStripePayment(orderId, orderData) {
     sessionStorage.setItem('checkoutData', JSON.stringify(checkoutData));
     window.location.href = 'html.html?orderId=' + encodeURIComponent(orderId);
   } catch (e) {
-    console.error('Failed to init payment redirect', e);
+    ////console.error('Failed to init payment redirect', e);
     alert('Error preparing payment. Please try again.');
   }
 }
@@ -1068,14 +1057,14 @@ function createStripePayment(orderId, orderData) {
       const data = await res.json();
 
       if (res.ok) {
-        console.log('📱 Telegram message requested via backend:', data);
+        ////console.log('📱 Telegram message requested via backend:', data);
       } else {
-        console.error('❌ Backend failed to send Telegram message:', data);
+        ////console.error('❌ Backend failed to send Telegram message:', data);
       }
 
       return data;
     } catch (error) {
-      console.error('⚠️ Error calling backend Telegram endpoint:', error);
+      ////console.error('⚠️ Error calling backend Telegram endpoint:', error);
       return null;
     }
   }function sendEmailMessage(orderData, docRef) {
@@ -1117,15 +1106,15 @@ function createStripePayment(orderId, orderData) {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          console.log('✅ Email sent successfully to boss!');
+          ////console.log('✅ Email sent successfully to boss!');
         } else {
-          console.warn('❌ Failed to send email:', data.error || data);
+          ////console.warn('❌ Failed to send email:', data.error || data);
         }
       })
       .catch(err => {
-        console.error('❌ Email sending error:', err);
+        ////console.error('❌ Email sending error:', err);
         // Fallback: log the order details for manual processing
-        console.log('📧 Order notification data:', payload);
+        ////console.log('📧 Order notification data:', payload);
       });
   }
   // sendEmailMessage(orderData, docRef);  
@@ -1144,7 +1133,7 @@ function createStripePayment(orderId, orderData) {
 })
 
  .catch((error) => {
-        console.error('Error submitting order:', error);
+        ////console.error('Error submitting order:', error);
         alert('Error placing order. Please try again.');
       });
     }
@@ -1166,7 +1155,7 @@ function createStripePayment(orderId, orderData) {
         sessionStorage.setItem(flagKey, '1');
         alert('✅ Payment confirmed. Thank you!');
       }).catch(err => {
-        console.error('Failed to set paymentStatus=paid', err);
+        ////console.error('Failed to set paymentStatus=paid', err);
       });
     } else if (status === 'cancelled') {
       db.collection('orders').doc(orderId).update({
