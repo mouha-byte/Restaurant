@@ -10,3 +10,4 @@ export default function handler(req, res) {
     measurementId: process.env.FIREBASE_MEASUREMENT_ID,
   });
 }
+  

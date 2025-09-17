@@ -641,8 +641,42 @@
                 </div>
                 <div class="form-group">
                   <label for="customerLocation" style="color: var(--text-primary);">Delivery Address:</label>
-                  <textarea id="customerLocation" class="form-control" rows="3" required style="background: var(--darker-bg); color: var(--text-primary); border: 1px solid var(--border-color);"></textarea>
+                  <textarea id="customerLocation" class="form-control" rows="3" required style="background: var(--darker-bg); color: var(--text-primary); border: 1px solid var(--border-color);" placeholder="Your address will be auto-filled if you allow location access"></textarea>
+                  <button type="button" class="btn btn-info mt-2" onclick="detectLocation()" style="background: var(--accent-color); color: white; border: none;">
+                    Detect My Location
+                  </button>
+                  <small id="locationStatus" style="color: var(--accent-color); display: block; margin-top: 5px;"></small>
                 </div>
+                <script>
+                function detectLocation() {
+                  const status = document.getElementById('locationStatus');
+                  status.textContent = "Detecting location...";
+                  if (!navigator.geolocation) {
+                    status.textContent = "Geolocation is not supported by your browser.";
+                    return;
+                  }
+                  navigator.geolocation.getCurrentPosition(async function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    try {
+                      // Use Nominatim OpenStreetMap API for reverse geocoding (returns address as text)
+                      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+                      const res = await fetch(url);
+                      const data = await res.json();
+                      if (data && data.display_name) {
+                        document.getElementById('customerLocation').value = data.display_name;
+                        status.textContent = "Location detected!";
+                      } else {
+                        status.textContent = "Unable to detect address. Please enter manually.";
+                      }
+                    } catch (e) {
+                      status.textContent = "Error detecting address. Please enter manually.";
+                    }
+                  }, function(error) {
+                    status.textContent = "Location access denied or unavailable.";
+                  }, { enableHighAccuracy: true, timeout: 10000 });
+                }
+                </script>
               </form>
             </div>
           </div>
