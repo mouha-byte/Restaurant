@@ -566,6 +566,45 @@
     </div>
   </div>
 
+  <script>
+    // Ensure leftover .cart-item nodes are removed when the cart becomes empty.
+    (function() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      const emptyCartEl = document.getElementById('empty-cart');
+
+      if (!cartItemsContainer || !emptyCartEl) return;
+
+      // Helper to remove any stale .cart-item children
+      function removeStaleItems() {
+        const items = cartItemsContainer.querySelectorAll('.cart-item');
+        items.forEach(i => i.remove());
+        // keep cart-total in sync
+        const cartTotal = document.getElementById('cart-total');
+        if (cartTotal) cartTotal.textContent = '0';
+        const cartCount = document.getElementById('cart-count');
+        const cartToggleCount = document.getElementById('cart-toggle-count');
+        if (cartCount) cartCount.style.display = 'none';
+        if (cartToggleCount) cartToggleCount.style.display = 'none';
+      }
+
+      // Observe style attribute changes on the empty cart node (updateCartDisplay toggles style.display)
+      const obs = new MutationObserver(() => {
+        try {
+          const isVisible = emptyCartEl.style.display !== 'none' && getComputedStyle(emptyCartEl).display !== 'none';
+          if (isVisible) removeStaleItems();
+        } catch (e) { /* ignore */ }
+      });
+
+      obs.observe(emptyCartEl, { attributes: true, attributeFilter: ['style'] });
+
+      // Also run once on load in case updateCartDisplay returned early previously
+      document.addEventListener('DOMContentLoaded', () => {
+        const isVisibleNow = emptyCartEl.style.display !== 'none' && getComputedStyle(emptyCartEl).display !== 'none';
+        if (isVisibleNow) removeStaleItems();
+      });
+    })();
+  </script>
+
   <!-- food section -->
   <section class="food_section layout_padding">
     <div class="container">
@@ -601,6 +640,48 @@
       </div>
       <div class="btn-box"><a href="">View More</a></div>
     </div>
+    <div class="modal fade" id="canetteModal" tabindex="-1" role="dialog" aria-labelledby="canetteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content" style="background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color);">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+          <h5 class="modal-title" id="canetteModalLabel" style="color: var(--text-primary);">Choisissez votre boisson</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: var(--text-primary); opacity: 0.8;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="background: var(--card-bg);">
+          <div class="row" id="canette-options">
+            <!-- Les options de canettes seront chargées ici -->
+          </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid var(--border-color); background: var(--card-bg);">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: var(--border-color); color: var(--text-primary); border: 1px solid var(--border-color);">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Drink Selection Modal -->
+  <div class="modal fade" id="menuDrinkModal" tabindex="-1" role="dialog" aria-labelledby="menuDrinkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content" style="background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color);">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+          <h5 class="modal-title" id="menuDrinkModalLabel" style="color: var(--text-primary);">Choisissez votre boisson</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: var(--text-primary); opacity: 0.8;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="background: var(--card-bg);">
+          <div class="row" id="menu-drink-options">
+            <!-- Les options de boisson seront chargées ici -->
+          </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid var(--border-color); background: var(--card-bg);">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: var(--border-color); color: var(--text-primary); border: 1px solid var(--border-color);">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <script>
   (function() {
@@ -807,7 +888,28 @@
     });
 
     // Static product data to avoid CORS issues
-     const products = [
+   const drinkOptions = [
+      { name: "Coca Cola", price: 0 },
+      { name: "Coca Cola Zero", price: 0 },
+      { name: "Coca Cola Cherry", price: 0 },
+      { name: "Ice Tea Pêche", price: 0 },
+      { name: "Perrier", price: 0 },
+      { name: "Sprite", price: 0 },
+      { name: "7up", price: 0 },
+      { name: "Orangina", price: 0 },
+      { name: "Oasis Tropical", price: 0 },
+      { name: "Oasis Framboise", price: 0 },
+      { name: "Fanta Orange", price: 0 },
+      { name: "Fanta Citron", price: 0 },
+      { name: "Tropico", price: 0 },
+      { name: "Hawaï", price: 0 },
+      { name: "7up Cherry", price: 0 },
+      { name: "Schweppes Agrumes", price: 0 },
+      { name: "Mojito (sans alcool)", price: 0 }
+    ];
+
+    // Static product data to avoid CORS issues
+    const products = [
       // --- PIZZAS ---
       // Base Tomate
       { name: "Margherita Pizza (Junior)", price: 8, description: "Base Tomate, Mozzarella", category: "pizza", image: "images/1.jpg" },
@@ -886,20 +988,20 @@
 
     // --- TEX MEX & FRIES ---
     { name: "6 Nuggets", price: 6, description: "6 pièces de poulet pané", category: "tex-mex", image: "images/n1.jpg" },
-    { name: "Menu 6 Nuggets", price: 8, description: "6 pièces de poulet pané, servi avec frites et boisson", category: "tex-mex", image: "images/n2.png" },
+    { name: "Menu 6 Nuggets", price: 8, description: "6 pièces de poulet pané, servi avec frites et boisson", category: "tex-mex", image: "images/n2.png", hasDrink: true, drinkOptions: drinkOptions },
     { name: "6 Onion Rings", price: 6, description: "6 rondelles d'oignon frites", category: "tex-mex", image: "images/n3.jpg" },
-    { name: "Menu 6 Onion Rings", price: 8, description: "6 rondelles d'oignon frites, servi avec frites et boisson", category: "tex-mex", image: "images/n4.png" },
+    { name: "Menu 6 Onion Rings", price: 8, description: "6 rondelles d'oignon frites, servi avec frites et boisson", category: "tex-mex", image: "images/n4.png", hasDrink: true, drinkOptions: drinkOptions },
     { name: "6 Mozzarella Sticks", price: 6, description: "6 bâtonnets de mozzarella panés", category: "tex-mex", image: "images/n5.jpg" },
-    { name: "Menu 6 Mozzarella Sticks", price: 8, description: "6 bâtonnets de mozzarella panés, servi avec frites et boisson", category: "tex-mex", image: "images/n6.png" },
+    { name: "Menu 6 Mozzarella Sticks", price: 8, description: "6 bâtonnets de mozzarella panés, servi avec frites et boisson", category: "tex-mex", image: "images/n6.png", hasDrink: true, drinkOptions: drinkOptions },
     { name: "6 Tenders", price: 8, description: "6 tenders de poulet", category: "tex-mex", image: "images/n7.jpg" },
-    { name: "Menu 6 Tenders", price: 10, description: "6 tenders de poulet, servi avec frites et boisson", category: "tex-mex", image: "images/n8.png" },
+    { name: "Menu 6 Tenders", price: 10, description: "6 tenders de poulet, servi avec frites et boisson", category: "tex-mex", image: "images/n8.png", hasDrink: true, drinkOptions: drinkOptions },
     { name: "Frites (Petite)", price: 2.5, description: "Portion de frites petite", category: "fries", image: "images/f1.jpg" },
     { name: "Frites (Moyenne)", price: 3.5, description: "Portion de frites moyenne", category: "fries", image: "images/f2.jpg" },
     { name: "Frites (Grande)", price: 4.5, description: "Portion de frites grande", category: "fries", image: "images/f3.jpg" },
     { name: "Box Tenders, Wings, Mix", price: 19, description: "Box 1 (1kg avant cuisson) Seul", category: "tex-mex", image: "images/n9.jpg" },
-    { name: "Box Tenders, Wings, Mix", price: 23, description: "Box 1 (1kg avant cuisson) Menu", category: "tex-mex", image: "images/n9.jpg" },
+    { name: "Box Tenders, Wings, Mix", price: 23, description: "Box 1 (1kg avant cuisson) Menu", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions },
     { name: "Box Tenders, Wings, Mix", price: 29, description: "Box 2 (2kg avant cuisson) Seul", category: "tex-mex", image: "images/n9.jpg" },
-    { name: "Box Tenders, Wings, Mix", price: 33, description: "Box 2 (2kg avant cuisson) Menu", category: "tex-mex", image: "images/n9.jpg" },
+    { name: "Box Tenders, Wings, Mix", price: 33, description: "Box 2 (2kg avant cuisson) Menu", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions },
     // --- TACOS ---
     { name: "Tacos (1 Viande)", price: 8, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/t1.jpeg" },
     { name: "Tacos (2 Viandes)", price: 9, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/t2.jpg" },
@@ -908,9 +1010,9 @@
     { name: "Thon", price: 5, description: "Seul", category: "panini", image: "images/pa1.jpg" },
     { name: "Poulet", price: 5, description: "Seul", category: "panini", image: "images/pa2.jpg" },
     { name: "Viande hachée", price: 5, description: "Seul", category: "panini", image: "images/pa3.jpg" },
-    { name: "Thon", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp" },
-    { name: "Poulet", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp" },
-    { name: "Viande hachée", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp" },
+    { name: "Thon (Menu)", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions },
+    { name: "Poulet (Menu)", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions },
+    { name: "Viande hachée (Menu)", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions },
     // --- SALADES ---
     { name: "Salade César", price: 7, description: "Salade, Poulet, Tomate, Olives, Buffalo", category: "salade", image: "images/s1.jpg" },
     { name: "Salade Chèvre Chaud", price: 7, description: "Salade, Lardons Grillés, Chèvre Chaud Sur Toast, Miel, Tomate", category: "salade", image: "images/s2.jpg" },
@@ -919,8 +1021,38 @@
     // --- DESSERTS & BOISSONS ---
     { name: "Tiramisu", price: 3, description: "Dessert classique italien", category: "dessert", image: "images/d1.jpg" },
     { name: "Tarte au Daims", price: 3, description: "Tarte au chocolat et caramel Daims", category: "dessert", image: "images/d2.jpg" },
-    { name: "Canette 33cl", price: 1.5, description: "Boisson en canette de 33cl", category: "boissons", image: "images/f8.png" },
-    { name: "Bouteille 1.5L", price: 3.5, description: "Boisson en bouteille de 1.5L", category: "boissons", image: "images/f8.png" },
+    // --- BOISSONS ---
+      // Sous-catégorie : Canette
+      { 
+        name: "Canette 33cl", 
+        price: 0, 
+        description: "Choisissez votre boisson en canette", 
+        category: "boissons", 
+        subcategory: "canette", 
+        image: "images/b.jpg",
+        options: [
+          { name: "Coca Cola", price: 1.5 },
+          { name: "Coca Cola Zero", price: 1.5 },
+          { name: "Coca Cola Cherry", price: 1.5 },
+          { name: "Ice Tea Pêche", price: 1.5 },
+          { name: "Perrier", price: 1.5 },
+          { name: "Sprite", price: 1.5 },
+          { name: "7up", price: 1.5 },
+          { name: "Orangina", price: 1.5 },
+          { name: "Oasis Tropical", price: 1.5 },
+          { name: "Oasis Framboise", price: 1.5 },
+          { name: "Fanta Orange", price: 1.5 },
+          { name: "Fanta Citron", price: 1.5 },
+          { name: "Tropico", price: 1.5 },
+          { name: "Hawaï", price: 1.5 },
+          { name: "7up Cherry", price: 1.5 },
+          { name: "Schweppes Agrumes", price: 1.5 },
+          { name: "Mojito (sans alcool)", price: 2 }
+        ]
+      },
+      // Sous-catégorie : Eaux
+      { name: "Eau Cristaline 50cl", price: 1, description: "Bouteille 50cl", category: "boissons", subcategory: "eaux", image: "images/eaux.jpg" },
+      { name: "Bouteille Coca 1.5L", price: 3.5, description: "Bouteille 1.5L", category: "boissons", subcategory: "eaux", image: "images/coca.webp" },
     // --- Menu Enfant ---
     { name: "Tacos 1 viande ", price: 7, description: "Frites Capri-Sun Compote", category: "menuenfant", image: "images/me1.jpg" },
     { name: "Cheeseburger ", price: 7, description: "Frites Capri-Sun compote", category: "menuenfant", image: "images/me2.jpg" },
@@ -929,12 +1061,29 @@
 ];
 
    
-    function loadProducts() {
+   function loadProducts() {
+
+      
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
       products.forEach(product => {
         const col = document.createElement('div');
         col.className = `col-xl-4-custom col-lg-4 col-md-6 col-sm-12 all ${product.category}`;
+        
+        // Vérifier si le produit a des options (comme les canettes) ou une boisson incluse
+        const hasOptions = product.options && product.options.length > 0;
+        const hasDrink = product.hasDrink && product.drinkOptions;
+        const priceDisplay = (hasOptions || hasDrink) ? 'Choisir' : `$${product.price}`;
+        const buttonText = (hasOptions || hasDrink) ? 'Choisir' : 'Add to Cart';
+        let buttonAction;
+        if (hasOptions) {
+          buttonAction = `openCanetteModal('${product.name}')`;
+        } else if (hasDrink) {
+          buttonAction = `openMenuDrinkModal('${product.name}', ${product.price})`;
+        } else {
+          buttonAction = `addToCart('${product.name}', ${product.price})`;
+        }
+        
         col.innerHTML = `
           <div class="product-card">
             <div class="img-box">
@@ -944,9 +1093,9 @@
               <h5>${product.name}</h5>
               <p>${product.description}</p>
               <div class="options">
-                <h6>$${product.price}</h6>
-                <button class="add-to-cart-btn" onclick="addToCart('${product.name}', ${product.price})">
-                  Add to Cart
+                <h6>${priceDisplay}</h6>
+                <button class="add-to-cart-btn" onclick="${buttonAction}">
+                  ${buttonText}
                 </button>
               </div>
             </div>
@@ -956,8 +1105,87 @@
       });
     }
 
-    // Cart Management (rest of the JavaScript remains the same)
-    let cart = [];
+    // Fonction pour ouvrir la modal des canettes
+    function openCanetteModal(productName) {
+      const product = products.find(p => p.name === productName);
+      if (!product || !product.options) return;
+      
+      const modal = document.getElementById('canetteModal');
+      const optionsContainer = document.getElementById('canette-options');
+      const modalTitle = document.getElementById('canetteModalLabel');
+      
+      modalTitle.textContent = `Choisissez votre ${productName.toLowerCase()}`;
+      optionsContainer.innerHTML = '';
+      
+      // Créer les cartes pour chaque option de canette
+      product.options.forEach(option => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 mb-3';
+        col.innerHTML = `
+          <div class="card" style="background: var(--darker-bg); border: 1px solid var(--border-color); border-radius: 15px; transition: all 0.3s ease; cursor: pointer;" 
+               onmouseover="this.style.borderColor='var(--accent-color)'; this.style.transform='translateY(-5px)'" 
+               onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'"
+               onclick="selectCanette('${option.name}', ${option.price})">
+            <div class="card-body text-center" style="padding: 20px;">
+              <h6 class="card-title" style="color: var(--text-primary); margin-bottom: 10px; font-weight: 600;">${option.name}</h6>
+              <p class="card-text" style="color: var(--accent-color); font-size: 18px; font-weight: bold; margin: 0;">$${option.price}</p>
+            </div>
+          </div>
+        `;
+        optionsContainer.appendChild(col);
+      });
+      
+      $('#canetteModal').modal('show');
+    }
+
+    // Fonction pour sélectionner une canette et l'ajouter au panier
+    function selectCanette(canetteName, price) {
+      addToCart(canetteName, price);
+      $('#canetteModal').modal('hide');
+    }
+
+    // Fonction pour ouvrir la modal de sélection de boisson pour les menus
+    function openMenuDrinkModal(productName, basePrice) {
+      const product = products.find(p => p.name === productName);
+      if (!product || !product.drinkOptions) return;
+      
+      const modal = document.getElementById('menuDrinkModal');
+      const optionsContainer = document.getElementById('menu-drink-options');
+      const modalTitle = document.getElementById('menuDrinkModalLabel');
+      
+      modalTitle.textContent = `Choisissez votre boisson pour ${productName}`;
+      optionsContainer.innerHTML = '';
+      
+      // Créer les cartes pour chaque option de boisson
+      product.drinkOptions.forEach(drink => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 mb-3';
+        col.innerHTML = `
+          <div class="card" style="background: var(--darker-bg); border: 1px solid var(--border-color); border-radius: 15px; transition: all 0.3s ease; cursor: pointer;" 
+               onmouseover="this.style.borderColor='var(--accent-color)'; this.style.transform='translateY(-5px)'" 
+               onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'"
+               onclick="selectMenuDrink('${productName}', ${basePrice}, '${drink.name}', ${drink.price})">
+            <div class="card-body text-center" style="padding: 20px;">
+              <h6 class="card-title" style="color: var(--text-primary); margin-bottom: 10px; font-weight: 600;">${drink.name}</h6>
+              <p class="card-text" style="color: var(--accent-color); font-size: 16px; font-weight: bold; margin: 0;">Inclus</p>
+              <small style="color: var(--text-secondary);">Dans le prix du menu</small>
+            </div>
+          </div>
+        `;
+        optionsContainer.appendChild(col);
+      });
+      
+      $('#menuDrinkModal').modal('show');
+    }
+
+    // Fonction pour sélectionner une boisson et ajouter le menu complet au panier
+    function selectMenuDrink(productName, basePrice, drinkName, drinkPrice) {
+      // Ajouter le plat principal au panier
+      addToCart(productName, basePrice);
+      // Ajouter la boisson sélectionnée au panier (incluse dans le prix)
+      addToCart(drinkName, 0);
+      $('#menuDrinkModal').modal('hide');
+    } let cart = [];
 
     function addToCart(productName, price) {
       const existingItem = cart.find(item => item.name === productName);
