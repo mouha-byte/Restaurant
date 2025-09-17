@@ -601,6 +601,46 @@
       </div>
       <div class="btn-box"><a href="">View More</a></div>
     </div>
+
+<script>
+  (function() {
+    // Apply given filter to the currently rendered product cards
+    function applyFilter(filterValue) {
+      const productCards = document.querySelectorAll('.product-grid > div');
+      productCards.forEach(card => {
+        if (filterValue === '*' || card.classList.contains(filterValue.substring(1))) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Delegate clicks on filter buttons so we always use the current product list
+    document.addEventListener('click', function(e) {
+      const li = e.target.closest('.filters_menu li');
+      if (!li) return;
+      const filterButtons = document.querySelectorAll('.filters_menu li');
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      li.classList.add('active');
+      const filterValue = li.getAttribute('data-filter');
+      applyFilter(filterValue);
+    });
+
+    // When products are inserted into the grid, apply the currently active filter once
+    const grid = document.getElementById('product-grid');
+    if (grid) {
+      const observer = new MutationObserver(function(mutations, obs) {
+        if (grid.children.length > 0) {
+          const active = document.querySelector('.filters_menu li.active');
+          if (active) applyFilter(active.getAttribute('data-filter'));
+          obs.disconnect();
+        }
+      });
+      observer.observe(grid, { childList: true });
+    }
+  })();
+</script>
   </section>
 
   <!-- Rest of the HTML remains the same... -->
