@@ -648,48 +648,56 @@
                   <small id="locationStatus" style="color: var(--accent-color); display: block; margin-top: 5px;"></small>
                 </div>
                 <script>
-                function detectLocation() {
-                  const status = document.getElementById('locationStatus');
-                  status.textContent = "Detecting location...";
-                  if (!navigator.geolocation) {
-                    status.textContent = "Geolocation is not supported by your browser.";
-                    return;
-                  }
-                  // Must be called directly from a user event (button click)
-                  navigator.geolocation.getCurrentPosition(
-                    async function(position) {
-                      const lat = position.coords.latitude;
-                      const lng = position.coords.longitude;
-                      try {
-                        // Use Nominatim OpenStreetMap API for reverse geocoding (returns address as text)
-                        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-                        const res = await fetch(url);
-                        const data = await res.json();
-                        if (data && data.display_name) {
-                          document.getElementById('customerLocation').value = data.display_name;
-                          status.textContent = "Location detected!";
-                        } else {
-                          status.textContent = "Unable to detect address. Please enter manually.";
-                        }
-                      } catch (e) {
-                        status.textContent = "Error detecting address. Please enter manually.";
-                      }
-                    },
-                    function(error) {
-                      if (error.code === error.PERMISSION_DENIED) {
-                        status.textContent = "Location access denied. Please allow location access in your browser settings.";
-                      } else if (error.code === error.POSITION_UNAVAILABLE) {
-                        status.textContent = "Location information is unavailable.";
-                      } else if (error.code === error.TIMEOUT) {
-                        status.textContent = "Location request timed out. Try again.";
-                      } else {
-                        status.textContent = "Location access denied or unavailable.";
-                      }
-                    },
-                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-                  );
-                }
-                </script>
+               function detectLocation() {
+  const status = document.getElementById('locationStatus');
+  status.textContent = "Detecting location...";
+  if (!navigator.geolocation) {
+    status.textContent = "Geolocation is not supported by your browser.";
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    async function(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      try {
+        // Google Maps link
+        const mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+
+        // Optionnel: récupérer l’adresse (reverse geocoding)
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        let address = data?.display_name || '';
+
+        // Affiche dans le textarea
+        document.getElementById('customerLocation').value = address + "\n" + mapsLink;
+
+        // Lien cliquable
+        status.innerHTML = `✅ Location detected! 
+          <a href="${mapsLink}" target="_blank" 
+             style="color:var(--accent-color);text-decoration:underline;">
+             Open in Google Maps
+          </a>`;
+      } catch (e) {
+        status.textContent = "Error detecting address. Please enter manually.";
+      }
+    },
+    function(error) {
+      if (error.code === error.PERMISSION_DENIED) {
+        status.textContent = "Location access denied. Please allow location access in your browser settings.";
+      } else if (error.code === error.POSITION_UNAVAILABLE) {
+        status.textContent = "Location information is unavailable.";
+      } else if (error.code === error.TIMEOUT) {
+        status.textContent = "Location request timed out. Try again.";
+      } else {
+        status.textContent = "Location access denied or unavailable.";
+      }
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+  );
+}
+  </script>
               </form>
             </div>
           </div>
