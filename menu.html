@@ -704,15 +704,9 @@
     }
     if (!db) {
       // Replace with your config or API endpoint if needed
-      const config = {
-        apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-        authDomain: "restaurant-896d0.firebaseapp.com",
-        projectId: "restaurant-896d0",
-        storageBucket: "restaurant-896d0.firebasestorage.app",
-        messagingSenderId: "1037108801190",
-        appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-        measurementId: "G-ESNJW4VC0Y"
-      };
+      // Fetch config from your Node.js server
+      const res = await fetch('/api/config');
+      const config = await res.json();
       if (!firebase.apps.length) firebase.initializeApp(config);
       db = firebase.firestore();
     }
