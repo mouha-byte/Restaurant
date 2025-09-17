@@ -660,31 +660,32 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
   <script>
-    // Firebase Configuration
-    let db; // Declare db in global scope
-  async function initFirebase() {
-    const res = await fetch("/api/config");
-    const firebaseConfig = await res.json();
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.firestore(); // Assign to global db
-    console.log("Firebase init ✅", db);
+  // --- Firebase Initialization ---
+  let db;
+  async function ensureFirebase() {
+    if (db) return db;
+    if (!window.firebase || !window.firebase.firestore) {
+      await new Promise(res => setTimeout(res, 200));
+      if (!window.firebase || !window.firebase.firestore) throw new Error('Firebase SDK not loaded');
+    }
+    if (!db) {
+      // Replace with your config or API endpoint if needed
+      const config = {
+        apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
+        authDomain: "restaurant-896d0.firebaseapp.com",
+        projectId: "restaurant-896d0",
+        storageBucket: "restaurant-896d0.firebasestorage.app",
+        messagingSenderId: "1037108801190",
+        appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
+        measurementId: "G-ESNJW4VC0Y"
+      };
+      if (!firebase.apps.length) firebase.initializeApp(config);
+      db = firebase.firestore();
+    }
+    return db;
   }
 
-  initFirebase();
-  //    async function initFirebase() {
-  //   // Appel au backend pour récupérer les configs
-  //   const res = await fetch('/api/firebase');
-  //   const config = await res.json();
-
-  //   // Initialisation Firebase
-  //   const app = firebase.initializeApp(config);
-  //   const db = firebase.firestore();
-
-  //   console.log('Firebase ready', db);
-  //   return { app, db };
-  // }
-
-  //   // Filter functionality
+    // Filter functionality
     document.addEventListener('DOMContentLoaded', function() {
       const filterButtons = document.querySelectorAll('.filters_menu li');
       const productCards = document.querySelectorAll('.product-grid > div');
@@ -1150,15 +1151,6 @@ function createStripePayment(orderId, orderData) {
 
     // --- Post Stripe return payment handler ---
   async function handlePostPayment() {
-    // Wait for Firebase to be initialized and db to be available
-    if (typeof db === 'undefined' || !db) {
-      await initFirebase();
-      let tries = 0;
-      while ((typeof db === 'undefined' || !db) && tries < 10) {
-        await new Promise(res => setTimeout(res, 200));
-        tries++;
-      }
-    }
     const params = new URLSearchParams(window.location.search);
     const status = params.get('payment');
     const orderId = params.get('orderId');
@@ -1166,61 +1158,66 @@ function createStripePayment(orderId, orderData) {
 
     const flagKey = 'paymentConfirmed-' + orderId;
     if (status === 'success') {
-      if (sessionStorage.getItem(flagKey)) return; // already processed
+      if (sessionStorage.getItem(flagKey)) return;
 
-      // Show waiting message
-      let waitingMsg = document.createElement('div');
-      waitingMsg.id = 'payment-waiting-msg';
-      waitingMsg.style = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:16px 32px;border-radius:8px;z-index:9999;font-size:18px;';
-      waitingMsg.textContent = '⏳ Confirmation du paiement en cours...';
-      document.body.appendChild(waitingMsg);
+      // Spinner & message
+      let spinner = document.createElement('div');
+      spinner.id = 'payment-spinner';
+      spinner.style = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:18px 36px;border-radius:10px;z-index:9999;font-size:18px;display:flex;align-items:center;gap:12px;';
+      spinner.innerHTML = '<span class="fa fa-spinner fa-spin"></span> <span id="payment-msg">Confirmation du paiement...</span>';
+      document.body.appendChild(spinner);
 
-      let attempts = 0;
-      let maxAttempts = 5;
-      let delay = 800;
+      let attempts = 0, maxAttempts = 6, delay = 600, updated = false;
+      const dbRef = () => ensureFirebase().then(db => db.collection('orders').doc(orderId));
 
       async function tryUpdate() {
         attempts++;
         try {
-          await db.collection('orders').doc(orderId).update({
+          await dbRef().then(ref => ref.update({
             paymentStatus: 'paid',
             paymentConfirmedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
+          }));
+          updated = true;
           sessionStorage.setItem(flagKey, '1');
-          waitingMsg.textContent = '✅ Paiement confirmé. Merci !';
-          setTimeout(() => waitingMsg.remove(), 2000);
+          document.getElementById('payment-msg').textContent = '✅ Paiement confirmé. Merci !';
+          spinner.style.background = '#28a745';
+          setTimeout(() => spinner.remove(), 1800);
         } catch (err) {
           if (attempts < maxAttempts) {
-            waitingMsg.textContent = `⏳ Tentative ${attempts}/${maxAttempts}...`;
+            document.getElementById('payment-msg').textContent = `Tentative ${attempts}/${maxAttempts}...`;
             setTimeout(tryUpdate, delay);
-            delay *= 1.5; // increase delay
+            delay *= 1.5;
           } else {
-            waitingMsg.textContent = '⚠️ Paiement confirmé, mais la mise à jour a échoué. Contactez le support.';
-            setTimeout(() => waitingMsg.remove(), 4000);
-            console.error('Failed to set paymentStatus=paid after retries', err);
+            document.getElementById('payment-msg').textContent = '⚠️ Paiement confirmé, mais la mise à jour a échoué. Contactez le support.';
+            spinner.style.background = '#dc3545';
+            setTimeout(() => spinner.remove(), 4000);
+            console.error('Firestore update failed after retries', err);
           }
         }
       }
 
       // Timeout global pour éviter de bloquer l'utilisateur
       setTimeout(() => {
-        if (!sessionStorage.getItem(flagKey)) {
-          waitingMsg.textContent = '⚠️ Confirmation trop lente. Veuillez vérifier votre commande ou contacter le support.';
-          setTimeout(() => waitingMsg.remove(), 5000);
+        if (!updated) {
+          document.getElementById('payment-msg').textContent = '⚠️ Confirmation trop lente. Vérifiez votre commande ou contactez le support.';
+          spinner.style.background = '#ffc107';
+          setTimeout(() => spinner.remove(), 5000);
         }
-      }, 12000);
+      }, 9000);
 
       tryUpdate();
     } else if (status === 'cancelled') {
-      db.collection('orders').doc(orderId).update({
+      ensureFirebase().then(db => db.collection('orders').doc(orderId).update({
         paymentStatus: 'cancelled'
-      }).catch(() => {});
+      })).catch(() => {});
     }
   }
 
-  // Call after initial UI setup
-  loadProducts();
-  handlePostPayment();
+  document.addEventListener('DOMContentLoaded', function() {
+    // ...existing code for filters...
+    loadProducts();
+    handlePostPayment();
+  });
   </script>
 
   <!-- footer section -->
