@@ -658,14 +658,16 @@
   <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
 
   <script>
-    // Firebase Configuration
-     async function initFirebase() {
+  // Firebase Configuration
+  let db; // Declare db in global scope
+  async function initFirebase() {
     const res = await fetch("/api/config");
     const firebaseConfig = await res.json();
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    db = firebase.firestore(); // Assign to global db
     console.log("Firebase init ✅", db);
   }
 
