@@ -661,17 +661,15 @@
 
   <script>
     // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_-HbKHMUbNiX6pvw5d9t73oqTvFjp7Co",
-      authDomain: "restaurant-896d0.firebaseapp.com",
-      projectId: "restaurant-896d0",
-      storageBucket: "restaurant-896d0.firebasestorage.app",
-      messagingSenderId: "1037108801190",
-      appId: "1:1037108801190:web:9a2308dc0cb53b29854e67",
-      measurementId: "G-ESNJW4VC0Y"
-    };
+     async function initFirebase() {
+    const res = await fetch("/api/config");
+    const firebaseConfig = await res.json();
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    console.log("Firebase init ✅", db);
+  }
+
+  initFirebase();
   //    async function initFirebase() {
   //   // Appel au backend pour récupérer les configs
   //   const res = await fetch('/api/firebase');
