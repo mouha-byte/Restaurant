@@ -1150,6 +1150,9 @@ function createStripePayment(orderId, orderData) {
 
     // --- Post Stripe return payment handler ---
   function handlePostPayment() {
+    let db;
+    initFirebase();
+    db = firebase.firestore();
     const params = new URLSearchParams(window.location.search);
     const status = params.get('payment');
     const orderId = params.get('orderId');
