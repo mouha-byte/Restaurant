@@ -696,6 +696,14 @@
   <script>
   // --- Firebase Initialization ---
   let db;
+  ensureFirebase().then(() => {
+    console.log('Firebase initialized');
+    loadProducts();
+  }).catch(err => {
+    console.error('Error initializing Firebase:', err);
+    // Fallback to static products if Firebase fails
+    loadProducts();
+  });
   async function ensureFirebase() {
     if (db) return db;
     if (!window.firebase || !window.firebase.firestore) {
@@ -703,8 +711,7 @@
       if (!window.firebase || !window.firebase.firestore) throw new Error('Firebase SDK not loaded');
     }
     if (!db) {
-      // Replace with your config or API endpoint if needed
-      // Fetch config from your Node.js server
+      // Use server-side Node.js API to get config
       const res = await fetch('/api/config');
       const config = await res.json();
       if (!firebase.apps.length) firebase.initializeApp(config);
