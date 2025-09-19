@@ -85,14 +85,19 @@
     'leforest',
     'thumeries',
     'oignies',
-    'wahagnies'
+    'wahagnies'     
   ];
   
   const deliveryLocation = (data.customerLocation || '').toLowerCase().trim();
   const subtotal = Number(data.total) || 0;
   
-  // Livraison gratuite si commande >= 15€ ET dans zone de livraison gratuite (correspondance exacte)
-  if (subtotal >= 15 && freeDeliveryLocations.includes(deliveryLocation)) {
+  // Check if any free delivery location is contained within the delivery address
+  const isInFreeZone = freeDeliveryLocations.some(location => 
+    deliveryLocation.includes(location)
+  );
+  
+  // Livraison gratuite si commande >= 15€ ET dans zone de livraison gratuite
+  if (subtotal >= 15 && isInFreeZone) {
     return 0;
   }
   
