@@ -19,6 +19,7 @@
     a.btn-link { color:#ff6b35; }
     pre { white-space: pre-wrap; word-break: break-word; }
     .delivery-row { border-top: 1px solid #444; padding-top: 10px; margin-top: 10px; }
+    .promo-text { color: #28a745; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -104,12 +105,53 @@
   return 20; // Prix de livraison standard
 }
 
+function calculatePizzaPromotion(items) {
+  // Compter le nombre total de pizzas
+  let totalPizzas = 0;
+  let pizzaItems = [];
+  
+  items.forEach(item => {
+    // Supposer que les pizzas contiennent le mot "pizza" dans leur nom
+    if (item.name && item.name.toLowerCase().includes('pizza')) {
+      totalPizzas += item.quantity || 1;
+      pizzaItems.push(item);
+    }
+  });
+  
+  // Calculer le nombre de pizzas gratuites
+  let freePizzas = 0;
+  if (totalPizzas >= 3) {
+    freePizzas = Math.floor(totalPizzas / 3); // 1 pizza gratuite pour chaque groupe de 3
+  }
+  
+  // Calculer la réduction (prix de la pizza la moins chère multipliée par le nombre de pizzas gratuites)
+  let discount = 0;
+  if (freePizzas > 0 && pizzaItems.length > 0) {
+    // Trier les pizzas par prix croissant pour offrir les moins chères
+    const sortedPizzas = pizzaItems.sort((a, b) => (a.price || 0) - (b.price || 0));
+    
+    let pizzasToDiscount = freePizzas;
+    for (let pizza of sortedPizzas) {
+      if (pizzasToDiscount <= 0) break;
+      
+      const quantity = pizza.quantity || 1;
+      const pizzasFromThisItem = Math.min(pizzasToDiscount, quantity);
+      discount += (pizza.price || 0) * pizzasFromThisItem;
+      pizzasToDiscount -= pizzasFromThisItem;
+    }
+  }
+  
+  return { totalPizzas, freePizzas, discount };
+}
+
     function renderSummary(data) {
       document.getElementById('orderId').textContent = data.orderId || '—';
       
-      const subtotal = Number(data.total) || 0;
+      const originalSubtotal = Number(data.total) || 0;
+      const pizzaPromo = calculatePizzaPromotion(data.items || []);
+      const subtotalAfterPromo = originalSubtotal - pizzaPromo.discount;
       const deliveryFee = calculateDeliveryFee(data);
-      const finalTotal = subtotal + deliveryFee;
+      const finalTotal = subtotalAfterPromo + deliveryFee;
       
       document.getElementById('orderTotal').textContent = `€${finalTotal.toFixed(2)}`;
 
@@ -134,14 +176,25 @@
         summary.appendChild(empty);
       }
       
-      // Sous-total
+      // Sous-total original
       const subtotalRow = document.createElement('div');
       subtotalRow.className = 'd-flex justify-content-between small py-1 delivery-row';
       subtotalRow.innerHTML = `
         <span>Sous-total</span>
-        <span>€${subtotal.toFixed(2)}</span>
+        <span>€${originalSubtotal.toFixed(2)}</span>
       `;
       summary.appendChild(subtotalRow);
+      
+      // Promotion pizza si applicable
+      if (pizzaPromo.freePizzas > 0) {
+        const promoRow = document.createElement('div');
+        promoRow.className = 'd-flex justify-content-between small py-1';
+        promoRow.innerHTML = `
+          <span class="promo-text">Promotion: ${pizzaPromo.freePizzas} pizza${pizzaPromo.freePizzas > 1 ? 's' : ''} offerte${pizzaPromo.freePizzas > 1 ? 's' : ''}</span>
+          <span class="promo-text">-€${pizzaPromo.discount.toFixed(2)}</span>
+        `;
+        summary.appendChild(promoRow);
+      }
       
       // Livraison
       const deliveryRow = document.createElement('div');
@@ -165,6 +218,7 @@
       // Mettre à jour le total dans les données
       data.finalTotal = finalTotal;
       data.deliveryFee = deliveryFee;
+      data.pizzaDiscount = pizzaPromo.discount;
     }
 
     async function createCheckoutSession(data) {
@@ -181,7 +235,8 @@
           orderId: data.orderId,
           items: data.items,
           total: data.finalTotal,
-          deliveryFee: data.deliveryFee
+          deliveryFee: data.deliveryFee,
+          pizzaDiscount: data.pizzaDiscount
         });
 
         const response = await fetch(apiPath, {
@@ -192,6 +247,7 @@
             totalPrice: Number(data.finalTotal),
             items: data.items,
             deliveryFee: data.deliveryFee,
+            pizzaDiscount: data.pizzaDiscount,
             customerName: data.customerName,
             customerEmail: data.customerEmail,
             customerPhone: data.customerPhone,

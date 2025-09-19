@@ -1005,124 +1005,164 @@
     const products = [
       // --- PIZZAS ---
       // Base Tomate
-      { name: "Margherita Pizza (Junior)", price: 8, description: "Base Tomate, Mozzarella", category: "pizza", image: "images/1.jpg" },
-      { name: "Margherita Pizza (Senior)", price: 12.5, description: "Base Tomate, Mozzarella", category: "pizza", image: "images/1.jpg" },
-      { name: "Bambino Pizza (Junior)", price: 8.5, description: "Base Tomate, Mozzarella, Jambon, Œuf", category: "pizza", image: "images/2.jpg" },
-      { name: "Bambino Pizza (Senior)", price: 14.5, description: "Base Tomate, Mozzarella, Jambon, Œuf", category: "pizza", image: "images/2.jpg" },
-      { name: "Calzone Pizza (Junior)", price: 8.5, description: "Base Tomate, Mozzarella, Viande Hachée ou Jambon, Œuf", category: "pizza", image: "images/3.jpg" },
-      { name: "Calzone Pizza (Senior)", price: 14.5, description: "Base Tomate, Mozzarella, Viande Hachée ou Jambon, Œuf", category: "pizza", image: "images/3.jpg" },
-      { name: "Napolitaine Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Anchois, Câpres, Olives", category: "pizza", image: "images/4.jpg" },
-      { name: "Napolitaine Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Anchois, Câpres, Olives", category: "pizza", image: "images/4.jpg" },
-      { name: "Regina Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Jambon, Champignons", category: "pizza", image: "images/5.jpg" },
-      { name: "Regina Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Jambon, Champignons", category: "pizza", image: "images/5.jpg" },
-      { name: "4 Fromages Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Gorgonzola, Chèvre, Brie", category: "pizza", image: "images/6.jpg" },
-      { name: "4 Fromages Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Gorgonzola, Chèvre, Brie", category: "pizza", image: "images/6.jpg" },
-      { name: "Campion Pizza (Junior)", price: 9, description: "Base Tomate, Mozzarella, Viande Hachée, Champignons", category: "pizza", image: "images/7.jpg" },
-      { name: "Campion Pizza (Senior)", price: 15, description: "Base Tomate, Mozzarella, Viande Hachée, Champignons", category: "pizza", image: "images/7.jpg" },
-      { name: "4 Saisons Pizza (Junior)", price: 9.5, description: "Base Tomate, Mozzarella, Jambon, Champignons, Poivrons, Olives", category: "pizza", image: "images/8.jpg" },
-      { name: "4 Saisons Pizza (Senior)", price: 15.5, description: "Base Tomate, Mozzarella, Jambon, Champignons, Poivrons, Olives", category: "pizza", image: "images/8.jpg" },
-      { name: "Vegetarienne Pizza (Junior)", price: 9.5, description: "Base Tomate, Mozzarella, Champignons, Poivrons, Olives", category: "pizza", image: "images/9.jpg" },
-      { name: "Vegetarienne Pizza (Senior)", price: 15.5, description: "Base Tomate, Mozzarella, Champignons, Poivrons, Olives", category: "pizza", image: "images/9.jpg" },
-      { name: "Orientale Pizza (Junior)", price: 9.5, description: "Base Tomate, Mozzarella, Merguez, Poivrons, Oignons", category: "pizza", image: "images/10.jpg" },
-      { name: "Orientale Pizza (Senior)", price: 15.5, description: "Base Tomate, Mozzarella, Merguez, Poivrons, Oignons", category: "pizza", image: "images/10.jpg" },
-      { name: "Speranza Pizza (Junior)", price: 10, description: "Base Tomate, Mozzarella, Viande Hachée, Merguez, Poulet, Buffalo", category: "pizza", image: "images/11.jpg" },
-      { name: "Speranza Pizza (Senior)", price: 16, description: "Base Tomate, Mozzarella, Viande Hachée, Merguez, Poulet, Buffalo", category: "pizza", image: "images/11.jpg" },
+      { name: "Margherita Pizza (Junior)", price: 8, description: "Pizza classique italienne avec une base tomate traditionnelle", category: "pizza", image: "images/1.jpg", ingredients: ["Base Tomate", "Mozzarella"] },
+      { name: "Margherita Pizza (Senior)", price: 12.5, description: "Pizza classique italienne avec une base tomate traditionnelle", category: "pizza", image: "images/1.jpg", ingredients: ["Base Tomate", "Mozzarella"] },
+      { name: "Bambino Pizza (Junior)", price: 8.5, description: "Pizza gourmande spécialement conçue pour les enfants", category: "pizza", image: "images/2.jpg", ingredients: ["Base Tomate", "Mozzarella", "Jambon", "Œuf"] },
+      { name: "Bambino Pizza (Senior)", price: 14.5, description: "Pizza gourmande spécialement conçue pour les enfants", category: "pizza", image: "images/2.jpg", ingredients: ["Base Tomate", "Mozzarella", "Jambon", "Œuf"] },
+      { name: "Calzone Pizza (Junior)", price: 8.5, description: "Pizza fermée traditionnelle italienne, généreusement garnie", category: "pizza", image: "images/3.jpg", ingredients: ["Base Tomate", "Mozzarella", "Viande Hachée ou Jambon", "Œuf"] },
+      { name: "Calzone Pizza (Senior)", price: 14.5, description: "Pizza fermée traditionnelle italienne, généreusement garnie", category: "pizza", image: "images/3.jpg", ingredients: ["Base Tomate", "Mozzarella", "Viande Hachée ou Jambon", "Œuf"] },
+      { name: "Napolitaine Pizza (Junior)", price: 9, description: "Spécialité méditerranéenne aux saveurs marines authentiques", category: "pizza", image: "images/4.jpg", ingredients: ["Base Tomate", "Mozzarella", "Anchois", "Câpres", "Olives"] },
+      { name: "Napolitaine Pizza (Senior)", price: 15, description: "Spécialité méditerranéenne aux saveurs marines authentiques", category: "pizza", image: "images/4.jpg", ingredients: ["Base Tomate", "Mozzarella", "Anchois", "Câpres", "Olives"] },
+      { name: "Regina Pizza (Junior)", price: 9, description: "La pizza royale française par excellence", category: "pizza", image: "images/5.jpg", ingredients: ["Base Tomate", "Mozzarella", "Jambon", "Champignons"] },
+      { name: "Regina Pizza (Senior)", price: 15, description: "La pizza royale française par excellence", category: "pizza", image: "images/5.jpg", ingredients: ["Base Tomate", "Mozzarella", "Jambon", "Champignons"] },
+      { name: "4 Fromages Pizza (Junior)", price: 9, description: "Un festival de fromages pour les vrais amateurs", category: "pizza", image: "images/6.jpg", ingredients: ["Base Tomate", "Mozzarella", "Gorgonzola", "Chèvre", "Brie"] },
+      { name: "4 Fromages Pizza (Senior)", price: 15, description: "Un festival de fromages pour les vrais amateurs", category: "pizza", image: "images/6.jpg", ingredients: ["Base Tomate", "Mozzarella", "Gorgonzola", "Chèvre", "Brie"] },
+      { name: "Campion Pizza (Junior)", price: 9, description: "Pizza robuste et savoureuse pour les gros appétits", category: "pizza", image: "images/7.jpg", ingredients: ["Base Tomate", "Mozzarella", "Viande Hachée", "Champignons"] },
+      { name: "Campion Pizza (Senior)", price: 15, description: "Pizza robuste et savoureuse pour les gros appétits", category: "pizza", image: "images/7.jpg", ingredients: ["Base Tomate", "Mozzarella", "Viande Hachée", "Champignons"] },
+      { name: "4 Saisons Pizza (Junior)", price: 9.5, description: "Voyage culinaire à travers les quatre saisons", category: "pizza", image: "images/8.jpg", ingredients: ["Base Tomate", "Mozzarella", "Jambon", "Champignons", "Poivrons", "Olives"] },
+      { name: "4 Saisons Pizza (Senior)", price: 15.5, description: "Voyage culinaire à travers les quatre saisons", category: "pizza", image: "images/8.jpg", ingredients: ["Base Tomate", "Mozzarella", "Jambon", "Champignons", "Poivrons", "Olives"] },
+      { name: "Vegetarienne Pizza (Junior)", price: 9.5, description: "Pizza colorée et saine pour les amoureux des légumes", category: "pizza", image: "images/9.jpg", ingredients: ["Base Tomate", "Mozzarella", "Champignons", "Poivrons", "Olives"] },
+      { name: "Vegetarienne Pizza (Senior)", price: 15.5, description: "Pizza colorée et saine pour les amoureux des légumes", category: "pizza", image: "images/9.jpg", ingredients: ["Base Tomate", "Mozzarella", "Champignons", "Poivrons", "Olives"] },
+      { name: "Orientale Pizza (Junior)", price: 9.5, description: "Évasion épicée vers les saveurs du Maghreb", category: "pizza", image: "images/10.jpg", ingredients: ["Base Tomate", "Mozzarella", "Merguez", "Poivrons", "Oignons"] },
+      { name: "Orientale Pizza (Senior)", price: 15.5, description: "Évasion épicée vers les saveurs du Maghreb", category: "pizza", image: "images/10.jpg", ingredients: ["Base Tomate", "Mozzarella", "Merguez", "Poivrons", "Oignons"] },
+      { name: "Speranza Pizza (Junior)", price: 10, description: "Notre création signature aux multiples viandes", category: "pizza", image: "images/11.jpg", ingredients: ["Base Tomate", "Mozzarella", "Viande Hachée", "Merguez", "Poulet", "Buffalo"] },
+      { name: "Speranza Pizza (Senior)", price: 16, description: "Notre création signature aux multiples viandes", category: "pizza", image: "images/11.jpg", ingredients: ["Base Tomate", "Mozzarella", "Viande Hachée", "Merguez", "Poulet", "Buffalo"] },
 
       // Base Crème
-      { name: "Tartiflette Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Lardons, Reblochon, Pommes de terre, Oignons", category: "pizza", image: "images/12.jpg" },
-      { name: "Tartiflette Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Lardons, Reblochon, Pommes de terre, Oignons", category: "pizza", image: "images/12.jpg" },
-      { name: "Chèvre Miel Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Chèvre, Miel", category: "pizza", image: "images/13.jpg" },
-      { name: "Chèvre Miel Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Chèvre, Miel", category: "pizza", image: "images/13.jpg" },
-      { name: "Raclette Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Poulet, Raclette, Pommes de terre, Oignons", category: "pizza", image: "images/14.jpg" },
-      { name: "Raclette Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Poulet, Raclette, Pommes de terre, Oignons", category: "pizza", image: "images/14.jpg" },
-      { name: "Campagnarde Pizza (Junior)", price: 9.5, description: "Base Crème, Mozzarella, Poulet, Gorgonzola, Pommes de terre, Oignons", category: "pizza", image: "images/15.jpg" },
-      { name: "Campagnarde Pizza (Senior)", price: 15.5, description: "Base Crème, Mozzarella, Poulet, Gorgonzola, Pommes de terre, Oignons", category: "pizza", image: "images/15.jpg" },
+      { name: "Tartiflette Pizza (Junior)", price: 9.5, description: "L'authenticité savoyarde directement sur votre pizza", category: "pizza", image: "images/12.jpg", ingredients: ["Base Crème", "Mozzarella", "Lardons", "Reblochon", "Pommes de terre", "Oignons"] },
+      { name: "Tartiflette Pizza (Senior)", price: 15.5, description: "L'authenticité savoyarde directement sur votre pizza", category: "pizza", image: "images/12.jpg", ingredients: ["Base Crème", "Mozzarella", "Lardons", "Reblochon", "Pommes de terre", "Oignons"] },
+      { name: "Chèvre Miel Pizza (Junior)", price: 9.5, description: "Mariage parfait entre douceur et caractère", category: "pizza", image: "images/13.jpg", ingredients: ["Base Crème", "Mozzarella", "Chèvre", "Miel"] },
+      { name: "Chèvre Miel Pizza (Senior)", price: 15.5, description: "Mariage parfait entre douceur et caractère", category: "pizza", image: "images/13.jpg", ingredients: ["Base Crème", "Mozzarella", "Chèvre", "Miel"] },
+      { name: "Raclette Pizza (Junior)", price: 9.5, description: "Convivialité montagnarde en format pizza", category: "pizza", image: "images/14.jpg", ingredients: ["Base Crème", "Mozzarella", "Poulet", "Raclette", "Pommes de terre", "Oignons"] },
+      { name: "Raclette Pizza (Senior)", price: 15.5, description: "Convivialité montagnarde en format pizza", category: "pizza", image: "images/14.jpg", ingredients: ["Base Crème", "Mozzarella", "Poulet", "Raclette", "Pommes de terre", "Oignons"] },
+      { name: "Campagnarde Pizza (Junior)", price: 9.5, description: "Retour aux sources avec cette recette rustique", category: "pizza", image: "images/15.jpg", ingredients: ["Base Crème", "Mozzarella", "Poulet", "Gorgonzola", "Pommes de terre", "Oignons"] },
+      { name: "Campagnarde Pizza (Senior)", price: 15.5, description: "Retour aux sources avec cette recette rustique", category: "pizza", image: "images/15.jpg", ingredients: ["Base Crème", "Mozzarella", "Poulet", "Gorgonzola", "Pommes de terre", "Oignons"] },
 
       // Base Spéciale
-      { name: "Poulet Al Tartufo Pizza (Junior)", price: 10, description: "Base Spéciale, Mozzarella, Crème Truffe, Poulet, Buffalo, P.Terre, Champignons, Oignons", category: "pizza", image: "images/16.jpg" },
-      { name: "Poulet Al Tartufo Pizza (Senior)", price: 16, description: "Base Spéciale, Mozzarella, Crème Truffe, Poulet, Buffalo, P.Terre, Champignons, Oignons", category: "pizza", image: "images/16.jpg" },
-      { name: "La Corzza Pizza (Junior)", price: 10, description: "Base Spéciale, Mozzarella, Cordon Bleu, Tenders, Sauce Fromagère, Frites", category: "pizza", image: "images/17.jpg" },
-      { name: "La Corzza Pizza (Senior)", price: 16, description: "Base Spéciale, Mozzarella, Cordon Bleu, Tenders, Sauce Fromagère, Frites", category: "pizza", image: "images/17.jpg" },
-      { name: "Barbecue Pizza (Junior)", price: 10, description: "Base Spéciale, Mozzarella, Merguez, Poulet, Buffalo, Sauce Barbecue", category: "pizza", image: "images/18.jpg" },
-      { name: "Barbecue Pizza (Senior)", price: 16, description: "Base Spéciale, Mozzarella, Merguez, Poulet, Buffalo, Sauce Barbecue", category: "pizza", image: "images/18.jpg" },
+      { name: "Poulet Al Tartufo Pizza (Junior)", price: 10, description: "Expérience gastronomique aux arômes de truffe", category: "pizza", image: "images/16.jpg", ingredients: ["Base Spéciale", "Mozzarella", "Crème Truffe", "Poulet", "Buffalo", "Pommes de terre", "Champignons", "Oignons"] },
+      { name: "Poulet Al Tartufo Pizza (Senior)", price: 16, description: "Expérience gastronomique aux arômes de truffe", category: "pizza", image: "images/16.jpg", ingredients: ["Base Spéciale", "Mozzarella", "Crème Truffe", "Poulet", "Buffalo", "Pommes de terre", "Champignons", "Oignons"] },
+      { name: "La Corzza Pizza (Junior)", price: 10, description: "Innovation culinaire fusion entre pizza et fast-food", category: "pizza", image: "images/17.jpg", ingredients: ["Base Spéciale", "Mozzarella", "Cordon Bleu", "Tenders", "Sauce Fromagère", "Frites"] },
+      { name: "La Corzza Pizza (Senior)", price: 16, description: "Innovation culinaire fusion entre pizza et fast-food", category: "pizza", image: "images/17.jpg", ingredients: ["Base Spéciale", "Mozzarella", "Cordon Bleu", "Tenders", "Sauce Fromagère", "Frites"] },
+      { name: "Barbecue Pizza (Junior)", price: 10, description: "Saveurs fumées américaines sur pâte italienne", category: "pizza", image: "images/18.jpg", ingredients: ["Base Spéciale", "Mozzarella", "Merguez", "Poulet", "Buffalo", "Sauce Barbecue"] },
+      { name: "Barbecue Pizza (Senior)", price: 16, description: "Saveurs fumées américaines sur pâte italienne", category: "pizza", image: "images/18.jpg", ingredients: ["Base Spéciale", "Mozzarella", "Merguez", "Poulet", "Buffalo", "Sauce Barbecue"] },
 
       // --- BURGERS ---
       // Classiques
-      { name: "Cheese Burger", price: 6.5, description: "Steak 90g, Cheddar", category: "burger", image: "images/b1.jpg" },
-      { name: "Cheese Burger (Menu)", price: 8, description: "Steak 90g, Cheddar", category: "burger", image: "images/b1.jpg" },
-      { name: "Fish Burger", price: 6.5, description: "Poisson, Cheddar", category: "burger", image: "images/b2.jpg" },
-      { name: "Fish Burger (Menu)", price: 8, description: "Poisson, Cheddar", category: "burger", image: "images/b2.jpg" },
-      { name: "Chicken Burger", price: 6.5, description: "Chicken, Galette, Cheddar", category: "burger", image: "images/b3.jpg" },
-      { name: "Chicken Burger (Menu)", price: 8, description: "Chicken, Galette, Cheddar", category: "burger", image: "images/b3.jpg" },
+      { name: "Cheese Burger", price: 6.5, description: "Le grand classique américain incontournable", category: "burger", image: "images/b1.jpg", ingredients: ["Pain burger", "Steak 90g", "Cheddar", "Salade", "Tomate", "Oignon"] },
+      { name: "Cheese Burger (Menu)", price: 8, description: "Le grand classique américain en formule complète", category: "burger", image: "images/b1.jpg", ingredients: ["Pain burger", "Steak 90g", "Cheddar", "Salade", "Tomate", "Oignon"] },
+      { name: "Fish Burger", price: 6.5, description: "Alternative marine pour les amateurs de poisson", category: "burger", image: "images/b2.jpg", ingredients: ["Pain burger", "Filet de poisson", "Cheddar", "Salade", "Tomate", "Sauce Tartare"] },
+      { name: "Fish Burger (Menu)", price: 8, description: "Alternative marine en formule complète", category: "burger", image: "images/b2.jpg", ingredients: ["Pain burger", "Filet de poisson", "Cheddar", "Salade", "Tomate", "Sauce Tartare"] },
+      { name: "Chicken Burger", price: 6.5, description: "Tendresse du poulet avec une touche croustillante", category: "burger", image: "images/b3.jpg", ingredients: ["Pain burger", "Escalope de poulet", "Galette de pommes de terre", "Cheddar", "Salade", "Tomate"] },
+      { name: "Chicken Burger (Menu)", price: 8, description: "Tendresse du poulet en formule complète", category: "burger", image: "images/b3.jpg", ingredients: ["Pain burger", "Escalope de poulet", "Galette de pommes de terre", "Cheddar", "Salade", "Tomate"] },
 
       // XXL
-      { name: "Bio Bacon Burger", price: 9, description: "Steak 180g, Double Cheddar, Bacon", category: "burger", image: "images/b4.jpg" },
-      { name: "Bio Bacon Burger (Menu)", price: 10.5, description: "Steak 180g, Double Cheddar, Bacon", category: "burger", image: "images/b4.jpg" },
-      { name: "Le King Burger", price: 9, description: "Steak 180g, Cheddar, Œuf", category: "burger", image: "images/b5.jpg" },
-      { name: "Le King Burger (Menu)", price: 10.5, description: "Steak 180g, Cheddar, Œuf", category: "burger", image: "images/b5.jpg" },
-      { name: "Ostri Burger", price: 10, description: "2 Steak 180g, Bacon, 2 Cheddar, Œuf", category: "burger", image: "images/b6.jpg" },
-      { name: "Ostri Burger (Menu)", price: 11.5, description: "2 Steak 180g, Bacon, 2 Cheddar, Œuf", category: "burger", image: "images/b6.jpg" },
+      { name: "Bio Bacon Burger", price: 9, description: "Format XXL pour les vrais carnivores", category: "burger", image: "images/b4.jpg", ingredients: ["Pain burger", "Steak 180g", "Double Cheddar", "Bacon", "Salade", "Tomate", "Oignon"] },
+      { name: "Bio Bacon Burger (Menu)", price: 10.5, description: "Format XXL en formule complète", category: "burger", image: "images/b4.jpg", ingredients: ["Pain burger", "Steak 180g", "Double Cheddar", "Bacon", "Salade", "Tomate", "Oignon"] },
+      { name: "Le King Burger", price: 9, description: "Sa Majesté des burgers, royal et généreux", category: "burger", image: "images/b5.jpg", ingredients: ["Pain burger", "Steak 180g", "Cheddar", "Œuf", "Salade", "Tomate", "Oignon"] },
+      { name: "Le King Burger (Menu)", price: 10.5, description: "Sa Majesté des burgers en formule complète", category: "burger", image: "images/b5.jpg", ingredients: ["Pain burger", "Steak 180g", "Cheddar", "Œuf", "Salade", "Tomate", "Oignon"] },
+      { name: "Ostri Burger", price: 10, description: "Notre création locale XXL défiant tous les appétits", category: "burger", image: "images/b6.jpg", ingredients: ["Pain burger", "2 Steaks 180g", "Bacon", "2 Cheddars", "Œuf", "Salade", "Tomate", "Oignon"] },
+      { name: "Ostri Burger (Menu)", price: 11.5, description: "Notre création locale XXL en formule complète", category: "burger", image: "images/b6.jpg", ingredients: ["Pain burger", "2 Steaks 180g", "Bacon", "2 Cheddars", "Œuf", "Salade", "Tomate", "Oignon"] },
 
       // Speciaux
-      { name: "Bacon Burger", price: 7.5, description: "Steak 90g, Bacon, Cheddar, Œuf", category: "burger", image: "images/b7.jpg" },
-      { name: "Bacon Burger (Menu)", price: 9, description: "Steak 90g, Bacon, Cheddar, Œuf", category: "burger", image: "images/b7.jpg" },
-      { name: "Speranza Burger", price: 7.5, description: "Steak 90g, Chicken, Galette P.Terre, Cheddar", category: "burger", image: "images/b8.jpg" },
-      { name: "Speranza Burger (Menu)", price: 9, description: "Steak 90g, Chicken, Galette P.Terre, Cheddar", category: "burger", image: "images/b8.jpg" },
-      { name: "Burger Raclette", price: 7.5, description: "Steak 90g, Raclette, Galette P.Terre, Cheddar", category: "burger", image: "images/b9.jpg" },
-      { name: "Burger Raclette (Menu)", price: 9, description: "Steak 90g, Raclette, Galette P.Terre, Cheddar", category: "burger", image: "images/b9.jpg" },
-
+      { name: "Bacon Burger", price: 7.5, description: "Plaisir croustillant et gourmandise assurée", category: "burger", image: "images/b7.jpg", ingredients: ["Pain burger", "Steak 90g", "Bacon", "Cheddar", "Œuf", "Salade", "Tomate", "Oignon"] },
+      { name: "Bacon Burger (Menu)", price: 9, description: "Plaisir croustillant en formule complète", category: "burger", image: "images/b7.jpg", ingredients: ["Pain burger", "Steak 90g", "Bacon", "Cheddar", "Œuf", "Salade", "Tomate", "Oignon"] },
+      { name: "Speranza Burger", price: 7.5, description: "Notre spécialité maison alliant terre et mer", category: "burger", image: "images/b8.jpg", ingredients: ["Pain burger", "Steak 90g", "Escalope de poulet", "Galette de pommes de terre", "Cheddar", "Salade", "Tomate"] },
+      { name: "Speranza Burger (Menu)", price: 9, description: "Notre spécialité maison en formule complète", category: "burger", image: "images/b8.jpg", ingredients: ["Pain burger", "Steak 90g", "Escalope de poulet", "Galette de pommes de terre", "Cheddar", "Salade", "Tomate"] },
+      { name: "Burger Raclette", price: 7.5, description: "Évasion montagnarde dans votre burger", category: "burger", image: "images/b9.jpg", ingredients: ["Pain burger", "Steak 90g", "Fromage à raclette", "Galette de pommes de terre", "Cheddar", "Salade", "Tomate"] },
+      { name: "Burger Raclette (Menu)", price: 9, description: "Évasion montagnarde en formule complète", category: "burger", image: "images/b9.jpg", ingredients: ["Pain burger", "Steak 90g", "Fromage à raclette", "Galette de pommes de terre", "Cheddar", "Salade", "Tomate"] },
 
       // --- PATES (PASTA) ---
-      { name: "Pâtes Carbonara", price: 9, description: "Crème Fraîche, Lardons, Œuf, Parmesan", category: "pasta", image: "images/p1.jpg" },
-      { name: "Pâtes Saumon", price: 9, description: "Crème Fraîche, Saumon, Parmesan", category: "pasta", image: "images/p2.jpg" },
-      { name: "Pâtes Bolognaise", price: 9, description: "Sauce Tomate, Viande Hachée, Parmesan", category: "pasta", image: "images/p3.jpg" },
-      { name: "Pâtes Fruits de Mer", price: 9, description: "Sauce Tomate, Fruits de mer, Parmesan", category: "pasta", image: "images/p4.jpg" },
-      { name: "Pâtes Al Tartuffo", price: 9, description: "Crème Fraîche, Crème de Truffe, Poulet, Champignon, Parmesan", category: "pasta", image: "images/p5.jpg" },
+      { name: "Pâtes Carbonara", price: 9, description: "Recette romaine traditionnelle crémeuse et savoureuse", category: "pasta", image: "images/p1.jpg", ingredients: ["Pâtes", "Crème Fraîche", "Lardons", "Œuf", "Parmesan"] },
+      { name: "Pâtes Saumon", price: 9, description: "Délicatesse nordique pour un plat raffiné", category: "pasta", image: "images/p2.jpg", ingredients: ["Pâtes", "Crème Fraîche", "Saumon", "Parmesan"] },
+      { name: "Pâtes Bolognaise", price: 9, description: "L'authentique recette milanaise intemporelle", category: "pasta", image: "images/p3.jpg", ingredients: ["Pâtes", "Sauce Tomate", "Viande Hachée", "Parmesan"] },
+      { name: "Pâtes Fruits de Mer", price: 9, description: "Voyage maritime dans votre assiette", category: "pasta", image: "images/p4.jpg", ingredients: ["Pâtes", "Sauce Tomate", "Fruits de mer", "Parmesan"] },
+      { name: "Pâtes Al Tartuffo", price: 9, description: "Expérience gastronomique aux arômes nobles", category: "pasta", image: "images/p5.jpg", ingredients: ["Pâtes", "Crème Fraîche", "Crème de Truffe", "Poulet", "Champignons", "Parmesan"] },
 
       // --- TEX MEX & FRIES ---
-      { name: "6 Nuggets", price: 6, description: "6 pièces de poulet pané", category: "tex-mex", image: "images/n1.jpg" },
-      { name: "Menu 6 Nuggets", price: 8, description: "6 pièces de poulet pané, servi avec frites et boisson", category: "tex-mex", image: "images/n2.png", hasDrink: true, drinkOptions: drinkOptions },
-      { name: "6 Onion Rings", price: 6, description: "6 rondelles d'oignon frites", category: "tex-mex", image: "images/n3.jpg" },
-      { name: "Menu 6 Onion Rings", price: 8, description: "6 rondelles d'oignon frites, servi avec frites et boisson", category: "tex-mex", image: "images/n4.png", hasDrink: true, drinkOptions: drinkOptions },
-      { name: "6 Mozzarella Sticks", price: 6, description: "6 bâtonnets de mozzarella panés", category: "tex-mex", image: "images/n5.jpg" },
-      { name: "Menu 6 Mozzarella Sticks", price: 8, description: "6 bâtonnets de mozzarella panés, servi avec frites et boisson", category: "tex-mex", image: "images/n6.png", hasDrink: true, drinkOptions: drinkOptions },
-      { name: "6 Tenders", price: 8, description: "6 tenders de poulet", category: "tex-mex", image: "images/n7.jpg" },
-      { name: "Menu 6 Tenders", price: 10, description: "6 tenders de poulet, servi avec frites et boisson", category: "tex-mex", image: "images/n8.png", hasDrink: true, drinkOptions: drinkOptions },
-      { name: "Frites (Petite)", price: 2.5, description: "Portion de frites petite", category: "fries", image: "images/f1.jpg" },
-      { name: "Frites (Moyenne)", price: 3.5, description: "Portion de frites moyenne", category: "fries", image: "images/f2.jpg" },
-      { name: "Frites (Grande)", price: 4.5, description: "Portion de frites grande", category: "fries", image: "images/f3.jpg" },
-      { name: "Box Tenders, Wings, Mix", price: 19, description: "Box 1 (1kg avant cuisson) Seul", category: "tex-mex", image: "images/n9.jpg" },
-      { name: "Box Tenders, Wings, Mix", price: 23, description: "Box 1 (1kg avant cuisson) Menu", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions },
-      { name: "Box Tenders, Wings, Mix", price: 29, description: "Box 2 (2kg avant cuisson) Seul", category: "tex-mex", image: "images/n9.jpg" },
-      { name: "Box Tenders, Wings, Mix", price: 33, description: "Box 2 (2kg avant cuisson) Menu", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions },
+      { name: "6 Nuggets", price: 6, description: "Bouchées dorées et croustillantes pour petites faims", category: "tex-mex", image: "images/n1.jpg", ingredients: ["Nuggets de poulet (6 pièces)"] },
+      { name: "Menu 6 Nuggets", price: 8, description: "Formule complète avec accompagnements pour enfants", category: "tex-mex", image: "images/n2.png", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Nuggets de poulet (6 pièces)", "Frites", "Boisson"] },
+      { name: "6 Onion Rings", price: 6, description: "Anneaux dorés et fondants aux saveurs d'oignon", category: "tex-mex", image: "images/n3.jpg", ingredients: ["Rondelles d'oignon panées (6 pièces)"] },
+      { name: "Menu 6 Onion Rings", price: 8, description: "Formule complète avec ces spécialités américaines", category: "tex-mex", image: "images/n4.png", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Rondelles d'oignon panées (6 pièces)", "Frites", "Boisson"] },
+      { name: "6 Mozzarella Sticks", price: 6, description: "Bâtonnets fondants au cœur coulant de fromage", category: "tex-mex", image: "images/n5.jpg", ingredients: ["Bâtonnets de mozzarella panés (6 pièces)"] },
+      { name: "Menu 6 Mozzarella Sticks", price: 8, description: "Formule complète avec ces délices fromagés", category: "tex-mex", image: "images/n6.png", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Bâtonnets de mozzarella panés (6 pièces)", "Frites", "Boisson"] },
+      { name: "6 Tenders", price: 8, description: "Lamelles de poulet tendres et épicées", category: "tex-mex", image: "images/n7.jpg", ingredients: ["Tenders de poulet (6 pièces)"] },
+      { name: "Menu 6 Tenders", price: 10, description: "Formule complète avec ces spécialités de poulet", category: "tex-mex", image: "images/n8.png", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Tenders de poulet (6 pièces)", "Frites", "Boisson"] },
+      { name: "Frites (Petite)", price: 2.5, description: "Accompagnement doré et croustillant format individuel", category: "fries", image: "images/f1.jpg", ingredients: ["Pommes de terre frites"] },
+      { name: "Frites (Moyenne)", price: 3.5, description: "Accompagnement doré format standard", category: "fries", image: "images/f2.jpg", ingredients: ["Pommes de terre frites"] },
+      { name: "Frites (Grande)", price: 4.5, description: "Accompagnement doré format généreux à partager", category: "fries", image: "images/f3.jpg", ingredients: ["Pommes de terre frites"] },
+      { name: "Box Tenders, Wings, Mix", price: 19, description: "Assortiment varié pour les amateurs de volaille (1kg)", category: "tex-mex", image: "images/n9.jpg", ingredients: ["Tenders de poulet", "Ailes de poulet", "Mix varié"] },
+      { name: "Box Tenders, Wings, Mix", price: 23, description: "Formule complète avec assortiment varié (1kg)", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Tenders de poulet", "Ailes de poulet", "Mix varié", "Frites", "Boisson"] },
+      { name: "Box Tenders, Wings, Mix", price: 29, description: "Mega assortiment pour grande tablée (2kg)", category: "tex-mex", image: "images/n9.jpg", ingredients: ["Tenders de poulet", "Ailes de poulet", "Mix varié"] },
+      { name: "Box Tenders, Wings, Mix", price: 33, description: "Mega formule complète pour grande tablée (2kg)", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Tenders de poulet", "Ailes de poulet", "Mix varié", "Frites", "Boisson"] },
+
       // --- TACOS ---
-      { name: "Tacos (1 Viande)", price: 8, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/t1.jpeg" },
-      { name: "Tacos (2 Viandes)", price: 9, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/t2.jpg" },
-      { name: "Tacos (3 Viandes)", price: 10, description: "Accompagné de sauce fromagère maison + Frites", category: "tacos", image: "images/t3.png" },
+      { name: "Tacos (1 Viande)", price: 8, description: "Spécialité tex-mex généreuse et savoureuse", category: "tacos", image: "images/t1.jpeg", ingredients: ["Galette de blé", "1 Viande au choix", "Sauce fromagère maison", "Frites", "Salade", "Tomate"] },
+      { name: "Tacos (2 Viandes)", price: 9, description: "Double plaisir pour les amateurs de viande", category: "tacos", image: "images/t2.jpg", ingredients: ["Galette de blé", "2 Viandes au choix", "Sauce fromagère maison", "Frites", "Salade", "Tomate"] },
+      { name: "Tacos (3 Viandes)", price: 10, description: "Le summum des tacos pour les gros appétits", category: "tacos", image: "images/t3.png", ingredients: ["Galette de blé", "3 Viandes au choix", "Sauce fromagère maison", "Frites", "Salade", "Tomate"] },
+
       // --- Panini ---
-      { name: "Thon", price: 5, description: "Seul", category: "panini", image: "images/pa1.jpg" },
-      { name: "Poulet", price: 5, description: "Seul", category: "panini", image: "images/pa2.jpg" },
-      { name: "Viande hachée", price: 5, description: "Seul", category: "panini", image: "images/pa3.jpg" },
-      { name: "Thon (Menu)", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions },
-      { name: "Poulet (Menu)", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions },
-      { name: "Viande hachée (Menu)", price: 6, description: "Panini+Boisson", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions },
+      { name: "Thon", price: 5, description: "Sandwich italien grillé aux saveurs marines", category: "panini", image: "images/pa1.jpg", ingredients: ["Pain panini", "Thon", "Mozzarella", "Tomate", "Salade"] },
+      { name: "Poulet", price: 5, description: "Sandwich italien grillé tendre et savoureux", category: "panini", image: "images/pa2.jpg", ingredients: ["Pain panini", "Poulet", "Mozzarella", "Tomate", "Salade"] },
+      { name: "Viande hachée", price: 5, description: "Sandwich italien grillé généreux et consistant", category: "panini", image: "images/pa3.jpg", ingredients: ["Pain panini", "Viande hachée", "Mozzarella", "Tomate", "Salade"] },
+      { name: "Thon (Menu)", price: 6, description: "Formule panini avec boisson rafraîchissante", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Pain panini", "Thon", "Mozzarella", "Tomate", "Salade", "Boisson"] },
+      { name: "Poulet (Menu)", price: 6, description: "Formule panini avec boisson rafraîchissante", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Pain panini", "Poulet", "Mozzarella", "Tomate", "Salade", "Boisson"] },
+      { name: "Viande hachée (Menu)", price: 6, description: "Formule panini avec boisson rafraîchissante", category: "panini", image: "images/pa4.webp", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Pain panini", "Viande hachée", "Mozzarella", "Tomate", "Salade", "Boisson"] },
+
       // --- SALADES ---
-      { name: "Salade César", price: 7, description: "Salade, Poulet, Tomate, Olives, Buffalo", category: "salade", image: "images/s1.jpg" },
-      { name: "Salade Chèvre Chaud", price: 7, description: "Salade, Lardons Grillés, Chèvre Chaud Sur Toast, Miel, Tomate", category: "salade", image: "images/s2.jpg" },
-      { name: "Salade Fraîcheur", price: 6, description: "Salade, Saumon, Thon, Tomate, Buffalo, Olives", category: "salade", image: "images/s3.jpg" },
+      { name: "Salade César", price: 7, description: "Classique américain revisité avec nos spécialités", category: "salade", image: "images/s1.jpg", ingredients: ["Salade verte", "Poulet grillé", "Tomate", "Olives", "Fromage Buffalo", "Sauce César"] },
+      { name: "Salade Chèvre Chaud", price: 7, description: "Mélange gourmand entre tradition française et originalité", category: "salade", image: "images/s2.jpg", ingredients: ["Salade verte", "Lardons grillés", "Chèvre chaud sur toast", "Miel", "Tomate"] },
+      { name: "Salade Fraîcheur", price: 6, description: "Composition légère et équilibrée aux produits de la mer", category: "salade", image: "images/s3.jpg", ingredients: ["Salade verte", "Saumon", "Thon", "Tomate", "Fromage Buffalo", "Olives"] },
 
       // --- DESSERTS & BOISSONS ---
-      { name: "Tiramisu", price: 3, description: "Dessert classique italien", category: "dessert", image: "images/d1.jpg" },
-      { name: "Tarte au Daims", price: 3, description: "Tarte au chocolat et caramel Daims", category: "dessert", image: "images/d2.jpg" },
-      // --- BOISSONS ---
-      // Sous-catégorie : Canette
+     { 
+  name: "Tiramisu", 
+  price: 3, 
+  description: "Douceur italienne authentique pour finir en beauté", 
+  category: "dessert", 
+  image: "images/d1.jpg", 
+  ingredients: ["Mascarpone", "Café", "Biscuits à la cuillère", "Cacao"] 
+},
+{ 
+  name: "Tarte au Daim", 
+  price: 3, 
+  description: "Gourmandise sucrée aux éclats de caramel croquant", 
+  category: "dessert", 
+  image: "images/d2.jpg", 
+  ingredients: ["Pâte sablée", "Chocolat", "Caramel", "Daim"] 
+},
+{ 
+  name: "Brownie", 
+  price: 2.5, 
+  description: "Moelleux au chocolat avec une touche fondante", 
+  category: "dessert", 
+  image: "images/d3.jpg", 
+  ingredients: ["Chocolat", "Beurre", "Sucre", "Œufs", "Farine"] 
+},
+{ 
+  name: "Haagen-Dazs 100ml", 
+  price: 4, 
+  description: "Glace premium en petit format pour un plaisir instantané", 
+  category: "dessert", 
+  image: "images/d4.jpg", 
+  ingredients: ["Selon parfum choisi"] 
+},
+{ 
+  name: "Haagen-Dazs 500ml", 
+  price: 8, 
+  description: "Grand format de glace premium pour partager (ou pas !)", 
+  category: "dessert", 
+  image: "images/d5.jpg", 
+  ingredients: ["Selon parfum choisi"] 
+},
+ // --- BOISSONS ---
       {
         name: "Canette 33cl",
         price: 0,
-        description: "Choisissez votre boisson en canette",
+        description: "Large sélection de boissons rafraîchissantes en format pratique",
         category: "boissons",
         subcategory: "canette",
         image: "images/b.jpg",
+        ingredients: ["Boisson en canette 33cl"],
         options: [
           { name: "Coca Cola", price: 1.5 },
           { name: "Coca Cola Zero", price: 1.5 },
@@ -1143,60 +1183,186 @@
           { name: "Mojito (sans alcool)", price: 2 }
         ]
       },
-      // Sous-catégorie : Eaux
-      { name: "Eau Cristaline 50cl", price: 1, description: "Bouteille 50cl", category: "boissons", subcategory: "eaux", image: "images/eaux.jpg" },
-      { name: "Bouteille Coca 1.5L", price: 3.5, description: "Bouteille 1.5L", category: "boissons", subcategory: "eaux", image: "images/coca.webp" },
+      { name: "Eau Cristaline 50cl", price: 1, description: "Hydratation pure et naturelle en format individuel", category: "boissons", subcategory: "eaux", image: "images/eaux.jpg", ingredients: ["Eau minérale"] },
+      { name: "Bouteille Coca 1.5L", price: 3.5, description: "Format famille de la boisson mythique américaine", category: "boissons", subcategory: "eaux", image: "images/coca.webp", ingredients: ["Coca-Cola"] },
+
       // --- Menu Enfant ---
-      { name: "Tacos 1 viande ", price: 7, description: "Frites Capri-Sun Compote", category: "menuenfant", image: "images/me1.jpg" },
-      { name: "Cheeseburger ", price: 7, description: "Frites Capri-Sun compote", category: "menuenfant", image: "images/me2.jpg" },
-      { name: "5 nuggets ", price: 7, description: "Frites Capri-Sun compote", category: "menuenfant", image: "images/me3.jpg" },
-
-    ];
-
-
-    function loadProducts() {
-
-
+      { name: "Tacos 1 viande ", price: 7, description: "Formule enfant complète avec boisson et dessert", category: "menuenfant", image: "images/me1.jpg", ingredients: ["Galette de blé", "1 Viande", "Frites", "Capri-Sun", "Compote"] },
+      { name: "Cheeseburger ", price: 7, description: "Formule enfant avec le classique américain", category: "menuenfant", image: "images/me2.jpg", ingredients: ["Pain burger", "Steak", "Cheddar", "Frites", "Capri-Sun", "Compote"] },
+      { name: "5 nuggets ", price: 7, description: "Formule enfant avec les favoris des petits", category: "menuenfant", image: "images/me3.jpg", ingredients: ["Nuggets de poulet (5 pièces)", "Frites", "Capri-Sun", "Compote"] },
+    ];function loadProducts() {
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
       products.forEach(product => {
-        const col = document.createElement('div');
-        col.className = `col-xl-4-custom col-lg-4 col-md-6 col-sm-12 all ${product.category}`;
+      const col = document.createElement('div');
+      col.className = `col-xl-4-custom col-lg-4 col-md-6 col-sm-12 all ${product.category}`;
 
-        // Vérifier si le produit a des options (comme les canettes) ou une boisson incluse
-        const hasOptions = product.options && product.options.length > 0;
-        const hasDrink = product.hasDrink && product.drinkOptions;
-        const priceDisplay = (hasOptions || hasDrink) ? 'Choisir' : `$${product.price}`;
-        const buttonText = (hasOptions || hasDrink) ? 'Choisir' : 'Add to Cart';
-        let buttonAction;
-        if (hasOptions) {
-          buttonAction = `openCanetteModal('${product.name}')`;
-        } else if (hasDrink) {
-          buttonAction = `openMenuDrinkModal('${product.name}', ${product.price})`;
-        } else {
-          buttonAction = `addToCart('${product.name}', ${product.price})`;
-        }
+      // Vérifier si le produit a des options (comme les canettes) ou une boisson incluse
+      const hasOptions = product.options && product.options.length > 0;
+      const hasDrink = product.hasDrink && product.drinkOptions;
+      const priceDisplay = (hasOptions || hasDrink) ? 'Choisir' : `$${product.price}`;
+      const buttonText = (hasOptions || hasDrink) ? 'Choisir' : 'Add to Cart';
+      let buttonAction;
+      if (hasOptions) {
+      buttonAction = `openCanetteModal('${product.name}')`;
+      } else if (hasDrink) {
+      buttonAction = `openMenuDrinkModal('${product.name}', ${product.price})`;
+      } else {
+      buttonAction = `addToCart('${product.name}', ${product.price})`;
+      }
 
-        col.innerHTML = `
-          <div class="product-card">
-            <div class="img-box">
-              <img src="${product.image}" alt="${product.name}">
-            </div>
-            <div class="detail-box">
-              <h5>${product.name}</h5>
-              <p>${product.description}</p>
-              <div class="options">
-                <h6>${priceDisplay}</h6>
-                <button class="add-to-cart-btn" onclick="${buttonAction}">
-                  ${buttonText}
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-        grid.appendChild(col);
+      col.innerHTML = `
+      <div class="product-card" onclick="showProductDetails('${product.name.replace(/'/g, "\\'")}', '${(product.ingredients || []).join(', ').replace(/'/g, "\\'")}', ${product.price}, '${product.image}')">
+      <div class="img-box">
+        <img src="${product.image}" alt="${product.name}">
+      </div>
+      <div class="detail-box">
+        <h5>${product.name}</h5>
+        <p>${product.description}</p>
+        <div class="options">
+        <h6>${priceDisplay}</h6>
+        <button class="add-to-cart-btn" onclick="event.stopPropagation(); ${buttonAction}">
+        ${buttonText}
+        </button>
+        </div>
+      </div>
+      </div>
+      `;
+      grid.appendChild(col);
       });
     }
+
+    // Function to show product details in a popup
+    function showProductDetails(name, description, price, image) {
+      const popup = document.createElement('div');
+      popup.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+      `;
+      
+      popup.innerHTML = `
+      <div style="
+        background: var(--card-bg);
+        border-radius: 20px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        animation: slideUp 0.3s ease;
+      ">
+        <button onclick="this.closest('div').parentElement.remove()" style="
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        cursor: pointer;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        " onmouseover="this.style.background='var(--accent-hover)'" onmouseout="this.style.background='var(--accent-color)'">×</button>
+        
+        <div style="padding: 0;">
+        <div style="
+          width: 100%;
+          height: 250px;
+          background-image: url('${image}');
+          background-size: cover;
+          background-position: center;
+          border-radius: 20px 20px 0 0;
+          position: relative;
+        ">
+          <div style="
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: linear-gradient(transparent, rgba(0,0,0,0.8));
+          padding: 20px;
+          border-radius: 0 0 0 0;
+          ">
+          <h3 style="color: white; margin: 0; font-size: 24px; font-weight: bold;">${name}</h3>
+          </div>
+        </div>
+        
+        <div style="padding: 25px;">
+          <p style="
+          color: var(--text-secondary);
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: 20px;
+          ">${description}</p>
+          
+          <div style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 15px;
+          border-top: 1px solid var(--border-color);
+          ">
+          <span style="
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-shadow: 0 2px 4px rgba(255, 107, 53, 0.3);
+          ">$${price}</span>
+          
+         
+          </div>
+        </div>
+        </div>
+      </div>
+      `;
+
+      // Close popup when clicking outside
+      popup.addEventListener('click', function(e) {
+      if (e.target === popup) {
+        popup.remove();
+      }
+      });
+
+      document.body.appendChild(popup);
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+      }
+      
+      @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      }
+    `;
+    document.head.appendChild(style);
 
     // Fonction pour ouvrir la modal des canettes
     function openCanetteModal(productName) {
@@ -1695,7 +1861,8 @@
         </div>
         <div class="col-md-4 footer-col">
           <h4>Opening Hours</h4>
-          <p>Mon–Sun: 10:00 AM – 10:00 PM</p>
+          <p>Lun–Jeu, Sam–Dim: 11h00 – 14h00 et 18h00 – 23h00</p>
+          <p>Vendredi: 18h00 – 23h00</p>
         </div>
       </div>
       <div class="footer-info"></div>
