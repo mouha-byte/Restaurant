@@ -13,10 +13,12 @@
     .spinner {
       width: 36px; height: 36px; border: 4px solid rgba(255,255,255,.15);
       border-top-color: #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;
+      display: none;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     a.btn-link { color:#ff6b35; }
     pre { white-space: pre-wrap; word-break: break-word; }
+    .delivery-row { border-top: 1px solid #444; padding-top: 10px; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -24,13 +26,13 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card p-4">
-          <h4 class="mb-1">Redirecting to secure payment…</h4>
-          <p class="text-muted mb-4">Please wait while we prepare your Stripe Checkout session.</p>
+          <h4 class="mb-1">Commande prête pour paiement</h4>
+          <p class="text-muted mb-4">Vérifiez votre commande avant de procéder au paiement.</p>
 
           <div class="d-flex align-items-center gap-3 mb-4">
             <div class="spinner mr-3"></div>
             <div>
-              <div class="small text-muted">Order</div>
+              <div class="small text-muted">Commande</div>
               <div id="orderId" class="font-weight-bold">—</div>
             </div>
             <div class="ml-auto text-right">
@@ -44,14 +46,14 @@
           </div>
 
           <div class="d-flex">
-            <button id="retryBtn" class="btn btn-primary mr-2" style="display:none;">Try Again</button>
-            <a href="menu.html" class="btn btn-outline-secondary">Back to Menu</a>
-            <button id="payNowBtn" class="btn btn-success ml-auto" style="display:none;">Pay Now</button>
+            <button id="retryBtn" class="btn btn-primary mr-2" style="display:none;">Réessayer</button>
+            <a href="menu.html" class="btn btn-outline-secondary">Retour au Menu</a>
+            <button id="payNowBtn" class="btn btn-success ml-auto">Payer</button>
           </div>
 
           <div id="errorBox" class="alert alert-danger mt-3" role="alert" style="display:none;"></div>
         </div>
-        <p class="text-center text-muted mt-3 small">Secured by Stripe</p>
+        <p class="text-center text-muted mt-3 small">Sécurisé par Stripe</p>
       </div>
     </div>
   </div>
@@ -76,34 +78,95 @@
       return { orderId, total, items };
     }
 
+    function calculateDeliveryFee(data) {
+      const freeDeliveryLocations = [
+        'ostricourt',
+        'evin malmaison',
+        'leforest',
+        'thumeries',
+        'oignies',
+        'wahagnies'
+      ];
+      
+      const deliveryLocation = (data.customerLocation || '').toLowerCase().trim();
+      const subtotal = Number(data.total) || 0;
+      
+      // Livraison gratuite si commande >= 15€ ET dans zone de livraison gratuite
+      if (subtotal >= 15 && freeDeliveryLocations.includes(deliveryLocation)) {
+        return 0;
+      }
+      
+      return 20; // Prix de livraison standard
+    }
+
     function renderSummary(data) {
       document.getElementById('orderId').textContent = data.orderId || '—';
-      document.getElementById('orderTotal').textContent = data.total ? `$${Number(data.total).toFixed(2)}` : '—';
+      
+      const subtotal = Number(data.total) || 0;
+      const deliveryFee = calculateDeliveryFee(data);
+      const finalTotal = subtotal + deliveryFee;
+      
+      document.getElementById('orderTotal').textContent = `€${finalTotal.toFixed(2)}`;
 
       const summary = document.getElementById('summary');
       summary.innerHTML = '';
 
+      // Articles
       if (Array.isArray(data.items) && data.items.length) {
         data.items.forEach(it => {
           const row = document.createElement('div');
           row.className = 'd-flex justify-content-between small py-1 border-bottom border-dark';
           row.innerHTML = `
             <span>${it.name} x${it.quantity || 1}</span>
-            <span>$${Number((it.price || 0) * (it.quantity || 1)).toFixed(2)}</span>
+            <span>€${Number((it.price || 0) * (it.quantity || 1)).toFixed(2)}</span>
           `;
           summary.appendChild(row);
         });
       } else {
         const empty = document.createElement('div');
         empty.className = 'text-muted small';
-        empty.textContent = 'No item details available.';
+        empty.textContent = 'Aucun détail d\'article disponible.';
         summary.appendChild(empty);
       }
+      
+      // Sous-total
+      const subtotalRow = document.createElement('div');
+      subtotalRow.className = 'd-flex justify-content-between small py-1 delivery-row';
+      subtotalRow.innerHTML = `
+        <span>Sous-total</span>
+        <span>€${subtotal.toFixed(2)}</span>
+      `;
+      summary.appendChild(subtotalRow);
+      
+      // Livraison
+      const deliveryRow = document.createElement('div');
+      deliveryRow.className = 'd-flex justify-content-between small py-1';
+      const deliveryText = deliveryFee === 0 ? 'Livraison (GRATUITE)' : 'Livraison';
+      deliveryRow.innerHTML = `
+        <span>${deliveryText}</span>
+        <span>${deliveryFee === 0 ? 'GRATUIT' : '€' + deliveryFee.toFixed(2)}</span>
+      `;
+      summary.appendChild(deliveryRow);
+      
+      // Total final
+      const totalRow = document.createElement('div');
+      totalRow.className = 'd-flex justify-content-between font-weight-bold py-2 border-top border-secondary mt-2';
+      totalRow.innerHTML = `
+        <span>Total</span>
+        <span class="accent">€${finalTotal.toFixed(2)}</span>
+      `;
+      summary.appendChild(totalRow);
+      
+      // Mettre à jour le total dans les données
+      data.finalTotal = finalTotal;
+      data.deliveryFee = deliveryFee;
     }
 
     async function createCheckoutSession(data) {
       const errorBox = document.getElementById('errorBox');
+      const spinner = document.querySelector('.spinner');
       errorBox.style.display = 'none';
+      spinner.style.display = 'block';
 
       // Determine API path (supports local server.js or Vercel serverless)
       const apiPath = '/api/create-checkout-session';
@@ -112,7 +175,8 @@
         console.log('[Checkout] Creating session with payload:', {
           orderId: data.orderId,
           items: data.items,
-          total: data.total
+          total: data.finalTotal,
+          deliveryFee: data.deliveryFee
         });
 
         const response = await fetch(apiPath, {
@@ -120,9 +184,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             orderId: data.orderId,
-              // totalPrice not trusted for charge, but passed for reference
-            totalPrice: Number(data.total),
+            totalPrice: Number(data.finalTotal),
             items: data.items,
+            deliveryFee: data.deliveryFee,
             customerName: data.customerName,
             customerEmail: data.customerEmail,
             customerPhone: data.customerPhone,
@@ -142,11 +206,12 @@
         throw new Error(payload.error || `HTTP ${response.status} – ${raw.slice(0,200)}`);
       } catch (err) {
         console.error('Stripe session error:', err);
-        errorBox.textContent = 'Unable to create payment session: ' + err.message +
-          ' (Check that /api/create-checkout-session exists and STRIPE_SECRET_KEY is set).';
+        errorBox.textContent = 'Impossible de créer la session de paiement: ' + err.message +
+          ' (Vérifiez que /api/create-checkout-session existe et que STRIPE_SECRET_KEY est définie).';
         errorBox.style.display = 'block';
         document.getElementById('retryBtn').style.display = 'inline-block';
-        document.getElementById('payNowBtn').style.display = 'inline-block';
+      } finally {
+        spinner.style.display = 'none';
       }
     }
 
@@ -158,8 +223,7 @@
       document.getElementById('retryBtn').addEventListener('click', retry);
       document.getElementById('payNowBtn').addEventListener('click', retry);
 
-      // Auto-start
-      createCheckoutSession(data);
+      // Ne pas démarrer automatiquement, attendre le clic sur "Payer"
     })();
   </script>
 </body>
