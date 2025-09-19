@@ -25,14 +25,21 @@ module.exports = async (req, res) => {
       items = [],
       totalPrice,
       customerEmail,
-      customerName
+      customerName,
+      deliveryAddress
     } = req.body || {};
 
     if (!items.length) {
       return res.status(400).json({ error: 'No items provided' });
     }
 
-    // Build line_items from cart (do not trust client total for payment amount)
+    // Calculer le total des articles
+    const itemsTotal = items.reduce((sum, item) => sum + (Number(item.price || 0) * (item.quantity || 1)), 0);
+    
+    // Déterminer les frais de livraison
+    const deliveryFee = itemsTotal >= 15 ? 0 : 7;
+
+    // Build line_items from cart
     const line_items = items.map(it => ({
       price_data: {
         currency: 'eur',
@@ -41,6 +48,21 @@ module.exports = async (req, res) => {
       },
       quantity: it.quantity || 1
     }));
+
+    // Ajouter les frais de livraison si nécessaire
+    if (deliveryFee > 0) {
+      line_items.push({
+        price_data: {
+          currency: 'eur',
+          product_data: { 
+            name: 'Frais de livraison',
+            description: 'Livraison gratuite à partir de 15€'
+          },
+          unit_amount: deliveryFee * 100
+        },
+        quantity: 1
+      });
+    }
 
     const host = req.headers.origin || 'https://restaurant-eight-self.vercel.app';
     const success_url = `${host}/menu.html?payment=success&orderId=${encodeURIComponent(orderId || '')}`;
@@ -52,10 +74,30 @@ module.exports = async (req, res) => {
       customer_email: customerEmail || undefined,
       metadata: {
         orderId: orderId || '',
-        customerName: customerName || ''
+        customerName: customerName || '',
+        deliveryAddress: deliveryAddress || '',
+        itemsTotal: itemsTotal.toString(),
+        deliveryFee: deliveryFee.toString()
       },
       success_url,
-      cancel_url
+      cancel_url,
+      // Informations de la boutique
+      payment_intent_data: {
+        statement_descriptor: 'RESTAURANT ZZH5',
+        description: `Commande #${orderId || 'N/A'} - ${customerName || 'Client'}`
+      },
+      // Configuration de livraison
+      shipping_address_collection: {
+        allowed_countries: ['FR', 'BE', 'CH']
+      },
+      // Message personnalisé
+      custom_text: {
+        submit: {
+          message: deliveryFee === 0 
+            ? 'Félicitations ! Livraison gratuite pour cette commande (15€+)'
+            : 'Frais de livraison: 7€ (Gratuit à partir de 15€)'
+        }
+      }
     });
 
     return res.status(200).json({ url: session.url });
