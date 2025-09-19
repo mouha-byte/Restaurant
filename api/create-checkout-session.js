@@ -25,37 +25,14 @@ module.exports = async (req, res) => {
       items = [],
       totalPrice,
       customerEmail,
-      customerName,
-      deliveryAddress
+      customerName
     } = req.body || {};
 
     if (!items.length) {
       return res.status(400).json({ error: 'No items provided' });
     }
 
-    // Calculer le total des articles
-    const itemsTotal = items.reduce((sum, item) => sum + (Number(item.price || 0) * (item.quantity || 1)), 0);
-    
-    // Villes avec livraison gratuite
-    const freeDeliveryZones = [
-      'ostricourt',
-      'evin malmaison',
-      'leforest',
-      'thumeries',
-      'oignies',
-      'wahagnies'
-    ];
-
-    // Vérifier si l'adresse est dans une zone de livraison gratuite
-    const addressLower = (deliveryAddress || '').toLowerCase();
-    const isInFreeZone = freeDeliveryZones.some(zone => 
-      addressLower.includes(zone)
-    );
-
-    // Déterminer les frais de livraison
-    const deliveryFee = (itemsTotal >= 15 || isInFreeZone) ? 0 : 20;
-
-    // Build line_items from cart
+    // Build line_items from cart (do not trust client total for payment amount)
     const line_items = items.map(it => ({
       price_data: {
         currency: 'eur',
@@ -64,21 +41,6 @@ module.exports = async (req, res) => {
       },
       quantity: it.quantity || 1
     }));
-
-    // Ajouter les frais de livraison si nécessaire
-    if (deliveryFee > 0) {
-      line_items.push({
-        price_data: {
-          currency: 'eur',
-          product_data: { 
-            name: 'Frais de livraison',
-            description: 'Livraison gratuite à partir de 15€ ou dans certaines zones'
-          },
-          unit_amount: deliveryFee * 100
-        },
-        quantity: 1
-      });
-    }
 
     const host = req.headers.origin || 'https://restaurant-eight-self.vercel.app';
     const success_url = `${host}/menu.html?payment=success&orderId=${encodeURIComponent(orderId || '')}`;
@@ -90,32 +52,10 @@ module.exports = async (req, res) => {
       customer_email: customerEmail || undefined,
       metadata: {
         orderId: orderId || '',
-        customerName: customerName || '',
-        deliveryAddress: deliveryAddress || '',
-        itemsTotal: itemsTotal.toString(),
-        deliveryFee: deliveryFee.toString()
+        customerName: customerName || ''
       },
       success_url,
-      cancel_url,
-      // Informations de la boutique
-      payment_intent_data: {
-        statement_descriptor: 'RESTAURANT ZZH5',
-        description: `Commande #${orderId || 'N/A'} - ${customerName || 'Client'}`
-      },
-      // Configuration de livraison
-      shipping_address_collection: {
-        allowed_countries: ['FR', 'BE', 'CH']
-      },
-      // Message personnalisé
-      custom_text: {
-        submit: {
-          message: deliveryFee === 0 
-            ? isInFreeZone 
-              ? 'Livraison gratuite dans votre zone !'
-              : 'Félicitations ! Livraison gratuite pour cette commande (15€+)'
-            : 'Frais de livraison: 20€ (Gratuit à partir de 15€ ou dans certaines zones)'
-        }
-      }
+      cancel_url
     });
 
     return res.status(200).json({ url: session.url });
