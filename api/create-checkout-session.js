@@ -36,8 +36,24 @@ module.exports = async (req, res) => {
     // Calculer le total des articles
     const itemsTotal = items.reduce((sum, item) => sum + (Number(item.price || 0) * (item.quantity || 1)), 0);
     
+    // Villes avec livraison gratuite
+    const freeDeliveryZones = [
+      'ostricourt',
+      'evin malmaison',
+      'leforest',
+      'thumeries',
+      'oignies',
+      'wahagnies'
+    ];
+
+    // Vérifier si l'adresse est dans une zone de livraison gratuite
+    const addressLower = (deliveryAddress || '').toLowerCase();
+    const isInFreeZone = freeDeliveryZones.some(zone => 
+      addressLower.includes(zone)
+    );
+
     // Déterminer les frais de livraison
-    const deliveryFee = itemsTotal >= 15 ? 0 : 7;
+    const deliveryFee = (itemsTotal >= 15 || isInFreeZone) ? 0 : 20;
 
     // Build line_items from cart
     const line_items = items.map(it => ({
@@ -56,7 +72,7 @@ module.exports = async (req, res) => {
           currency: 'eur',
           product_data: { 
             name: 'Frais de livraison',
-            description: 'Livraison gratuite à partir de 15€'
+            description: 'Livraison gratuite à partir de 15€ ou dans certaines zones'
           },
           unit_amount: deliveryFee * 100
         },
@@ -94,8 +110,10 @@ module.exports = async (req, res) => {
       custom_text: {
         submit: {
           message: deliveryFee === 0 
-            ? 'Félicitations ! Livraison gratuite pour cette commande (15€+)'
-            : 'Frais de livraison: 7€ (Gratuit à partir de 15€)'
+            ? isInFreeZone 
+              ? 'Livraison gratuite dans votre zone !'
+              : 'Félicitations ! Livraison gratuite pour cette commande (15€+)'
+            : 'Frais de livraison: 20€ (Gratuit à partir de 15€ ou dans certaines zones)'
         }
       }
     });
