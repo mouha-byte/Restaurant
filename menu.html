@@ -1094,6 +1094,13 @@
       { name: "Box Tenders, Wings, Mix", price: 23, description: "Formule complète avec assortiment varié (1kg)", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Tenders de poulet", "Ailes de poulet", "Mix varié", "Frites", "Boisson"] },
       { name: "Box Tenders, Wings, Mix", price: 29, description: "Mega assortiment pour grande tablée (2kg)", category: "tex-mex", image: "images/n9.jpg", ingredients: ["Tenders de poulet", "Ailes de poulet", "Mix varié"] },
       { name: "Box Tenders, Wings, Mix", price: 33, description: "Mega formule complète pour grande tablée (2kg)", category: "tex-mex", image: "images/n9.jpg", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Tenders de poulet", "Ailes de poulet", "Mix varié", "Frites", "Boisson"] },
+      { name: "6 Calamar seul", price: 6, description: "Anneaux de calamar panés et croustillants", category: "tex-mex", image: "images/calamar.jpg", ingredients: ["Anneaux de calamar panés (6 pièces)"] },
+      { name: "6 jalapenos seul", price: 8, description: "Piments jalapeños farcis au fromage, panés et dorés", category: "tex-mex", image: "images/jalapenos.jpg", ingredients: ["Jalapeños farcis au fromage (6 pièces)"] },
+      { name: "6 bouchées de camembert seul", price: 6, description: "Délicieuses bouchées de camembert panées et fondantes", category: "tex-mex", image: "images/boucher.jpg", ingredients: ["Bouchées de camembert panées (6 pièces)"] },
+      { name: "menu Calamar ", price: 8, description: "Formule complète avec anneaux de calamar croustillants", category: "tex-mex", image: "images/menu_calamar.png", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Anneaux de calamar panés (6 pièces)", "Frites", "Boisson"] },
+      { name: "menu jalapenos", price: 10, description: "Formule complète avec jalapeños farcis épicés", category: "tex-mex", image: "images/menu_jalapenos.png", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Jalapeños farcis au fromage (6 pièces)", "Frites", "Boisson"] },
+      { name: "menu bouchées de camembert", price: 8, description: "Formule complète avec bouchées de camembert fondantes", category: "tex-mex", image: "images/menu_bouchees_camembert.png", hasDrink: true, drinkOptions: drinkOptions, ingredients: ["Bouchées de camembert panées (6 pièces)", "Frites", "Boisson"] },
+
 
       // --- TACOS ---
       { name: "Tacos (1 Viande)", price: 8, description: "Spécialité tex-mex généreuse et savoureuse", category: "tacos", image: "images/t1.jpeg", ingredients: ["Galette de blé", "1 Viande au choix", "Sauce fromagère maison", "Frites", "Salade", "Tomate"] },
@@ -1190,7 +1197,9 @@
       { name: "Tacos 1 viande ", price: 7, description: "Formule enfant complète avec boisson et dessert", category: "menuenfant", image: "images/me1.jpg", ingredients: ["Galette de blé", "1 Viande", "Frites", "Capri-Sun", "Compote"] },
       { name: "Cheeseburger ", price: 7, description: "Formule enfant avec le classique américain", category: "menuenfant", image: "images/me2.jpg", ingredients: ["Pain burger", "Steak", "Cheddar", "Frites", "Capri-Sun", "Compote"] },
       { name: "5 nuggets ", price: 7, description: "Formule enfant avec les favoris des petits", category: "menuenfant", image: "images/me3.jpg", ingredients: ["Nuggets de poulet (5 pièces)", "Frites", "Capri-Sun", "Compote"] },
-    ];function loadProducts() {
+    ];
+    function loadProducts() 
+    {
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
       products.forEach(product => {
@@ -1200,15 +1209,26 @@
       // Vérifier si le produit a des options (comme les canettes) ou une boisson incluse
       const hasOptions = product.options && product.options.length > 0;
       const hasDrink = product.hasDrink && product.drinkOptions;
-      const priceDisplay = (hasOptions || hasDrink) ? 'Choisir' : `$${product.price}`;
-      const buttonText = (hasOptions || hasDrink) ? 'Choisir' : 'Add to Cart';
-      let buttonAction;
-      if (hasOptions) {
-      buttonAction = `openCanetteModal('${product.name}')`;
+      const isTacos = product.category === 'tacos';
+      
+      let priceDisplay, buttonText, buttonAction;
+      
+      if (isTacos) {
+        priceDisplay = `À partir de $${product.price}`;
+        buttonText = 'Personnaliser';
+        buttonAction = `openTacosCustomization('${product.name}', ${product.price})`;
+      } else if (hasOptions) {
+        priceDisplay = 'Choisir';
+        buttonText = 'Choisir';
+        buttonAction = `openCanetteModal('${product.name}')`;
       } else if (hasDrink) {
-      buttonAction = `openMenuDrinkModal('${product.name}', ${product.price})`;
+        priceDisplay = 'Choisir';
+        buttonText = 'Choisir';
+        buttonAction = `openMenuDrinkModal('${product.name}', ${product.price})`;
       } else {
-      buttonAction = `addToCart('${product.name}', ${product.price})`;
+        priceDisplay = `$${product.price}`;
+        buttonText = 'Add to Cart';
+        buttonAction = `addToCart('${product.name}', ${product.price})`;
       }
 
       col.innerHTML = `
@@ -1230,6 +1250,208 @@
       `;
       grid.appendChild(col);
       });
+    }
+
+    // Données pour la personnalisation des tacos
+    const tacosData = {
+      viandes: [
+        'Kebab', 'Merguez', 'Steak', 'Cordon Bleu', 'Nuggets', 
+        'Tenders', 'Poulet', 'Fricadelle', 'Mexicanos'
+      ],
+      sauces: [
+        'Mayonnaise', 'Ketchup', 'Algérienne', 'Blanche', 'Samouraï', 
+        'Biggy', 'Hannibal', 'Curry', 'Harissa', 'Américaine', 
+        'Poivre', 'Andalouse', 'Barbecue'
+      ],
+      supplements: [
+        'Boursin', 'Maroilles', 'Cheddar', 'Raclette', 'Chèvre', 
+        'Gorgonzola', 'Bacon', 'Œuf', 'Crudités', 'Lardons'
+      ]
+    };
+
+    // Fonction pour ouvrir la modal de personnalisation des tacos
+    function openTacosCustomization(productName, basePrice) {
+      // Créer la modal dynamiquement
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.id = 'tacosCustomModal';
+      modal.setAttribute('tabindex', '-1');
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-hidden', 'true');
+
+      // Déterminer le nombre de viandes selon le produit
+      let maxViandes = 1;
+      if (productName.includes('2 Viandes')) maxViandes = 2;
+      if (productName.includes('3 Viandes')) maxViandes = 3;
+
+      modal.innerHTML = `
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content" style="background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+              <h5 class="modal-title" style="color: var(--text-primary);">Personnaliser votre ${productName}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: var(--text-primary); opacity: 0.8;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="background: var(--card-bg); max-height: 70vh; overflow-y: auto;">
+              <!-- Sélection des viandes -->
+              <div class="mb-4">
+                <h6 style="color: var(--accent-color); margin-bottom: 15px;">
+                  <i class="fa fa-cutlery"></i> Choisissez ${maxViandes} viande${maxViandes > 1 ? 's' : ''} :
+                </h6>
+                <div class="row" id="viandes-selection">
+                  ${tacosData.viandes.map(viande => `
+                    <div class="col-md-4 mb-2">
+                      <label class="custom-checkbox" style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; transition: all 0.3s ease;">
+                        <input type="checkbox" name="viande" value="${viande}" onchange="updateViandeSelection(${maxViandes})" style="margin-right: 8px;">
+                        <span style="color: var(--text-primary);">${viande}</span>
+                      </label>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Sélection des sauces -->
+              <div class="mb-4">
+                <h6 style="color: var(--accent-color); margin-bottom: 15px;">
+                  <i class="fa fa-tint"></i> Choisissez vos sauces :
+                </h6>
+                <div class="row" id="sauces-selection">
+                  ${tacosData.sauces.map(sauce => `
+                    <div class="col-md-4 mb-2">
+                      <label class="custom-checkbox" style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; transition: all 0.3s ease;">
+                        <input type="checkbox" name="sauce" value="${sauce}" style="margin-right: 8px;">
+                        <span style="color: var(--text-primary);">${sauce}</span>
+                      </label>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Suppléments -->
+              <div class="mb-4">
+                <h6 style="color: var(--accent-color); margin-bottom: 15px;">
+                  <i class="fa fa-plus"></i> Suppléments (+1€ chacun) :
+                </h6>
+                <div class="row" id="supplements-selection">
+                  ${tacosData.supplements.map(supplement => `
+                    <div class="col-md-4 mb-2">
+                      <label class="custom-checkbox" style="display: flex; align-items: center; cursor: pointer; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; transition: all 0.3s ease;">
+                        <input type="checkbox" name="supplement" value="${supplement}" onchange="updateTacosPrice()" style="margin-right: 8px;">
+                        <span style="color: var(--text-primary);">${supplement} <small style="color: var(--accent-color);">(+1€)</small></span>
+                      </label>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Prix total -->
+             <!-- <div class="text-center mb-3">
+                <h5 style="color: var(--accent-color);">
+                  Prix total: $<span id="tacos-total-price">${basePrice}</span>
+                </h5>
+              </div> -->
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid var(--border-color); background: var(--card-bg);">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: var(--border-color); color: var(--text-primary); border: 1px solid var(--border-color);">Annuler</button>
+              <button type="button" class="btn btn-primary" onclick="addCustomTacosToCart('${productName}', ${basePrice})" style="background: linear-gradient(135deg, var(--accent-color), var(--accent-hover)); border: none;">
+                Ajouter au panier
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <style>
+          .custom-checkbox:hover {
+            border-color: var(--accent-color) !important;
+            background: rgba(255, 107, 53, 0.1) !important;
+          }
+          .custom-checkbox input:checked + span {
+            color: var(--accent-color) !important;
+            font-weight: bold;
+          }
+          .custom-checkbox:has(input:checked) {
+            border-color: var(--accent-color) !important;
+            background: rgba(255, 107, 53, 0.2) !important;
+          }
+        </style>
+      `;
+
+      document.body.appendChild(modal);
+      $('#tacosCustomModal').modal('show');
+      
+      // Nettoyer la modal quand elle se ferme
+      $('#tacosCustomModal').on('hidden.bs.modal', function () {
+        modal.remove();
+      });
+    }
+
+    // Fonction pour limiter la sélection des viandes
+    function updateViandeSelection(maxViandes) {
+      const checkboxes = document.querySelectorAll('input[name="viande"]');
+      const checkedBoxes = document.querySelectorAll('input[name="viande"]:checked');
+      
+      if (checkedBoxes.length >= maxViandes) {
+        checkboxes.forEach(checkbox => {
+          if (!checkbox.checked) {
+            checkbox.disabled = true;
+            checkbox.parentElement.style.opacity = '0.5';
+          }
+        });
+      } else {
+        checkboxes.forEach(checkbox => {
+          checkbox.disabled = false;
+          checkbox.parentElement.style.opacity = '1';
+        });
+      }
+    }
+
+    // Fonction pour mettre à jour le prix des tacos
+    function updateTacosPrice() {
+      const basePrice = parseFloat(document.getElementById('tacos-total-price').textContent.split('$').pop()) || 0;
+      const supplements = document.querySelectorAll('input[name="supplement"]:checked');
+      const supplementPrice = supplements.length * 1; // 1€ par supplément
+      
+      // Récupérer le prix de base original depuis le bouton
+      const originalPrice = parseFloat(document.querySelector('.btn-primary[onclick*="addCustomTacosToCart"]').getAttribute('onclick').match(/\d+/)[0]);
+      const totalPrice = originalPrice + supplementPrice;
+      
+      document.getElementById('tacos-total-price').textContent = totalPrice;
+    }
+
+    // Fonction pour ajouter le tacos personnalisé au panier
+    function addCustomTacosToCart(productName, basePrice) {
+      const viandes = Array.from(document.querySelectorAll('input[name="viande"]:checked')).map(cb => cb.value);
+      const sauces = Array.from(document.querySelectorAll('input[name="sauce"]:checked')).map(cb => cb.value);
+      const supplements = Array.from(document.querySelectorAll('input[name="supplement"]:checked')).map(cb => cb.value);
+      
+      // Vérification: au moins une viande doit être sélectionnée
+      if (viandes.length === 0) {
+        alert('Veuillez sélectionner au moins une viande.');
+        return;
+      }
+      
+      // Calculer le prix total
+      const supplementPrice = supplements.length * 1;
+      const totalPrice = basePrice + supplementPrice;
+      
+      // Créer le nom personnalisé du produit
+      let customName = productName;
+      if (viandes.length > 0) {
+        customName += ` (${viandes.join(', ')})`;
+      }
+      if (sauces.length > 0) {
+        customName += ` - Sauces: ${sauces.join(', ')}`;
+      }
+      if (supplements.length > 0) {
+        customName += ` - Suppléments: ${supplements.join(', ')}`;
+      }
+      
+      // Ajouter au panier
+      addToCart(customName, totalPrice);
+      
+      // Fermer la modal
+      $('#tacosCustomModal').modal('hide');
     }
 
     // Function to show product details in a popup
