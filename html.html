@@ -118,11 +118,10 @@ function calculatePizzaPromotion(items) {
     }
   });
   
-  // Calculer le nombre de pizzas gratuites
-  let freePizzas = 0;
-  if (totalPizzas >= 3) {
-    freePizzas = Math.floor(totalPizzas / 3); // 1 pizza gratuite pour chaque groupe de 3
-  }
+  // Calculer le nombre de pizzas gratuites : pour chaque groupe de 3, 1 est offerte
+  // Donc si on a 9 pizzas -> 3 groupes de 3 -> 3 offertes
+  // Si on a 6 pizzas -> 2 groupes de 3 -> 2 offertes
+  let freePizzas = Math.floor(totalPizzas / 3);
   
   // Calculer la réduction (prix de la pizza la moins chère multipliée par le nombre de pizzas gratuites)
   let discount = 0;
@@ -143,7 +142,6 @@ function calculatePizzaPromotion(items) {
   
   return { totalPizzas, freePizzas, discount };
 }
-
     function renderSummary(data) {
       document.getElementById('orderId').textContent = data.orderId || '—';
       
