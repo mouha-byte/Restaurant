@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Processing Payment • Speranza Pizza</title>
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <style>
+    body { background:#0f0f0f; color:#fff; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .card { background:#1e1e1e; border:1px solid #333; }
+    .text-muted { color:#b0b0b0 !important; }
+    .accent { color:#ff6b35; }
+    .spinner {
+      width: 36px; height: 36px; border: 4px solid rgba(255,255,255,.15);
+      border-top-color: #ff6b35; border-radius: 50%; animation: spin 1s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    a.btn-link { color:#ff6b35; }
+    pre { white-space: pre-wrap; word-break: break-word; }
+    .delivery-row { border-top: 1px solid #444; padding-top: 10px; margin-top: 10px; }
+    .promo-text { color: #28a745; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card p-4">
+          <h4 class="mb-1">Commande prête pour paiement</h4>
+          <p class="text-muted mb-4">Vérifiez votre commande avant de procéder au paiement.</p>
+
+          <div class="d-flex align-items-center gap-3 mb-4">
+            <div class="spinner mr-3"></div>
+            <div>
+              <div class="small text-muted">Commande</div>
+              <div id="orderId" class="font-weight-bold">—</div>
+            </div>
+            <div class="ml-auto text-right">
+              <div class="small text-muted">Total</div>
+              <div id="orderTotal" class="font-weight-bold accent">—</div>
+            </div>
+          </div>
+
+          <div id="summary" class="mb-3" style="max-height:220px; overflow:auto;">
+            <!-- Items summary -->
+          </div>
+
+          <div class="d-flex">
+            <button id="retryBtn" class="btn btn-primary mr-2" style="display:none;">Réessayer</button>
+            <a href="menu.html" class="btn btn-outline-secondary">Retour au Menu</a>
+            <button id="payNowBtn" class="btn btn-success ml-auto">Payer</button>
+          </div>
+
+          <div id="errorBox" class="alert alert-danger mt-3" role="alert" style="display:none;"></div>
+        </div>
+        <p class="text-center text-muted mt-3 small">Sécurisé par Stripe</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function readCheckoutData() {
+      // Prefer sessionStorage (set by menu.html)
+      try {
+        const raw = sessionStorage.getItem('checkoutData');
+        if (raw) {
+          const data = JSON.parse(raw);
+          console.log('Données récupérées de sessionStorage:', data);
+          return data;
+        }
+      } catch (_) {}
+
+      // Fallback to URL params (limited info)
+      const params = new URLSearchParams(location.search);
+      const orderId = params.get('orderId') || '';
+      const total = Number(params.get('total') || '0');
+      let items = [];
+      try {
+        const itemsRaw = params.get('items');
+        if (itemsRaw) items = JSON.parse(itemsRaw);
+      } catch (_) {}
+      console.log('Données récupérées des URL params:', { orderId, total, items });
+      return { orderId, total, items };
+    }
+
+   function calculateDeliveryFee(subtotalAfterPromo, data) {
+  // Si les frais de livraison sont déjà dans les données Firebase, les utiliser
+  if (data.deliveryFee !== undefined && data.deliveryFee !== null) {
+    return Number(data.deliveryFee);
+  }
+
+  const freeDeliveryLocations = [
+    'ostricourt',
+    'evin malmaison',
+    'leforest',
+    'thumeries',
+    'oignies',
+    'wahagnies'     
+  ];
+  
+  const deliveryLocation = (data.customerLocation || '').toLowerCase().trim();
+  
+  // Check if any free delivery location is contained within the delivery address
+  const isInFreeZone = freeDeliveryLocations.some(location => 
+    deliveryLocation.includes(location)
+  );
+  
+  // Livraison gratuite si commande >= 15€
+  if (subtotalAfterPromo >= 15) {
+    return 0;
+  }
+  
+  return 3; // Prix de livraison standard
+}
+
+function calculatePizzaPromotion(items) {
+  // Compter le nombre total de pizzas
+  let totalPizzas = 0;
+  let pizzaItems = [];
+  
+  items.forEach(item => {
+    // Supposer que les pizzas contiennent le mot "pizza" dans leur nom
+    if (item.name && item.name.toLowerCase().includes('pizza')) {
+      totalPizzas += item.quantity || 1;
+      pizzaItems.push(item);
+    }
+  });
+  
+  // Calculer le nombre de pizzas gratuites : pour chaque groupe de 3, 1 est offerte
+  // Donc si on a 9 pizzas -> 3 groupes de 3 -> 3 offertes
+  // Si on a 6 pizzas -> 2 groupes de 3 -> 2 offertes
+  let freePizzas = Math.floor(totalPizzas / 3);
+  
+  // Calculer la réduction (prix de la pizza la moins chère multipliée par le nombre de pizzas gratuites)
+  let discount = 0;
+  if (freePizzas > 0 && pizzaItems.length > 0) {
+    // Trier les pizzas par prix croissant pour offrir les moins chères
+    const sortedPizzas = pizzaItems.sort((a, b) => (a.price || 0) - (b.price || 0));
+    
+    let pizzasToDiscount = freePizzas;
+    for (let pizza of sortedPizzas) {
+      if (pizzasToDiscount <= 0) break;
+      
+      const quantity = pizza.quantity || 1;
+      const pizzasFromThisItem = Math.min(pizzasToDiscount, quantity);
+      discount += (pizza.price || 0) * pizzasFromThisItem;
+      pizzasToDiscount -= pizzasFromThisItem;
+    }
+  }
+  
+  return { totalPizzas, freePizzas, discount };
+}
+    function renderSummary(data) {
+      document.getElementById('orderId').textContent = data.orderId || '—';
+      
+      // Calculer le sous-total depuis les items (pas depuis data.total qui peut être déjà avec promotion)
+      const originalSubtotal = Array.isArray(data.items) 
+        ? data.items.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0)
+        : Number(data.subtotal) || Number(data.total) || 0;
+      
+      const pizzaPromo = calculatePizzaPromotion(data.items || []);
+      const subtotalAfterPromo = originalSubtotal - pizzaPromo.discount;
+      const deliveryFee = calculateDeliveryFee(subtotalAfterPromo, data);
+      const finalTotal = subtotalAfterPromo + deliveryFee;
+      
+      document.getElementById('orderTotal').textContent = `€${finalTotal.toFixed(2)}`;
+
+      const summary = document.getElementById('summary');
+      summary.innerHTML = '';
+
+      // Articles
+      if (Array.isArray(data.items) && data.items.length) {
+        data.items.forEach(it => {
+          const row = document.createElement('div');
+          row.className = 'd-flex justify-content-between small py-1 border-bottom border-dark';
+          row.innerHTML = `
+            <span>${it.name} x${it.quantity || 1}</span>
+            <span>€${Number((it.price || 0) * (it.quantity || 1)).toFixed(2)}</span>
+          `;
+          summary.appendChild(row);
+        });
+      } else {
+        const empty = document.createElement('div');
+        empty.className = 'text-muted small';
+        empty.textContent = 'Aucun détail d\'article disponible.';
+        summary.appendChild(empty);
+      }
+      
+      // Sous-total original
+      const subtotalRow = document.createElement('div');
+      subtotalRow.className = 'd-flex justify-content-between small py-1 delivery-row';
+      subtotalRow.innerHTML = `
+        <span>Sous-total</span>
+        <span>€${originalSubtotal.toFixed(2)}</span>
+      `;
+      summary.appendChild(subtotalRow);
+      
+      // Promotion pizza si applicable
+      if (pizzaPromo.freePizzas > 0) {
+        const promoRow = document.createElement('div');
+        promoRow.className = 'd-flex justify-content-between small py-1';
+        promoRow.innerHTML = `
+          <span class="promo-text">Promotion: ${pizzaPromo.freePizzas} pizza${pizzaPromo.freePizzas > 1 ? 's' : ''} offerte${pizzaPromo.freePizzas > 1 ? 's' : ''}</span>
+          <span class="promo-text">-€${pizzaPromo.discount.toFixed(2)}</span>
+        `;
+        summary.appendChild(promoRow);
+      }
+      
+      // Livraison
+      const deliveryRow = document.createElement('div');
+      deliveryRow.className = 'd-flex justify-content-between small py-1';
+      const deliveryText = deliveryFee === 0 ? 'Livraison (GRATUITE)' : 'Livraison';
+      deliveryRow.innerHTML = `
+        <span>${deliveryText}</span>
+        <span>${deliveryFee === 0 ? 'GRATUIT' : '€' + deliveryFee.toFixed(2)}</span>
+      `;
+      
+      summary.appendChild(deliveryRow);
+      
+      // Total final
+      const totalRow = document.createElement('div');
+      totalRow.className = 'd-flex justify-content-between font-weight-bold py-2 border-top border-secondary mt-2';
+      totalRow.innerHTML = `
+        <span>Total</span>
+        <span class="accent">€${finalTotal.toFixed(2)}</span>
+      `;
+      summary.appendChild(totalRow);
+      
+      // Mettre à jour le total dans les données
+      data.finalTotal = finalTotal;
+      data.deliveryFee = deliveryFee;
+      data.pizzaDiscount = pizzaPromo.discount;
+      data.subtotal = originalSubtotal;
+    }
+
+    async function createCheckoutSession(data) {
+      const errorBox = document.getElementById('errorBox');
+      const spinner = document.querySelector('.spinner');
+      errorBox.style.display = 'none';
+      spinner.style.display = 'block';
+
+      // Determine API path (supports local server.js or Vercel serverless)
+      const apiPath = '/api/create-checkout-session';
+
+      try {
+        console.log('[Checkout] Creating session with payload:', {
+          orderId: data.orderId,
+          items: data.items,
+          total: data.finalTotal,
+          deliveryFee: data.deliveryFee,
+          pizzaDiscount: data.pizzaDiscount
+        });
+
+        const response = await fetch(apiPath, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId: data.orderId,
+            totalPrice: Number(data.finalTotal),
+            items: data.items,
+            deliveryFee: data.deliveryFee,
+            pizzaDiscount: data.pizzaDiscount,
+            customerName: data.customerName,
+            customerEmail: data.customerEmail,
+            customerPhone: data.customerPhone,
+            customerLocation: data.customerLocation
+          })
+        });
+
+        let raw = await response.text();
+        let payload = {};
+        try { payload = JSON.parse(raw); } catch (_) {}
+
+        if (response.ok && payload.url) {
+          window.location.href = payload.url;
+          return;
+        }
+
+        throw new Error(payload.error || `HTTP ${response.status} – ${raw.slice(0,200)}`);
+      } catch (err) {
+        console.error('Stripe session error:', err);
+        errorBox.textContent = 'Impossible de créer la session de paiement: ' + err.message +
+          ' (Vérifiez que /api/create-checkout-session existe et que STRIPE_SECRET_KEY est définie).';
+        errorBox.style.display = 'block';
+        document.getElementById('retryBtn').style.display = 'inline-block';
+      } finally {
+        spinner.style.display = 'none';
+      }
+    }
+
+    (function init() {
+      const data = readCheckoutData();
+      renderSummary(data);
+
+      const retry = () => createCheckoutSession(data);
+      document.getElementById('retryBtn').addEventListener('click', retry);
+      document.getElementById('payNowBtn').addEventListener('click', retry);
+
+      // Ne pas démarrer automatiquement, attendre le clic sur "Payer"
+    })();
+  </script>
+</body>
+</html>
