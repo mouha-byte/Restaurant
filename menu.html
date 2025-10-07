@@ -3659,6 +3659,12 @@
         alert('Please enter a valid email address');
         return;
       }
+      // Contrôle numéro français (commence par 0 ou +33, puis 9 chiffres)
+      const frenchPhoneRegex = /^(0|\+33)[1-9](\d{8})$/;
+      if (!frenchPhoneRegex.test(customerPhone)) {
+        alert('Veuillez entrer un numéro de téléphone français valide (ex: 0612345678 ou +33612345678)');
+        return;
+      }
 
       // if (!phoneRegex.test(customerPhone)) {
       //   alert('Please enter a valid 10-digit phone number');
