@@ -1910,9 +1910,42 @@
       { name: "2 Pizzas Senior au Choix, 2 Desserts, 1 Maxi Boisson ", price: 28, description: "Menu duo parfait: 2 pizzas format senior au choix, 2 desserts et une grande boisson à partager.", category: "menu_duo", image: "images/menu duo.png", ingredients: ["2 Pizzas Senior au choix", "2 Desserts", "1 Boisson 1.5L"] },
       { name: "2 Pizzas Maxi au Choix, 1 Maxi Boisson ", price: 32, description: "Menu généreux pour 3-4 personnes: 2 grandes pizzas au choix et une maxi boisson.", category: "menu_mega", image: "images/menu mega.png", ingredients: ["2 Pizzas Maxi au choix", "1 Boisson 1.5L"] },
     ];
+    
     function loadProducts() {
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
+      
+      // Charger les pizzas depuis pizzaProducts (une seule carte par type)
+      if (typeof pizzaProducts !== 'undefined') {
+        pizzaProducts.forEach(pizza => {
+          const col = document.createElement('div');
+          col.className = `col-xl-4-custom col-lg-4 col-md-6 col-sm-12 all ${pizza.category}`;
+          
+          // Trouver le prix minimum pour l'affichage
+          const minPrice = Math.min(...pizza.sizes.map(s => s.price));
+          
+          col.innerHTML = `
+            <div class="product-card" onclick="showProductDetails('${pizza.name.replace(/'/g, "\\'")}', '${(pizza.ingredients || []).join(', ').replace(/'/g, "\\'")}', ${minPrice}, '${pizza.image}')">
+              <div class="img-box">
+                <img src="${pizza.image}" alt="${pizza.name}">
+              </div>
+              <div class="detail-box">
+                <h5>${pizza.name}</h5>
+                <p>${pizza.baseDescription}</p>
+                <div class="options">
+                  <h6>À partir de €${minPrice}</h6>
+                  <button class="add-to-cart-btn" onclick="event.stopPropagation(); openPizzaSizeModal('${pizza.name.replace(/'/g, "\\'")}')">
+                    Choisir la taille
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          grid.appendChild(col);
+        });
+      }
+      
+      // Charger les autres produits normalement
       products.forEach(product => {
         const col = document.createElement('div');
         col.className = `col-xl-4-custom col-lg-4 col-md-6 col-sm-12 all ${product.category}`;
@@ -2138,6 +2171,102 @@
 
       addToCart(customName, totalPrice);
       $('#tacoBowlCustomModal').modal('hide');
+    }
+
+    // Fonction pour ouvrir la modal de sélection de taille de pizza
+    function openPizzaSizeModal(pizzaName) {
+      // Trouver la pizza dans pizzaProducts
+      const pizza = pizzaProducts.find(p => p.name === pizzaName);
+      if (!pizza) {
+        console.error('Pizza non trouvée:', pizzaName);
+        return;
+      }
+
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.id = 'pizzaSizeModal';
+      modal.setAttribute('tabindex', '-1');
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-hidden', 'true');
+
+      modal.innerHTML = `
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content" style="background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border-color);">
+          <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+            <h5 class="modal-title" style="color: var(--text-primary);">Choisissez la taille de votre ${pizza.name}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: var(--text-primary); opacity: 0.8;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="background: var(--card-bg); padding: 30px;">
+            <div class="row">
+              ${pizza.sizes.map((sizeInfo, index) => `
+                <div class="col-md-4 mb-3">
+                  <div class="size-option" style="
+                    background: var(--darker-bg);
+                    border: 2px solid var(--border-color);
+                    border-radius: 15px;
+                    padding: 20px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    height: 100%;
+                  " 
+                  onclick="selectPizzaSize('${pizza.name}', '${sizeInfo.size}', ${sizeInfo.price})"
+                  onmouseover="this.style.borderColor='var(--accent-color)'; this.style.transform='translateY(-5px)'"
+                  onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)'">
+                    <div style="
+                      font-size: 48px;
+                      color: var(--accent-color);
+                      margin-bottom: 15px;
+                    ">
+                      🍕
+                    </div>
+                    <h4 style="color: var(--accent-color); font-weight: bold; margin-bottom: 10px;">
+                      ${sizeInfo.size}
+                    </h4>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px; min-height: 60px;">
+                      ${sizeInfo.description}
+                    </p>
+                    <div style="
+                      font-size: 28px;
+                      font-weight: bold;
+                      color: var(--text-primary);
+                      margin-top: auto;
+                    ">
+                      €${sizeInfo.price.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: var(--darker-bg); border-radius: 10px;">
+              <h6 style="color: var(--accent-color); margin-bottom: 10px;">
+                <i class="fa fa-info-circle"></i> Ingrédients:
+              </h6>
+              <p style="color: var(--text-secondary); margin: 0;">
+                ${pizza.ingredients.join(', ')}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+
+      document.body.appendChild(modal);
+      $('#pizzaSizeModal').modal('show');
+
+      $('#pizzaSizeModal').on('hidden.bs.modal', function () {
+        modal.remove();
+      });
+    }
+
+    // Fonction pour sélectionner une taille de pizza et l'ajouter au panier
+    function selectPizzaSize(pizzaName, size, price) {
+      const fullName = `${pizzaName} (${size})`;
+      addToCart(fullName, price);
+      $('#pizzaSizeModal').modal('hide');
     }
 
     // Fonction pour ouvrir la modal de personnalisation des sauces (burgers et sandwichs sans menu)
@@ -3996,6 +4125,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
   <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <script src="menu-pizzas.js"></script>
   <script src="js/custom.js"></script>
 </body>
 
