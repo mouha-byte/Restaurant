@@ -144,5 +144,220 @@ const pizzaProducts = [
       { size: "Méga", price: 19, description: "Grand format pour 2-3 personnes, idéal à partager." }
     ]
   },
-  // Add all other pizzas here using the same structure...
+  {
+    name: "Texas Pizza",
+    baseDescription: "Saveurs fumées et généreuses à l'esprit western.",
+    category: "pizza",
+    image: "images/texas pizza.jpg",
+    ingredients: ["Base Tomate", "Mozzarella", "Viande Hachée", "Chorizo", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 9, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Neptune Pizza",
+    baseDescription: "Fraîcheur marine équilibrée et savoureuse.",
+    category: "pizza",
+    image: "images/pizza neptune.webp",
+    ingredients: ["Base Tomate", "Mozzarella", "Thon", "Poivrons", "Olives", "Œuf"],
+    sizes: [
+      { size: "Junior", price: 9, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Kebazza Pizza",
+    baseDescription: "Fusion gourmande entre traditions italienne et kebab.",
+    category: "pizza",
+    image: "images/kebazza pizza.jpg",
+    ingredients: ["Base Tomate", "Mozzarella", "Viande de Kebab", "Oignons", "Sauce Blanche"],
+    sizes: [
+      { size: "Junior", price: 9, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Chicken Pizza",
+    baseDescription: "Poulet tendre et garniture généreuse aux accents rustiques.",
+    category: "pizza",
+    image: "images/chiken pizza.jpg",
+    ingredients: ["Base Tomate", "Mozzarella", "Poulet", "Pommes de Terre", "Champignons", "Poivrons", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 9, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Caramello Pizza",
+    baseDescription: "Alliance raffinée de saumon fumé et mozzarella di buffala.",
+    category: "pizza",
+    image: "images/caramello pizza.jpg",
+    ingredients: ["Base Tomate", "Mozzarella", "Saumon Fumé", "Buffala", "Aubergines", "Champignons", "Poivrons", "Tomates"],
+    sizes: [
+      { size: "Junior", price: 9, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "3 Jambons Pizza",
+    baseDescription: "Trio charcutier gourmand aux saveurs contrastées.",
+    category: "pizza",
+    image: "images/3 jmbon pizza.jpg",
+    ingredients: ["Base Tomate", "Mozzarella", "Jambon", "Lardons", "Chorizo"],
+    sizes: [
+      { size: "Junior", price: 9, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Tartiflette Pizza",
+    baseDescription: "Gourmande inspiration savoyarde : reblochon fondant, lardons et pommes de terre dorées.",
+    category: "pizza",
+    image: "images/12.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Lardons", "Reblochon", "Pommes de terre", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Chèvre Miel Pizza",
+    baseDescription: "Alliance subtile du chèvre crémeux et de la douceur du miel.",
+    category: "pizza",
+    image: "images/13.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Chèvre", "Miel"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Raclette Pizza",
+    baseDescription: "Fromage raclette fondant, poulet tendre et pommes de terre rustiques.",
+    category: "pizza",
+    image: "images/14.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Poulet", "Raclette", "Pommes de terre", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Campagnarde Pizza",
+    baseDescription: "Saveurs rurales : poulet tendre, gorgonzola parfumé et pommes de terre.",
+    category: "pizza",
+    image: "images/15.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Poulet", "Gorgonzola", "Pommes de terre", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "CHTI Pizza",
+    baseDescription: "Spécialité du Nord : jambon délicat et maroilles au caractère unique.",
+    category: "pizza",
+    image: "images/chti pizza.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Jambon", "Maroilles"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "FERMIÈRE Pizza",
+    baseDescription: "Généreuse : viande hachée, chèvre crémeux et touches méditerranéennes.",
+    category: "pizza",
+    image: "images/pizza_fermiere.png",
+    ingredients: ["Base Crème", "Mozzarella", "Viande Hachée", "Chèvre", "Oignons", "Olives"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "NORVÉGIENNE Pizza",
+    baseDescription: "Raffinement nordique : saumon fumé, buffala et champignons.",
+    category: "pizza",
+    image: "images/NORVÉGIENNE Pizza.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Saumon Fumé", "Buffala", "Champignons"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "MILANO Pizza",
+    baseDescription: "Élégance italienne : jambon, buffala et pommes de terre fondantes.",
+    category: "pizza",
+    image: "images/milano pizza.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Jambon", "Buffala", "Pommes de terre", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "HAWAÏENNE Pizza",
+    baseDescription: "Douceur exotique : ananas doré et jambon tendre.",
+    category: "pizza",
+    image: "images/hawai pizza.jpg",
+    ingredients: ["Base Crème", "Mozzarella", "Jambon", "Ananas"],
+    sizes: [
+      { size: "Junior", price: 9.5, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 15.5, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 19.5, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Poulet Al Tartufo Pizza",
+    baseDescription: "Crème de truffe parfumée, poulet rôti moelleux et buffala fondante.",
+    category: "pizza",
+    image: "images/16.jpg",
+    ingredients: ["Base Spéciale", "Mozzarella", "Crème Truffe", "Poulet", "Buffala", "Pommes de terre", "Champignons", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 10, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 16, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 20, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "Barbecue Pizza",
+    baseDescription: "Notes fumées et légèrement relevées avec un trio carné et sauce barbecue nappée.",
+    category: "pizza",
+    image: "images/18.jpg",
+    ingredients: ["Base Spéciale", "Mozzarella", "Merguez", "Poulet", "Buffalo", "Sauce Barbecue"],
+    sizes: [
+      { size: "Junior", price: 10, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 16, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 20, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  },
+  {
+    name: "AL TARTUFFO VIANDE Pizza",
+    baseDescription: "Crème de truffe élégante, viande hachée fondante et buffala pour une base parfumée.",
+    category: "pizza",
+    image: "images/AL TARTUFFO VIANDE Pizza.jpg",
+    ingredients: ["Base Spéciale", "Mozzarella", "Crème Truffe", "Viande Hachée", "Buffala", "Champignons", "Oignons"],
+    sizes: [
+      { size: "Junior", price: 10, description: "Format individuel, idéal pour une personne." },
+      { size: "Senior", price: 16, description: "Format moyen, parfait pour une personne affamée ou à partager." },
+      { size: "Méga", price: 20, description: "Grand format pour 2-3 personnes, idéal à partager." }
+    ]
+  }
 ];
