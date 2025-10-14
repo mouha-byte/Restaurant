@@ -470,115 +470,228 @@
 
   <!-- offer section -->
 
+  <style>
+    /* Enhanced Offer Section Styles */
+    .offer_section {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer_section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="1" fill="rgba(255,107,53,0.1)"/></svg>');
+      opacity: 0.3;
+      animation: moveBackground 20s linear infinite;
+    }
+
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(100px, 100px); }
+    }
+
+    .offer_section .box {
+      position: relative;
+      background: linear-gradient(145deg, #1f1f1f, #2a2a2a);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 53, 0.2);
+      margin-bottom: 30px;
+    }
+
+    .offer_section .box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s;
+    }
+
+    .offer_section .box:hover::before {
+      left: 100%;
+    }
+
+    .offer_section .box:hover {
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 20px 60px rgba(255, 107, 53, 0.4);
+      border-color: rgba(255, 107, 53, 0.6);
+    }
+
+    .offer_section .img-box {
+      position: relative;
+      height: 280px;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .offer_section .img-box::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    }
+
+    .offer_section .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .offer_section .box:hover .img-box img {
+      transform: scale(1.15) rotate(2deg);
+    }
+
+    .offer_section .detail-box {
+      padding: 25px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .offer_section .detail-box h5 {
+      color: #ff6b35;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .offer_section .detail-box h6 {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .offer_section .detail-box a {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #ff6b35, #ff8a65);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer_section .detail-box a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .offer_section .detail-box a:hover::before {
+      left: 100%;
+    }
+
+    .offer_section .detail-box a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+    }
+
+    /* Special Badge */
+    .offer-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff0000, #ff6b35);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      z-index: 10;
+      box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+      animation: pulse-badge 2s infinite;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+  </style>
+
   <section class="offer_section layout_padding-bottom">
     <div class="offer_container">
-      <div class="container ">
+      <div class="container">
         <div class="heading_container heading_center">
-          <h2>
-            Nos Offres Spéciales
+          <h2 style="color: #ff6b35; text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.3);">
+            🔥 Nos Offres Spéciales 🔥
           </h2>
+          <p style="color: #ccc; margin-top: 15px; font-size: 18px;">Profitez de nos promotions exceptionnelles !</p>
         </div>
-        <div class="row">
-          <div class="col-md-4">
-            <div class="box ">
+        <div class="row justify-content-center">
+          <div class="row">
+            <div class="box">
+              <span class="offer-badge">HOT 🔥</span>
               <div class="img-box">
                 <img src="images/offre 3 pizza.png" alt="Offre Livraison">
               </div>
               <div class="detail-box">
-                <h5>
-                  En livraison
-                </h5>
-                <h6>
-                  2 pizzas achetées <br>=> 3ème offerte
-                </h6>
+                <h5>🚚 En livraison</h5>
+                <h6>2 pizzas achetées<br>➜ 3ème OFFERTE</h6>
                 <a href="menu.html?filter=pizza">
-                  Obtenir l'offre!! 
-                  <!-- <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029"
-                    style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
-                    <g>
-                      <g>
-                        <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
-                     c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
-                      </g>
-                    </g>
-                    <g>
-                      <g>
-                        <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
-                     C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
-                     c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
-                     C457.728,97.71,450.56,86.958,439.296,84.91z" />
-                      </g>
-                    </g>
-                    <g>
-                      <g>
-                        <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
-                     c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
-                      </g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                    <g>
-                    </g>
-                  </svg> -->
+                  Obtenir l'offre !! 🎁
                 </a>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="box ">
+          aussi
+          <div class="row-md-4">
+            <div class="box">
+              <span class="offer-badge">PROMO 🎉</span>
               <div class="img-box">
                 <img src="images/offre_pizza+canette.png" alt="Offre Sur Place">
               </div>
               <div class="detail-box">
-                <h5>
-                  Sur place
-                </h5>
-                <h6>
-                  pizza achetée = canette offerte
-                </h6>
+                <h5>🍽️ Sur place</h5>
+                <h6>Pizza achetée<br>➜ Canette OFFERTE</h6>
+                <a href="menu.html?filter=pizza">
+                  Commander maintenant ! 🥤
+                </a>
               </div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="box ">
+          <div class="row-md-4">
+            <div class="box">
+              <span class="offer-badge">7J/7 ⭐</span>
               <div class="img-box">
                 <img src="images/offre 2 pizza.png" alt="Offre À Emporter">
               </div>
               <div class="detail-box">
-                <h5>
-                  À emporter
-                </h5>
-                <h6>
-                  1 pizza achetée = 1 offerte <br> (7J/7 valable sur senior)
-                </h6>
-
+                <h5>📦 À emporter</h5>
+                <h6>1 pizza achetée<br>➜ 1 OFFERTE<br><small>(Valable sur Senior)</small></h6>
+                <a href="menu.html?filter=pizza">
+                  Profiter de l'offre ! 🍕
+                </a>
               </div>
             </div>
           </div>
@@ -591,349 +704,365 @@
 
   <!-- food section -->
 
+  <style>
+    /* Enhanced Menu Section Styles */
+    .food_section {
+      background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%);
+      position: relative;
+    }
+
+    .food_section .heading_container h2 {
+      color: #ff6b35;
+      text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.3);
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .category-subtitle {
+      color: #ccc;
+      font-size: 18px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    /* 3 products per row */
+    .product-grid .col-sm-12.col-lg-4 {
+      margin-bottom: 30px;
+    }
+
+    .food_section .box {
+      background: linear-gradient(145deg, #1f1f1f, #262626);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 53, 0.15);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .food_section .box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .food_section .box:hover::before {
+      opacity: 1;
+    }
+
+    .food_section .box:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(255, 107, 53, 0.3);
+      border-color: rgba(255, 107, 53, 0.5);
+    }
+
+    .food_section .img-box {
+      position: relative;
+      height: 280px;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .food_section .img-box::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      pointer-events: none;
+    }
+
+    .food_section .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .food_section .box:hover .img-box img {
+      transform: scale(1.1);
+    }
+
+    .food_section .detail-box {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to bottom, #1f1f1f, #1a1a1a);
+    }
+
+    .food_section .detail-box h5 {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .food_section .detail-box p {
+      color: #bbb;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      flex-grow: 1;
+    }
+
+    .food_section .price {
+      color: #ff6b35;
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+      padding: 12px;
+      background: rgba(255, 107, 53, 0.1);
+      border-radius: 10px;
+      border: 2px solid rgba(255, 107, 53, 0.3);
+      transition: all 0.3s;
+    }
+
+    .food_section .box:hover .price {
+      background: rgba(255, 107, 53, 0.2);
+      border-color: rgba(255, 107, 53, 0.6);
+      transform: scale(1.05);
+    }
+
+    /* Category badge */
+    .category-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: linear-gradient(135deg, #ff6b35, #ff8a65);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+      letter-spacing: 0.5px;
+    }
+
+    /* Voir plus button enhanced */
+    .food_section .btn-box {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .food_section .order_online {
+      display: inline-block;
+      padding: 16px 50px;
+      background: linear-gradient(135deg, #ff6b35, #ff8a65);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .food_section .order_online::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s;
+    }
+
+    .food_section .order_online:hover::before {
+      left: 100%;
+    }
+
+    .food_section .order_online:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+      .food_section .img-box {
+        height: 240px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .food_section .img-box {
+        height: 220px;
+      }
+      .food_section .detail-box h5 {
+        font-size: 20px;
+      }
+    }
+  </style>
+
   <section class="food_section layout_padding" id="menu">
     <div class="container">
       <div class="heading_container heading_center">
-        <h2>Notre Menu</h2>
+        <h2>🍽️ Notre Menu 🍽️</h2>
+        <p class="category-subtitle">Découvrez notre sélection de produits par catégorie</p>
       </div>
 
-      <div class="filters-content"></div>
-      <div class="row product-grid" id="product-grid">
+      <div class="row product-grid">
         <!-- Pizza -->
-        <div class="col-sm-12 col-lg-6 all pizza">
+        <div class="col-sm-12 col-lg-4 all pizza">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/1.jpg" alt="Margherita Pizza Junior" style="width:100%; height:200; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Margherita Pizza (Junior)</h5>
-                <p>Base Tomate, Mozzarella</p>
-                <div class="price">€8.00</div>
-              </div>
+            <span class="category-badge">🍕 Pizza</span>
+            <div class="img-box">
+              <img src="images/11.jpg" alt="Speranza Pizza">
             </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all pizza">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/1.jpg" alt="Margherita Pizza Senior"
-                  style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Margherita Pizza (Senior)</h5>
-                <p>Base Tomate, Mozzarella</p>
-                <div class="price">€12.50</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all pizza">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/11.jpg" alt="Speranza Pizza Junior"
-                  style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Speranza Pizza (Junior)</h5>
-                <p>Base Tomate, Mozzarella, Viande Hachée, Merguez, Poulet, Buffalo</p>
-                <div class="price">€10.00</div>
-              </div>
+            <div class="detail-box">
+              <h5>Pizza Speranza</h5>
+              <p>Base Tomate, Mozzarella, Viande Hachée, Merguez, Poulet, Buffalo</p>
+              <div class="price">À partir de €10.00</div>
             </div>
           </div>
         </div>
 
         <!-- Burger -->
-        <div class="col-sm-12 col-lg-6 all burger">
+        <div class="col-sm-12 col-lg-4 all burger">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/b1.jpg" alt="Cheese Burger" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Cheese Burger</h5>
-                <p>Steak 90g, Cheddar</p>
-                <div class="price">€6.50</div>
-              </div>
+            <span class="category-badge">🍔 Burger</span>
+            <div class="img-box">
+              <img src="images/b8.jpg" alt="Speranza Burger">
             </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all burger">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/b4.jpg" alt="Bio Bacon Burger" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Bio Bacon Burger</h5>
-                <p>Steak 180g, Double Cheddar, Bacon</p>
-                <div class="price">€9.00</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all burger">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/b8.jpg" alt="Speranza Burger" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Speranza Burger</h5>
-                <p>Steak 90g, Chicken, Galette P.Terre, Cheddar</p>
-                <div class="price">€7.50</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pâtes -->
-        <div class="col-sm-12 col-lg-6 all pasta">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/p1.jpg" alt="Pâtes Carbonara" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Pâtes Carbonara</h5>
-                <p>Crème Fraîche, Lardons, Œuf, Parmesan</p>
-                <div class="price">€9.00</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all pasta">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/p3.jpg" alt="Pâtes Bolognaise" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Pâtes Bolognaise</h5>
-                <p>Sauce Tomate, Viande Hachée, Parmesan</p>
-                <div class="price">€9.00</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all pasta">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/p5.jpg" alt="Pâtes Al Tartuffo" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Pâtes Al Tartuffo</h5>
-                <p>Crème Fraîche, Crème de Truffe, Poulet, Champignon, Parmesan</p>
-                <div class="price">€9.00</div>
-              </div>
+            <div class="detail-box">
+              <h5>Speranza Burger</h5>
+              <p>Steak 90g, Chicken, Galette Pomme de Terre, Cheddar</p>
+              <div class="price">€7.50</div>
             </div>
           </div>
         </div>
 
         <!-- Tacos -->
-        <div class="col-sm-12 col-lg-6 all tacos">
+        <div class="col-sm-12 col-lg-4 all tacos">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/t1.jpeg" alt="Tacos 1 Viande" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Tacos (1 Viande)</h5>
-                <p>Accompagné de sauce fromagère maison + Frites</p>
-                <div class="price">€8.00</div>
-              </div>
+            <span class="category-badge">🌮 Tacos</span>
+            <div class="img-box">
+              <img src="images/t2.jpg" alt="Tacos 2 Viandes">
+            </div>
+            <div class="detail-box">
+              <h5>Tacos (2 Viandes)</h5>
+              <p>Accompagné de sauce fromagère maison + Frites</p>
+              <div class="price">€9.00</div>
             </div>
           </div>
         </div>
 
-        <div class="col-sm-12 col-lg-6 all tacos">
+        <!-- Pâtes -->
+        <div class="col-sm-12 col-lg-4 all pasta">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/t2.jpg" alt="Tacos 2 Viandes" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Tacos (2 Viandes)</h5>
-                <p>Accompagné de sauce fromagère maison + Frites</p>
-                <div class="price">€9.00</div>
-              </div>
+            <span class="category-badge">🍝 Pâtes</span>
+            <div class="img-box">
+              <img src="images/p5.jpg" alt="Pâtes Al Tartuffo">
             </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all tacos">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/t3.png" alt="Tacos 3 Viandes" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Tacos (3 Viandes)</h5>
-                <p>Accompagné de sauce fromagère maison + Frites</p>
-                <div class="price">€10.00</div>
-              </div>
+            <div class="detail-box">
+              <h5>Pâtes Al Tartuffo</h5>
+              <p>Crème Fraîche, Crème de Truffe, Poulet, Champignon, Parmesan</p>
+              <div class="price">€9.00</div>
             </div>
           </div>
         </div>
 
         <!-- Panini -->
-        <div class="col-sm-12 col-lg-6 all panini">
+        <div class="col-sm-12 col-lg-4 all panini">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/pa1.jpg" alt="Panini Thon" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Panini Thon</h5>
-                <p>Seul</p>
-                <div class="price">€5.00</div>
-              </div>
+            <span class="category-badge">🥪 Panini</span>
+            <div class="img-box">
+              <img src="images/pa2.jpg" alt="Panini Poulet">
             </div>
-          </div>
-        </div>
-
-        <div class="col-sm-12 col-lg-6 all panini">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/pa2.jpg" alt="Panini Poulet" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Panini Poulet</h5>
-                <p>Seul</p>
-                <div class="price">€5.00</div>
-              </div>
+            <div class="detail-box">
+              <h5>Panini Poulet</h5>
+              <p>Pain grillé, Poulet mariné, Sauce spéciale</p>
+              <div class="price">€5.00</div>
             </div>
           </div>
         </div>
 
         <!-- Tex-Mex -->
-        <div class="col-sm-12 col-lg-6 all tex-mex">
+        <div class="col-sm-12 col-lg-4 all tex-mex">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/n1.jpg" alt="6 Nuggets" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>6 Nuggets</h5>
-                <p>6 pièces de poulet pané</p>
-                <div class="price">€6.00</div>
-              </div>
+            <span class="category-badge">🌶️ Tex-Mex</span>
+            <div class="img-box">
+              <img src="images/n7.jpg" alt="6 Tenders">
+            </div>
+            <div class="detail-box">
+              <h5>6 Tenders</h5>
+              <p>6 tenders de poulet croustillants avec sauce au choix</p>
+              <div class="price">€8.00</div>
             </div>
           </div>
         </div>
 
-        <div class="col-sm-12 col-lg-6 all tex-mex">
+        <!-- Salade -->
+        <div class="col-sm-12 col-lg-4 all salade">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/n7.jpg" alt="6 Tenders" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>6 Tenders</h5>
-                <p>6 tenders de poulet</p>
-                <div class="price">€8.00</div>
-              </div>
+            <span class="category-badge">🥗 Salade</span>
+            <div class="img-box">
+              <img src="images/s1.jpg" alt="Salade César">
+            </div>
+            <div class="detail-box">
+              <h5>Salade César</h5>
+              <p>Salade, Poulet grillé, Tomate, Olives, Sauce Buffalo</p>
+              <div class="price">€7.00</div>
             </div>
           </div>
         </div>
 
-        <!-- Salades -->
-        <div class="col-sm-12 col-lg-6 all salade">
+        <!-- Dessert -->
+        <div class="col-sm-12 col-lg-4 all dessert">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/s1.jpg" alt="Salade César" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Salade César</h5>
-                <p>Salade, Poulet, Tomate, Olives, Buffalo</p>
-                <div class="price">€7.00</div>
-              </div>
+            <span class="category-badge">🍰 Dessert</span>
+            <div class="img-box">
+              <img src="images/d1.jpg" alt="Tiramisu">
             </div>
-          </div>
-        </div>
-
-        <!-- Frites -->
-        <div class="col-sm-12 col-lg-6 all fries">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/f2.jpg" alt="Frites Moyenne" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Frites (Moyenne)</h5>
-                <p>Portion de frites moyenne</p>
-                <div class="price">€3.50</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Desserts -->
-        <div class="col-sm-12 col-lg-6 all dessert">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/d1.jpg" alt="Tiramisu" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Tiramisu</h5>
-                <p>Dessert classique italien</p>
-                <div class="price">€3.00</div>
-              </div>
+            <div class="detail-box">
+              <h5>Tiramisu</h5>
+              <p>Dessert classique italien fait maison</p>
+              <div class="price">€3.00</div>
             </div>
           </div>
         </div>
 
         <!-- Boissons -->
-        <div class="col-sm-12 col-lg-6 all boissons">
+        <div class="col-sm-12 col-lg-4 all boissons">
           <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/f8.png" alt="Canette 33cl" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Canette 33cl</h5>
-                <p>Boisson en canette de 33cl</p>
-                <div class="price">€1.50</div>
-              </div>
+            <span class="category-badge">🥤 Boisson</span>
+            <div class="img-box">
+              <img src="images/f8.png" alt="Canette 33cl">
             </div>
-          </div>
-        </div>
-
-        <!-- Menu Enfant -->
-        <div class="col-sm-12 col-lg-6 all menuenfant">
-          <div class="box">
-            <div>
-              <div class="img-box">
-                <img src="images/me1.jpg" alt="Menu Enfant Tacos" style="width:100%; height:300px; object-fit:cover;">
-              </div>
-              <div class="detail-box">
-                <h5>Tacos 1 viande</h5>
-                <p>Frites Capri-Sun Compote</p>
-                <div class="price">€7.00</div>
-              </div>
+            <div class="detail-box">
+              <h5>Canette 33cl</h5>
+              <p>Boisson rafraîchissante au choix</p>
+              <div class="price">€1.50</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="btn-box">
-      <a href="menu.html" class="order_online">
-        Voir plus
-      </a>
-    </div>
+      <div class="btn-box">
+        <a href="menu.html" class="order_online">
+          Voir le Menu Complet 🔥
+        </a>
+      </div>
     </div>
   </section>
 
