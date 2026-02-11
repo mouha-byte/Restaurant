@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+     }
+  </style>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <link rel="shortcut icon" href="images/favicon.png" type="">
+
+  <title> Speranza Pizza </title>
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!--owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <!-- nice select  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+    integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ=="
+    crossorigin="anonymous" />
+  <!-- font awesome style -->
+  <link href="css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="css/responsive.css" rel="stylesheet" />
+  
+  <!-- Styles pour le bouton panier flottant -->
+  <style>
+    :root {
+      --accent-color: #ff6b35;
+      --accent-hover: #ff8a65;
+      --card-bg: #1a1a1a;
+      --border-color: #333;
+      --shadow-dark: rgba(0, 0, 0, 0.3);
+    }
+
+    .floating-cart-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 25px var(--shadow-dark);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      text-decoration: none;
+      border: none;
+    }
+
+    .floating-cart-button:hover {
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: 0 15px 35px var(--shadow-dark);
+      color: white;
+      text-decoration: none;
+      animation: bounce 0.6s ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(-5px) scale(1.1); }
+      40% { transform: translateY(-10px) scale(1.15); }
+      60% { transform: translateY(-7px) scale(1.12); }
+    }
+
+    .floating-cart-button i {
+      font-size: 28px;
+    }
+
+    .cart-count-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ff0000;
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      border: 2px solid white;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Animation d'apparition */
+    .floating-cart-button {
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .floating-cart-button {
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        right: 20px;
+      }
+
+      .floating-cart-button i {
+        font-size: 24px;
+      }
+
+      .cart-count-badge {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="hero_area" id="home">
+    <div class="bg-box">
+      <img src="images/hero-bg.jpg" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div
+        style="background: linear-gradient(135deg, var(--accent-color), var(--accent-hover), #ff8a65); color: white; text-align: center; padding: 15px 0; font-weight: 700; font-size: 24px; position: relative; overflow: hidden; box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4); border-bottom: 3px solid rgba(255,255,255,0.2);">
+        <!-- Animated background -->
+        <div
+          style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shine 3s infinite;">
+        </div>
+
+        <!-- Floating particles -->
+        <div
+          style="position: absolute; width: 6px; height: 6px; background: rgba(255,255,255,0.6); border-radius: 50%; top: 20%; left: 10%; animation: float 4s ease-in-out infinite;">
+        </div>
+        <div
+          style="position: absolute; width: 4px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 50%; top: 60%; left: 80%; animation: float 3s ease-in-out infinite 1s;">
+        </div>
+        <div
+          style="position: absolute; width: 8px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 50%; top: 40%; left: 90%; animation: float 5s ease-in-out infinite 2s;">
+        </div>
+
+        <div
+          style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; position: relative; z-index: 2;">
+          <!-- Main delivery message with enhanced styling -->
+          <div
+            style="background: rgba(255,255,255,0.15); padding: 12px 20px; border-radius: 25px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <span
+              style="font-size: 25px; font-family: 'Arial', sans-serif; text-shadow: 2px 2px 6px rgba(0,0,0,0.4); letter-spacing: 0.5px; animation: glow 2s ease-in-out infinite alternate;">Livraison
+              gratuite à partir de 15€ ! Ostricourt • Evin-Malmaison • Leforest • Thumeries • Oignies • Wahagnies</span>
+            <br>
+            <span
+              style="font-size: 14px; font-weight: 400; opacity: 0.9; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);"></span>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        @keyframes shine {
+          0% {
+            left: -100%;
+          }
+
+          100% {
+            left: 100%;
+          }
+        }
+
+        @keyframes glow {
+          0% {
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.3);
+          }
+
+          100% {
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 255, 255, 0.6);
+          }
+        }
+
+        @keyframes float {
+
+          0%,
+          100% {
+            transform: translateY(0px) rotate(0deg);
+            opacity: 1;
+          }
+
+          50% {
+            transform: translateY(-20px) rotate(180deg);
+            opacity: 0.7;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .delivery-banner {
+            font-size: 18px !important;
+            padding: 20px 10px !important;
+          }
+
+          .delivery-banner .main-message {
+            font-size: 18px !important;
+            padding: 10px 15px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .delivery-banner {
+            font-size: 16px !important;
+            padding: 18px 8px !important;
+          }
+
+          .delivery-banner .main-message {
+            font-size: 16px !important;
+            padding: 8px 12px !important;
+          }
+        }
+      </style>
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <span>
+              Speranza pizza
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  mx-auto ">
+              <li class="nav-item active">
+                <a class="nav-link" href="#home">Accueil <span class="sr-only">(actuel)</span></a>
+              </li>
+                <li class="nav-item active">
+                <a class="nav-link" href="menu.html" style="color: white;">Menu  </a>
+                </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#about">À Propos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#book">Localisation</a>
+              </li>
+            </ul>
+              <div class="user_option">
+                <!-- Panier avec compteur -->
+                <!-- <a class="cart_link" href="menu.html?openCart=true" style="position: relative; display: inline-block;">
+                  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
+                    <g>
+                      <g>
+                        <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                    c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                      </g>
+                    </g>
+                    <g>
+                      <g>
+                        <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                    C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                    c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                    C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                      </g>
+                    </g>
+                    <g>
+                      <g>
+                        <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                    c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                      </g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                  </svg>
+                  <!-- Compteur de panier -->
+                  <span id="cart-count-index" style="position: absolute; top: -8px; right: -8px; background: #ff6b35; color: white; border-radius: 50%; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;">0</span>
+                </a> 
+                <!-- <a href="" class="user_link">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                </a>
+                <a class="cart_link" href="#">
+                  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
+                    <g>
+                      <g>
+                        <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                    c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                      </g>
+                    </g>
+                    <g>
+                      <g>
+                        <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                    C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                    c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                    C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                      </g>
+                    </g>
+                    <g>
+                      <g>
+                        <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                    c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                      </g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                    <g>
+                    </g>
+                  </svg>
+                </a> -->
+                <!-- <form class="form-inline">
+                  <!-<button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button> -->
+                <!-- </form> -->
+                <a href="menu.html" class="order_online">
+                  Commandez maintenant
+                </a>
+              </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+    <!-- slider section -->
+    <section class="slider_section ">
+      <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-7 col-lg-6 ">
+                  <div class="detail-box">
+                    <h1>
+                      Votre Pause Délicieuse
+                    </h1>
+                    <p>
+                      Bienvenue chez nous 🍴
+                      Savourez des plats délicieux, préparés avec amour et des ingrédients frais.
+                      Un lieu chaleureux pour partager un bon moment entre amis ou en famille ❤️
+                    </p>
+                    <div class="btn-box">
+                      <a href="menu.html" class="btn1">
+                        Commandez maintenant
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item ">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-7 col-lg-6 ">
+                  <div class="detail-box">
+                    <h1>
+                      Saveurs & Plaisirs
+                    </h1>
+                    <p>
+                      Poussez la porte du plaisir🔥 <br>
+                      Recettes maison, produits purs. Refuge convivial pour dîners inoubliables
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1">
+                        Commandez maintenant
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="container ">
+              <div class="row">
+                <div class="col-md-7 col-lg-6 ">
+                  <div class="detail-box">
+                    <h1>
+                      Un Moment Gourmand
+                    </h1>
+                    <p>
+                      Bienvenue dans notre petit cocon gourmand 🍽️
+                      Plongez dans un univers de saveurs authentiques, où chaque plat est mijoté avec passion et des
+                      produits de saison. Un espace cosy pour des instants magiques en solo, en duo ou en tribu, rempli
+                      de rires et de bons souvenirs 😊.
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1">
+                        Commandez maintenant
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <ol class="carousel-indicators">
+            <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+            <li data-target="#customCarousel1" data-slide-to="1"></li>
+            <li data-target="#customCarousel1" data-slide-to="2"></li>
+          </ol>
+        </div>
+      </div>
+
+    </section>
+    <!-- end slider section -->
+  </div>
+
+  <!-- offer section -->
+
+  <style>
+    /* Enhanced Offer Section Styles */
+    .offer_section {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer_section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="1" fill="rgba(255,107,53,0.1)"/></svg>');
+      opacity: 0.3;
+      animation: moveBackground 20s linear infinite;
+    }
+
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(100px, 100px); }
+    }
+
+    .offer_section .box {
+      position: relative;
+      background: linear-gradient(145deg, #1f1f1f, #2a2a2a);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 53, 0.2);
+      margin-bottom: 30px;
+    }
+
+    .offer_section .box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s;
+    }
+
+    .offer_section .box:hover::before {
+      left: 100%;
+    }
+
+    .offer_section .box:hover {
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 20px 60px rgba(255, 107, 53, 0.4);
+      border-color: rgba(255, 107, 53, 0.6);
+    }
+
+    .offer_section .img-box {
+      position: relative;
+      height: 280px;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .offer_section .img-box::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    }
+
+    .offer_section .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .offer_section .box:hover .img-box img {
+      transform: scale(1.15) rotate(2deg);
+    }
+
+    .offer_section .detail-box {
+      padding: 25px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .offer_section .detail-box h5 {
+      color: #ff6b35;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .offer_section .detail-box h6 {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .offer_section .detail-box a {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #ff6b35, #ff8a65);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer_section .detail-box a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .offer_section .detail-box a:hover::before {
+      left: 100%;
+    }
+
+    .offer_section .detail-box a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+    }
+
+    /* Special Badge */
+    .offer-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff0000, #ff6b35);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      z-index: 10;
+      box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+      animation: pulse-badge 2s infinite;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+  </style>
+
+  <section class="offer_section layout_padding-bottom">
+    <div class="offer_container">
+      <div class="container">
+        <div class="heading_container heading_center">
+          <h2 style="color: #ff6b35; text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.3);">
+            🔥 Nos Offres Spéciales 🔥
+          </h2>
+          <p style="color: #ccc; margin-top: 15px; font-size: 18px;">Profitez de nos promotions exceptionnelles !</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="row">
+            <div class="box">
+              <div class="img-box">
+                <img src="images/offre 3 pizza.png" alt="Offre Livraison">
+              </div>
+              <div class="detail-box">
+                <h5>🚚 En livraison</h5>
+                <h6>2 pizzas achetées<br>➜ 3ème OFFERTE</h6>
+                <a href="menu.html?filter=pizza">
+                  Obtenir l'offre !! 🎁
+                </a>
+              </div>
+            </div>
+          </div>
+          aussi
+          <div class="row-md-4">
+            <div class="box">
+              <div class="img-box">
+                <img src="images/offre_pizza+canette.png" alt="Offre Sur Place">
+              </div>
+              <div class="detail-box">
+                <h5>🍽️ Sur place</h5>
+                <h6>Pizza achetée<br>➜ Canette OFFERTE</h6>
+                
+              </div>
+            </div>
+          </div>
+          <div class="row-md-4">
+            <div class="box">
+              <!-- <span class="offer-badge">7J/7 ⭐</span> -->
+              <div class="img-box">
+                <img src="images/offre 2 pizza.png" alt="Offre À Emporter">
+              </div>
+              <div class="detail-box">
+                <h5>📦 À emporter</h5>
+                <h6>1 pizza achetée<br>➜ 1 OFFERTE<br><small>(Valable sur Senior)</small></h6>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end offer section -->
+
+  <!-- food section -->
+
+  <style>
+    /* Enhanced Menu Section Styles */
+    .food_section {
+      background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%);
+      position: relative;
+    }
+
+    .food_section .heading_container h2 {
+      color: #ff6b35;
+      text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.3);
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .category-subtitle {
+      color: #ccc;
+      font-size: 18px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    /* 3 products per row */
+    .product-grid .col-sm-12.col-lg-4 {
+      margin-bottom: 30px;
+    }
+
+    .food_section .box {
+      background: linear-gradient(145deg, #1f1f1f, #262626);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 53, 0.15);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .food_section .box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .food_section .box:hover::before {
+      opacity: 1;
+    }
+
+    .food_section .box:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(255, 107, 53, 0.3);
+      border-color: rgba(255, 107, 53, 0.5);
+    }
+
+    .food_section .img-box {
+      position: relative;
+      height: 280px;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .food_section .img-box::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      pointer-events: none;
+    }
+
+    .food_section .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .food_section .box:hover .img-box img {
+      transform: scale(1.1);
+    }
+
+    .food_section .detail-box {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to bottom, #1f1f1f, #1a1a1a);
+    }
+
+    .food_section .detail-box h5 {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .food_section .detail-box p {
+      color: #bbb;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      flex-grow: 1;
+    }
+
+    .food_section .price {
+      color: #ff6b35;
+      font-size: 26px;
+      font-weight: 700;
+      text-align: center;
+      padding: 12px;
+      background: rgba(255, 107, 53, 0.1);
+      border-radius: 10px;
+      border: 2px solid rgba(255, 107, 53, 0.3);
+      transition: all 0.3s;
+    }
+
+    .food_section .box:hover .price {
+      background: rgba(255, 107, 53, 0.2);
+      border-color: rgba(255, 107, 53, 0.6);
+      transform: scale(1.05);
+    }
+
+    /* Category badge */
+    .category-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: linear-gradient(135deg, #ff6b35, #ff8a65);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+      letter-spacing: 0.5px;
+    }
+
+    /* Voir plus button enhanced */
+    .food_section .btn-box {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .food_section .order_online {
+      display: inline-block;
+      padding: 16px 50px;
+      background: linear-gradient(135deg, #ff6b35, #ff8a65);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .food_section .order_online::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s;
+    }
+
+    .food_section .order_online:hover::before {
+      left: 100%;
+    }
+
+    .food_section .order_online:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+      .food_section .img-box {
+        height: 240px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .food_section .img-box {
+        height: 220px;
+      }
+      .food_section .detail-box h5 {
+        font-size: 20px;
+      }
+    }
+  </style>
+
+  <section class="food_section layout_padding" id="menu">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>🍽️ Notre Menu 🍽️</h2>
+        <p class="category-subtitle">Découvrez notre sélection de produits par catégorie</p>
+      </div>
+
+      <div class="row product-grid">
+        <!-- Pizza -->
+        <div class="col-sm-12 col-lg-4 all pizza">
+          <div class="box">
+            <span class="category-badge">🍕 Pizza</span>
+            <div class="img-box">
+              <img src="images/11.jpg" alt="Speranza Pizza">
+            </div>
+            <div class="detail-box">
+              <h5>Pizza Speranza</h5>
+              <p>Base Tomate, Mozzarella, Viande Hachée, Merguez, Poulet, Buffalo</p>
+              <div class="price">À partir de €10.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Burger -->
+        <div class="col-sm-12 col-lg-4 all burger">
+          <div class="box">
+            <span class="category-badge">🍔 Burger</span>
+            <div class="img-box">
+              <img src="images/b8.jpg" alt="Speranza Burger">
+            </div>
+            <div class="detail-box">
+              <h5>Speranza Burger</h5>
+              <p>Steak 90g, Chicken, Galette Pomme de Terre, Cheddar</p>
+              <div class="price">€7.50</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tacos -->
+        <div class="col-sm-12 col-lg-4 all tacos">
+          <div class="box">
+            <span class="category-badge">🌮 Tacos</span>
+            <div class="img-box">
+              <img src="images/t2.jpg" alt="Tacos 2 Viandes">
+            </div>
+            <div class="detail-box">
+              <h5>Tacos (2 Viandes)</h5>
+              <p>Accompagné de sauce fromagère maison + Frites</p>
+              <div class="price">€9.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pâtes -->
+        <div class="col-sm-12 col-lg-4 all pasta">
+          <div class="box">
+            <span class="category-badge">🍝 Pâtes</span>
+            <div class="img-box">
+              <img src="images/p5.jpg" alt="Pâtes Al Tartuffo">
+            </div>
+            <div class="detail-box">
+              <h5>Pâtes Al Tartuffo</h5>
+              <p>Crème Fraîche, Crème de Truffe, Poulet, Champignon, Parmesan</p>
+              <div class="price">€9.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panini -->
+        <div class="col-sm-12 col-lg-4 all panini">
+          <div class="box">
+            <span class="category-badge">🥪 Panini</span>
+            <div class="img-box">
+              <img src="images/pa2.jpg" alt="Panini Poulet">
+            </div>
+            <div class="detail-box">
+              <h5>Panini Poulet</h5>
+              <p>Pain grillé, Poulet mariné, Sauce spéciale</p>
+              <div class="price">€5.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tex-Mex -->
+        <div class="col-sm-12 col-lg-4 all tex-mex">
+          <div class="box">
+            <span class="category-badge">🌶️ Tex-Mex</span>
+            <div class="img-box">
+              <img src="images/n7.jpg" alt="6 Tenders">
+            </div>
+            <div class="detail-box">
+              <h5>6 Tenders</h5>
+              <p>6 tenders de poulet croustillants avec sauce au choix</p>
+              <div class="price">€8.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Salade -->
+        <div class="col-sm-12 col-lg-4 all salade">
+          <div class="box">
+            <span class="category-badge">🥗 Salade</span>
+            <div class="img-box">
+              <img src="images/s1.jpg" alt="Salade César">
+            </div>
+            <div class="detail-box">
+              <h5>Salade César</h5>
+              <p>Salade, Poulet grillé, Tomate, Olives, Sauce Buffalo</p>
+              <div class="price">€7.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dessert -->
+        <div class="col-sm-12 col-lg-4 all dessert">
+          <div class="box">
+            <span class="category-badge">🍰 Dessert</span>
+            <div class="img-box">
+              <img src="images/d1.jpg" alt="Tiramisu">
+            </div>
+            <div class="detail-box">
+              <h5>Tiramisu</h5>
+              <p>Dessert classique italien fait maison</p>
+              <div class="price">€3.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Boissons -->
+        <div class="col-sm-12 col-lg-4 all boissons">
+          <div class="box">
+            <span class="category-badge">🥤 Boisson</span>
+            <div class="img-box">
+              <img src="images/f8.png" alt="Canette 33cl">
+            </div>
+            <div class="detail-box">
+              <h5>Canette 33cl</h5>
+              <p>Boisson rafraîchissante au choix</p>
+              <div class="price">€1.50</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-box">
+        <a href="menu.html" class="order_online">
+          Voir le Menu Complet 🔥
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- end food section -->
+
+  <!-- about section -->
+
+  <section class="about_section layout_padding" id="about">
+    <div class="container  ">
+
+      <div class="row">
+        <div class="col-md-6 ">
+          <div class="img-box">
+            <img src="images/about-img.png" alt="">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                Nous Speranza Pizza
+              </h2>
+            </div>
+            <p>
+              Bienvenue dans notre restaurant, un lieu chaleureux où la bonne humeur se mêle aux bonnes saveurs 🍽️
+              Chaque jour, nous préparons des plats frais et savoureux, faits avec soin et passion pour régaler vos
+              papilles.
+              Que ce soit pour un repas rapide, un moment entre amis ou un dîner en famille, notre équipe est là pour
+              vous offrir une expérience gourmande et agréable.
+            </p>
+            <!-- <a href="">
+              Read More
+            </a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    function myMap() {
+      var location = { lat: 50.470372, lng: 3.027186 }; // 80 place de la république, Ostricourt 59162
+      var map = new google.maps.Map(document.getElementById("googleMap"), {
+        zoom: 18,
+        center: location
+      });
+      var marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        title: "80 place de la république, Ostricourt 59162"
+      });
+    }
+  </script>
+
+  <!-- end about section -->
+
+  <!-- book section -->
+  <style>
+    /* Enhanced Book Section Styles */
+    .book_section {
+      background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .book_section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="1" fill="rgba(255,107,53,0.1)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .book_section .heading_container h2 {
+      color: #ff6b35;
+      text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.3);
+      font-size: 42px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .book_section .lead {
+      color: #ccc !important;
+      font-size: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .book_section .map_container {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 53, 0.3);
+      transition: all 0.3s;
+    }
+
+    .book_section .map_container:hover {
+      box-shadow: 0 15px 50px rgba(255, 107, 53, 0.4);
+      border-color: rgba(255, 107, 53, 0.5);
+    }
+
+    .book_section .btn-outline-primary {
+      background: linear-gradient(135deg, #ff6b35, #ff8a65);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    .book_section .btn-outline-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+    }
+
+    .contact-info-card {
+      background: linear-gradient(145deg, #1f1f1f, #262626);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 53, 0.2);
+      transition: all 0.3s;
+    }
+
+    .contact-info-card:hover {
+      border-color: rgba(255, 107, 53, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(255, 107, 53, 0.3);
+    }
+
+    .contact-info-card h4 {
+      color: #ff6b35;
+      font-weight: 700;
+      margin-bottom: 25px;
+      font-size: 26px;
+    }
+
+    .contact-info-card p {
+      color: #ccc;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .contact-info-card strong {
+      color: #ff8a65;
+      font-weight: 600;
+    }
+
+    .contact-info-card a {
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .contact-info-card a:hover {
+      color: #ff6b35;
+    }
+
+    .contact-info-card hr {
+      border-color: rgba(255, 107, 53, 0.3);
+      margin: 20px 0;
+    }
+
+    .contact-info-card small {
+      color: #999 !important;
+    }
+  </style>
+
+  <section class="book_section layout_padding" id="book">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>📍 Nous Trouver</h2>
+        <p class="lead">Visitez Speranza Pizza ou réservez votre table — nous confirmerons par téléphone ou email.</p>
+      </div>
+
+      <div class="row align-items-center">
+        <!-- Map column -->
+        <div class="col-12 col-lg-6 mb-4">
+          <div class="map_container rounded overflow-hidden" style="min-height:400px;">
+            <iframe width="100%" height="100%" frameborder="0" style="border:0; min-height:400px; display:block;"
+              src="https://www.google.com/maps?q=Speranza+Pizza+80+Place+de+la+R%C3%A9publique+Ostricourt+59162+France&output=embed"
+              allowfullscreen aria-hidden="false" tabindex="0">
+            </iframe>
+          </div>
+          <div class="mt-3 text-center">
+            <a href="https://www.google.com/maps?q=80+place+de+la+r%C3%A9publique+ostricourt+59162" target="_blank"
+              class="btn btn-outline-primary">
+              🗺️ Ouvrir dans Google Maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact & reservation column -->
+        <div class="col-12 col-lg-6">
+          <div class="contact-info-card">
+            <h4>📞 Contact & Horaires</h4>
+
+            <p><strong>📍 Adresse :</strong><br>80 Place de la République<br>Ostricourt 59162, France</p>
+            
+            <p><strong>☎️ Téléphone :</strong><br>
+              <a href="tel:+0764875254">07 64 87 52 54</a> / 
+              <a href="tel:+0359434718">03 59 43 47 18</a>
+            </p>
+            
+            <p><strong>📧 Email :</strong><br>
+              <a href="mailto:speranza.ostricourt@gmail.com">speranza.ostricourt@gmail.com</a>
+            </p>
+
+            <hr>
+
+            <p><strong>🕐 Horaires d'ouverture :</strong></p>
+            <div style="background: rgba(255,107,53,0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #ff6b35;">
+              <p style="margin-bottom: 10px;"><strong>Lundi - Jeudi, Samedi - Dimanche :</strong><br>
+              11h00 - 14h00 | 18h00 - 23h00</p>
+              <p style="margin-bottom: 0;"><strong>Vendredi :</strong><br>
+              18h00 - 23h00</p>
+            </div>
+
+            <small class="mt-3 d-block">💡 Pour les demandes urgentes, appelez-nous directement !</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end book section -->
+
+
+  <!-- client section -->
+
+  <style>
+    /* Enhanced Client Section Styles */
+    .client_section {
+      background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 80px 0;
+    }
+
+    .client_section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="1" fill="rgba(255,107,53,0.1)"/></svg>');
+      opacity: 0.3;
+      animation: moveBackground 20s linear infinite;
+    }
+
+    .client_section .heading_container {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 50px;
+    }
+
+    .client_section .heading_container h2 {
+      color: #ff6b35;
+      text-shadow: 2px 2px 8px rgba(255, 107, 53, 0.3);
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .client_section .subtitle {
+      color: #ccc;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .client_section .box {
+      background: linear-gradient(145deg, #1f1f1f, #262626);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 53, 0.2);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .client_section .box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s;
+    }
+
+    .client_section .box:hover::before {
+      left: 100%;
+    }
+
+    .client_section .box:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(255, 107, 53, 0.4);
+      border-color: rgba(255, 107, 53, 0.5);
+    }
+
+    .client_section .client-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .client_section .img-box {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #ff6b35;
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+      margin-right: 20px;
+      flex-shrink: 0;
+    }
+
+    .client_section .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .client_section .client-info h6 {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .client_section .client-rating {
+      color: #ffd700;
+      font-size: 16px;
+    }
+
+    .client_section .detail-box {
+      position: relative;
+      z-index: 2;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .client_section .detail-box p {
+      color: #ccc;
+      font-size: 16px;
+      line-height: 1.8;
+      font-style: italic;
+      margin-bottom: 15px;
+      flex-grow: 1;
+    }
+
+    .client_section .quote-icon {
+      color: #ff6b35;
+      font-size: 40px;
+      opacity: 0.3;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .client_section .verified-badge {
+      display: inline-block;
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .client_section .owl-carousel .owl-nav button {
+      background: linear-gradient(135deg, #ff6b35, #ff8a65) !important;
+      color: white !important;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 24px;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+    }
+
+    .client_section .owl-carousel .owl-nav button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+    }
+
+    .client_section .owl-dots .owl-dot span {
+      background: rgba(255, 107, 53, 0.3) !important;
+      width: 12px;
+      height: 12px;
+    }
+
+    .client_section .owl-dots .owl-dot.active span {
+      background: #ff6b35 !important;
+      width: 30px;
+      border-radius: 10px;
+    }
+  </style>
+
+  <section class="client_section">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>⭐ Nos Clients Aiment Nos Produits ⭐</h2>
+        <p class="subtitle">Découvrez ce que nos clients satisfaits disent de nous</p>
+      </div>
+      <div class="carousel-wrap row">
+        <div class="owl-carousel client_owl-carousel">
+          <!-- Client 1 -->
+          <div class="item">
+            <div class="box">
+              <span class="quote-icon">"</span>
+              <div class="client-header">
+                <div class="img-box">
+                  <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sophie Martin" class="box-img">
+                </div>
+                <div class="client-info">
+                  <h6>Sophie Martin</h6>
+                  <div class="client-rating">⭐⭐⭐⭐⭐</div>
+                </div>
+              </div>
+              <div class="detail-box">
+                <p>
+                  La meilleure pizza que j'ai mangée depuis des années ! La pâte est parfaite, les ingrédients sont frais et la livraison ultra rapide. Mon nouveau restaurant préféré à Ostricourt ! 🍕❤️
+                </p>
+                <span class="verified-badge">✓ Client Vérifié</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client 2 -->
+          <div class="item">
+            <div class="box">
+              <span class="quote-icon">"</span>
+              <div class="client-header">
+                <div class="img-box">
+                  <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas Dubois" class="box-img">
+                </div>
+                <div class="client-info">
+                  <h6>Thomas Dubois</h6>
+                  <div class="client-rating">⭐⭐⭐⭐⭐</div>
+                </div>
+              </div>
+              <div class="detail-box">
+                <p>
+                  Excellent rapport qualité-prix ! Les burgers sont généreux, les frites croustillantes à souhait. L'équipe est super sympa et l'offre 1+1 pizza est imbattable. Je recommande à 100% ! 🍔�
+                </p>
+                <span class="verified-badge">✓ Client Vérifié</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client 3 -->
+          <div class="item">
+            <div class="box">
+              <span class="quote-icon">"</span>
+              <div class="client-header">
+                <div class="img-box">
+                  <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Marie Lefebvre" class="box-img">
+                </div>
+                <div class="client-info">
+                  <h6>Marie Lefebvre</h6>
+                  <div class="client-rating">⭐⭐⭐⭐⭐</div>
+                </div>
+              </div>
+              <div class="detail-box">
+                <p>
+                  Une adresse incontournable ! Les tacos sont délicieux avec une sauce fromagère maison exceptionnelle. L'accueil est chaleureux et les portions généreuses. On revient toujours avec plaisir ! 🌮😋
+                </p>
+                <span class="verified-badge">✓ Client Vérifié</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client 4 -->
+          <div class="item">
+            <div class="box">
+              <span class="quote-icon">"</span>
+              <div class="client-header">
+                <div class="img-box">
+                  <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="Lucas Bernard" class="box-img">
+                </div>
+                <div class="client-info">
+                  <h6>Lucas Bernard</h6>
+                  <div class="client-rating">⭐⭐⭐⭐⭐</div>
+                </div>
+              </div>
+              <div class="detail-box">
+                <p>
+                  Service impeccable et produits de qualité ! La pizza 4 fromages est une tuerie, et les pâtes al tartuffo sont divines. Livraison gratuite en plus, que demander de mieux ? Bravo ! 👏🍝
+                </p>
+                <span class="verified-badge">✓ Client Vérifié</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Client 5 -->
+          <div class="item">
+            <div class="box">
+              <span class="quote-icon">"</span>
+              <div class="client-header">
+                <div class="img-box">
+                  <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Emma Moreau" class="box-img">
+                </div>
+                <div class="client-info">
+                  <h6>Emma Moreau</h6>
+                  <div class="client-rating">⭐⭐⭐⭐⭐</div>
+                </div>
+              </div>
+              <div class="detail-box">
+                <p>
+                  Parfait pour les soirées en famille ! Les enfants adorent les nuggets et le menu junior, et nous, on se régale avec les burgers maison. Qualité constante et prix justes. Top ! 🎉👨‍👩‍👧‍👦
+                </p>
+                <span class="verified-badge">✓ Client Vérifié</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end client section -->
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-col">
+          <div class="footer_contact">
+            <h4>
+              Contact & Horaires d'Ouverture
+            </h4>
+            <div class="contact_link_box">
+              <a href="https://www.google.com/maps?q=80+place+de+la+r%C3%A9publique+ostricourt+59162" target="_blank">
+                <span>
+                  80 Place de la République, Ostricourt 59162, France
+                </span>
+              </a>
+              <a href="tel:+011234567890">
+                <span>
+                  07 64 87 52 54 / 03 59 43 47 18
+                </span>
+              </a>
+              <a href="mailto:speranza.ostricourt@gmail.com">
+                <span>
+                  speranza.ostricourt@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <div class="footer_detail">
+            <a href="" class="footer-logo">
+              Speranza Pizza
+            </a>
+            <p>
+              Chez Speranza Pizza, nous sommes fiers de servir des repas délicieux et fraîchement préparés avec les
+              meilleurs ingrédients. De nos pizzas signature à nos burgers savoureux et nos pâtes, chaque plat est conçu
+              pour ravir vos papilles et créer des expériences culinaires inoubliables.
+            </p>
+            <div class="footer_social">
+              <a href="https://www.facebook.com/profile.php?id=61580148713448">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+
+              <a href="https://www.instagram.com/speranza.pizza/">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <h4>
+            Horaires d'Ouverture
+          </h4>
+          <div class="opening-hours">
+            <div class="time-block">
+              <p><strong>Lundi - Jeudi, Samedi - Dimanche :</strong></p>
+              <p>11h00 - 14h00</p>
+              <p>18h00 - 23h00</p>
+            </div>
+            <div class="time-block mt-2">
+              <p><strong>Vendredi :</strong></p>
+              <p>18h00 - 23h00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-info">
+        <p>
+          &copy; <span id="displayYear"></span> Tous Droits Réservés Par
+          <a href="https://html.design/">MM Developers</a><br><br>
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- Bouton panier flottant -->
+  <button class="floating-cart-button" id="floating-cart-btn" onclick="goToMenuWithCart()">
+    <i class="fa fa-shopping-cart"></i>
+    <span id="cart-count-floating" class="cart-count-badge">0</span>
+  </button>
+
+  <!-- jQery -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+  <!-- bootstrap js -->
+  <script src="js/bootstrap.js"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="js/custom.js"></script>
+  
+  <!-- Script pour gérer le panier depuis localStorage -->
+  <script>
+    // Fonctions pour gérer le localStorage
+    function loadCartFromLocalStorage() {
+      const savedCart = localStorage.getItem('restaurantCart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    }
+
+    function updateCartCountDisplay() {
+      const cart = loadCartFromLocalStorage();
+      const cartCountElement = document.getElementById('cart-count-index');
+      const cartCountFloating = document.getElementById('cart-count-floating');
+      const floatingBtn = document.getElementById('floating-cart-btn');
+      
+      if (cart.length === 0) {
+        cartCountElement.style.display = 'none';
+        cartCountFloating.style.display = 'none';
+        floatingBtn.style.background = 'linear-gradient(135deg, var(--accent-color), var(--accent-hover))';
+      } else {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountElement.textContent = totalItems;
+        cartCountElement.style.display = 'flex';
+        cartCountFloating.textContent = totalItems;
+        cartCountFloating.style.display = 'flex';
+        // Rendre le bouton plus visible quand il y a des articles
+        floatingBtn.style.background = 'linear-gradient(135deg, #ff4444, #ff6666)';
+      }
+    }
+
+    // Fonction pour aller au menu avec panier ouvert
+    function goToMenuWithCart() {
+      window.location.href = 'menu.html?openCart=true';
+    }
+
+    // Charger le compteur du panier au chargement de la page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateCartCountDisplay();
+      
+      // Mettre à jour le compteur toutes les 500ms au cas où le localStorage change
+      setInterval(updateCartCountDisplay, 500);
+    });
+  </script>
+  
+  <!-- Google Map -->
+  <!-- Replace YOUR_VALID_API_KEY with your actual Google Maps JavaScript API key -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_VALID_API_KEY&callback=myMap&loading=async" async
+    defer></script>
+  <!-- End Google Map -->
+  <!-- Note: Ensure server.js is running (node server.js) for Stripe payment to work -->
+
+</body>
+
+</html>
