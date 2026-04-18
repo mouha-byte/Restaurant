@@ -1078,7 +1078,7 @@
         }
 
         function checkOpenAndCheckout() {
-          if (!isOpenNow()) {
+          if (isOpenNow()) {
             proceedToCheckout();
           } else {
             alert(
